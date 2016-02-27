@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		80D4DBCF25FEF94556101ADE /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6CA67808BC7A749E6A768D7 /* Pods.framework */; };
 		FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC705D361C80F00A00216AB8 /* AppDelegate.swift */; };
-		FC705D391C80F00A00216AB8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC705D381C80F00A00216AB8 /* ViewController.swift */; };
 		FC705D3C1C80F00A00216AB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC705D3A1C80F00A00216AB8 /* Main.storyboard */; };
 		FC705D3F1C80F00A00216AB8 /* mlbl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC705D3D1C80F00A00216AB8 /* mlbl.xcdatamodeld */; };
 		FC705D411C80F00A00216AB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC705D401C80F00A00216AB8 /* Assets.xcassets */; };
 		FC705D441C80F00A00216AB8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC705D421C80F00A00216AB8 /* LaunchScreen.storyboard */; };
+		FC705D4D1C80F8D400216AB8 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC705D4C1C80F8D400216AB8 /* MainController.swift */; };
+		FC705D4F1C80F8FC00216AB8 /* BaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC705D4E1C80F8FC00216AB8 /* BaseController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,12 +23,13 @@
 		F6CA67808BC7A749E6A768D7 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC705D331C80F00A00216AB8 /* mlbl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mlbl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC705D361C80F00A00216AB8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FC705D381C80F00A00216AB8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		FC705D3B1C80F00A00216AB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FC705D3E1C80F00A00216AB8 /* mlbl.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mlbl.xcdatamodel; sourceTree = "<group>"; };
 		FC705D401C80F00A00216AB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FC705D431C80F00A00216AB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FC705D451C80F00A00216AB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FC705D4C1C80F8D400216AB8 /* MainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
+		FC705D4E1C80F8FC00216AB8 /* BaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,14 +83,23 @@
 			isa = PBXGroup;
 			children = (
 				FC705D361C80F00A00216AB8 /* AppDelegate.swift */,
-				FC705D381C80F00A00216AB8 /* ViewController.swift */,
 				FC705D3A1C80F00A00216AB8 /* Main.storyboard */,
+				FC705D4B1C80F8BD00216AB8 /* Controllers */,
 				FC705D401C80F00A00216AB8 /* Assets.xcassets */,
 				FC705D421C80F00A00216AB8 /* LaunchScreen.storyboard */,
 				FC705D451C80F00A00216AB8 /* Info.plist */,
 				FC705D3D1C80F00A00216AB8 /* mlbl.xcdatamodeld */,
 			);
 			path = mlbl;
+			sourceTree = "<group>";
+		};
+		FC705D4B1C80F8BD00216AB8 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FC705D4C1C80F8D400216AB8 /* MainController.swift */,
+				FC705D4E1C80F8FC00216AB8 /* BaseController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -213,8 +224,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC705D4D1C80F8D400216AB8 /* MainController.swift in Sources */,
 				FC705D3F1C80F00A00216AB8 /* mlbl.xcdatamodeld in Sources */,
-				FC705D391C80F00A00216AB8 /* ViewController.swift in Sources */,
+				FC705D4F1C80F8FC00216AB8 /* BaseController.swift in Sources */,
 				FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,10 +341,12 @@
 			baseConfigurationReference = 46C6234DC8A312DD65AC037A /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shamardin Valentin (VQ6W7B6495)";
 				INFOPLIST_FILE = mlbl/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = poglicier.mlbl;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.poglicier.mlbl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "db859d47-c174-4c30-83fb-a77839906526";
 			};
 			name = Debug;
 		};
@@ -341,10 +355,12 @@
 			baseConfigurationReference = 253216610277D0BBA91BA690 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shamardin Valentin (U7BR77R5M8)";
 				INFOPLIST_FILE = mlbl/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = poglicier.mlbl;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.poglicier.mlbl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8dfed0bb-c258-44a0-ab80-9091c150d13f";
 			};
 			name = Release;
 		};
