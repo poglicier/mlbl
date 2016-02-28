@@ -10,28 +10,32 @@ import UIKit
 import SnapKit
 
 class MainController: BaseController {
-    private enum Buttons {
-        case Games
-        case Teams
-        case Players
-        case Schedule
-        case Ratings
-    }
-    
+
     @IBOutlet private var buttonsScrollView: UIScrollView!
     @IBOutlet private var sectionButtons: [UIButton]!
     @IBOutlet private var contentView: UIView!
     @IBOutlet private var selectedIndicatorView: UIView!
+    private var containerController: ContainerController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.setupButtons()
+    }
+    
+    // MARK: - Private
+    
+    private func setupButtons() {
+        for (idx, button) in sectionButtons.enumerate() {
+            button.tag = idx
+        }
         
         if let first = self.sectionButtons.first {
             self.sectionButtonDidTap(first)
         }
     }
     
-    @IBAction func sectionButtonDidTap(sender: UIButton) {
+    @IBAction private func sectionButtonDidTap(sender: UIButton) {
         for sectionButton in self.sectionButtons {
             sectionButton.selected = sectionButton == sender
         }
@@ -43,6 +47,18 @@ class MainController: BaseController {
         
         UIView.animateWithDuration(0.3) { () -> Void in
             self.view.layoutIfNeeded()
+        }
+        
+        if let type = ContainerController.ControllerType(rawValue: sender.tag) {
+            self.containerController.goToControllerWithControllerType(type)
+        }
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "embedContainer" {
+            self.containerController = segue.destinationViewController as! ContainerController
         }
     }
 }
