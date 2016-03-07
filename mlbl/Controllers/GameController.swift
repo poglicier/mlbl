@@ -1,40 +1,30 @@
 //
-//  PlayersController.swift
+//  GameController.swift
 //  mlbl
 //
-//  Created by Valentin Shamardin on 28.02.16.
+//  Created by Valentin Shamardin on 07.03.16.
 //  Copyright © 2016 Valentin Shamardin. All rights reserved.
 //
 
 import UIKit
 
-class PlayersController: BaseController {
+class GameController: BaseController {
+    private enum Sections: NSInteger {
+        case Hat
+        case TeamA
+        case TeamB
+        case Count
+    }
+    
+    var gameId: NSNumber!
     @IBOutlet private var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.setupTableView()
-    }    
+        // Do any additional setup after loading the view.
+    }
 
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.tableView.scrollsToTop = true
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.tableView.scrollsToTop = false
-    }
-    
-    // MARK: - Private
-    
-    private func setupTableView() {
-        self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
-    }
-    
     /*
     // MARK: - Navigation
 
@@ -47,21 +37,34 @@ class PlayersController: BaseController {
 
 }
 
-extension PlayersController: UITableViewDelegate, UITableViewDataSource {
+extension GameController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return Sections.Count.rawValue
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        //        if let sections = self.fetchedResultsController.sections {
+        //            let currentSection = sections[section]
+        //            return currentSection.numberOfObjects
+        //        }
+        //
+        //        return 0
+        return 15
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 145
+        return 252
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("playerCell", forIndexPath: indexPath)
+        let cell: UITableViewCell
+        let cellIdentifier = "gameScoreCell"
+        cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
+        
         return cell
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        (cell as! PlayerCell).player = ""
+//        self.configureCell(cell as! GameCell, atIndexPath:indexPath)
     }
 }

@@ -1,20 +1,20 @@
 //
-//  PlayerCell.swift
+//  GameCell.swift
 //  mlbl
 //
-//  Created by Valentin Shamardin on 28.02.16.
+//  Created by Valentin Shamardin on 05.03.16.
 //  Copyright © 2016 Valentin Shamardin. All rights reserved.
 //
 
 import UIKit
 
-class PlayerCell: UITableViewCell {
+class GameCell: UITableViewCell {
+
     @IBOutlet private var background: UIView!
-    @IBOutlet private var avatarView: UIImageView!
     
-    var player: AnyObject! {
+    var game: Game! {
         didSet {
-            self.avatarView.image = UIImage(named: "avatarStub\(1+arc4random_uniform(3))")
+            
         }
     }
     
@@ -39,4 +39,5 @@ class PlayerCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+
 }

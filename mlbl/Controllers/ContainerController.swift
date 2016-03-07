@@ -52,6 +52,8 @@ class ContainerController: BaseController {
                         self.swapFromViewController(self.activeController!, toViewController:segue.destinationViewController)
                     }
                     else {
+                        (segue.destinationViewController as? BaseController)?.dataController = self.dataController
+
                         self.addChildViewController(segue.destinationViewController)
                         segue.destinationViewController.view.frame = self.view.bounds
                         self.view.addSubview(segue.destinationViewController.view)
@@ -72,8 +74,10 @@ class ContainerController: BaseController {
     }
     
     private func swapFromViewController(fromViewController: UIViewController, toViewController:UIViewController) {
+        (toViewController as? BaseController)?.dataController = self.dataController
+        
         toViewController.view.frame = self.view.bounds
-
+        
         fromViewController.willMoveToParentViewController(nil)
         self.addChildViewController(toViewController)
         self.transitionFromViewController(fromViewController,

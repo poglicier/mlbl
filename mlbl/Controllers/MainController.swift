@@ -59,6 +59,7 @@ class MainController: BaseController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "embedContainer" {
             self.containerController = segue.destinationViewController as! ContainerController
+            self.containerController.dataController = self.dataController
         }
     }
 }

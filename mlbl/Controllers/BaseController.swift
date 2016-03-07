@@ -10,7 +10,7 @@ import UIKit
 
 class BaseController: UIViewController {
 
-//    var dataController: DataController!
+    var dataController: DataController!
     var tasks = [NSURLSessionTask]()
     
     override func viewWillDisappear(animated: Bool) {
