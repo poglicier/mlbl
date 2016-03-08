@@ -19,8 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         Fabric.with([Crashlytics.self()])
         
-        UINavigationBar.appearance().barTintColor = UIColor.mlblOrangeColor()
-        
         if let mainController = (self.window?.rootViewController as? UINavigationController)?.viewControllers.first as? MainController {
             mainController.dataController = DataController()
         }

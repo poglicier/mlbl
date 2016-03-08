@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class GameController: BaseController {
     private enum Sections: NSInteger {
@@ -17,14 +18,45 @@ class GameController: BaseController {
     }
     
     var gameId: NSNumber!
+    private var game: Game?
     @IBOutlet private var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.automaticallyAdjustsScrollViewInsets = false
+        self.setupTableView()
+        
+        self.getData()
     }
-
+    
+    // MARK: - Private 
+    
+    private func setupTableView() {
+        self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+    }
+    
+    private func getData() {
+        self.dataController.getGameStats(self.gameId,
+            success: { [weak self] in
+                if let strongSelf = self {
+                    let fetchRequest = NSFetchRequest(entityName: Game.entityName())
+                    fetchRequest.predicate = NSPredicate(format: "objectId = %@", strongSelf.gameId)
+                    do {
+                        strongSelf.game = try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Game
+                    } catch {}
+                    
+                    strongSelf.tableView.reloadData()
+                }
+            }) { (let error) -> Void in
+                
+        }
+    }
+    
+    private func configureCell(cell: GameScoreCell, atIndexPath indexPath: NSIndexPath) {
+        cell.game = self.game
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -43,13 +75,11 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        if let sections = self.fetchedResultsController.sections {
-        //            let currentSection = sections[section]
-        //            return currentSection.numberOfObjects
-        //        }
-        //
-        //        return 0
-        return 15
+        if self.game == nil {
+            return 0
+        } else {
+            return 3
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -65,6 +95,6 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-//        self.configureCell(cell as! GameCell, atIndexPath:indexPath)
+        self.configureCell(cell as! GameScoreCell, atIndexPath:indexPath)
     }
 }

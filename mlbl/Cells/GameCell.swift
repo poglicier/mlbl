@@ -7,14 +7,27 @@
 //
 
 import UIKit
+import Alamofire
 
 class GameCell: UITableViewCell {
 
     @IBOutlet private var background: UIView!
+    @IBOutlet private var avatarA: UIImageView!
+    @IBOutlet private var avatarB: UIImageView!
     
     var game: Game! {
         didSet {
+            if let teamAId = game.teamA?.objectId {
+                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
+                    self.avatarA.setImageWithUrl(url)
+                }
+            }
             
+            if let teamBId = game.teamB?.objectId {
+                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
+                    self.avatarB.setImageWithUrl(url)
+                }
+            }
         }
     }
     

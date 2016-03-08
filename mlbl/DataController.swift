@@ -7,8 +7,55 @@
 //
 
 import CoreData
+import Alamofire
 
 class DataController {
+    private let baseURL = "http://reg.infobasket.ru/Widget/"
+    
+    private enum Method: String {
+        case GameStats = "gameBoxScore"
+    }
+    
+    private enum Keys: String {
+        case Format = "format"
+        case Json = "json"
+    }
+    
+    // MARK: - Public
+    
+    func getGameStats(gameId: NSNumber, success: () -> Void, fail: (NSError? -> Void)) -> NSURLSessionTask {
+        let urlString = String(format: "\(self.baseURL)\(Method.GameStats.rawValue)/\(gameId)?\(Keys.Format.rawValue)=\(Keys.Json.rawValue)")
+        print(urlString)
+        return Alamofire.request(.GET,
+            urlString,
+            parameters: nil,
+            encoding: .JSON)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .Success(let JSON):
+                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+                    context.parentContext = self.mainContext
+                    context.performBlock() {
+                        if let resultDict = JSON as? [String:AnyObject] {
+                            Game.gameWithDict(resultDict, inContext: context)
+                            self.saveContext(context)
+                            dispatch_async(dispatch_get_main_queue()) {
+                                success()
+                            }
+                        } else {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                fail(nil)
+                            }
+                        }
+                    }
+                case .Failure(let error):
+                    print("FAIL \(response.request): response = \(response)")
+                    fail(error)
+                }
+            }.task
+    }
+    
     // MARK: - Core Data stack
     
     lazy var applicationDocumentsDirectory: NSURL = {

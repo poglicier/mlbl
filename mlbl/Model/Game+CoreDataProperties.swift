@@ -2,7 +2,7 @@
 //  Game+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 05.03.16.
+//  Created by Valentin Shamardin on 07.03.16.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -14,12 +14,13 @@ import CoreData
 
 extension Game {
 
-    @NSManaged var objectId: NSNumber?
     @NSManaged var date: NSDate?
-    @NSManaged var venueRu: String?
-    @NSManaged var venueEn: NSNumber?
-    @NSManaged var score: String?
+    @NSManaged var objectId: NSNumber?
+    @NSManaged var scoreA: NSNumber?
     @NSManaged var scoreByPeriods: String?
+    @NSManaged var venueEn: String?
+    @NSManaged var venueRu: String?
+    @NSManaged var scoreB: NSNumber?
     @NSManaged var teamA: Team?
     @NSManaged var teamB: Team?
 

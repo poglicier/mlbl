@@ -64,7 +64,7 @@ class GamesController: BaseController {
         if segue.identifier == "goToGame" {
             let gameController = segue.destinationViewController as! GameController
             gameController.dataController = self.dataController
-//            gameController.gameId = self.
+            gameController.gameId = NSNumber(int: 11566)
         }
     }
 }
@@ -137,6 +137,7 @@ extension GamesController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         self.performSegueWithIdentifier("goToGame", sender: nil)
     }
 }
