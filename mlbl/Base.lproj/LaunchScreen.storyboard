@@ -20,10 +20,20 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="wDY-Tk-LPr">
                                 <rect key="frame" x="164" y="164" width="273" height="273"/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dvR-3s-Zbd">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="20"/>
+                                <color key="backgroundColor" red="0.71764705882352942" green="0.25490196078431371" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="9K6-m6-FCW"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.44313725490196076" blue="0.73725490196078436" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="dvR-3s-Zbd" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="1w9-RL-9Ob"/>
+                            <constraint firstAttribute="trailing" secondItem="dvR-3s-Zbd" secondAttribute="trailing" id="C4u-ct-sir"/>
                             <constraint firstItem="wDY-Tk-LPr" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="FRn-2t-G8O"/>
+                            <constraint firstItem="dvR-3s-Zbd" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="n3g-oi-zw9"/>
                             <constraint firstItem="wDY-Tk-LPr" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="yqs-bQ-8kF"/>
                         </constraints>
                     </view>

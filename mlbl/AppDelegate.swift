@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         Fabric.with([Crashlytics.self()])
         
-        if let mainController = (self.window?.rootViewController as? UINavigationController)?.viewControllers.first as? MainController {
+        if let mainController = (self.window?.rootViewController as? UINavigationController)?.viewControllers.first as? BaseController {
             mainController.dataController = DataController()
         }
         

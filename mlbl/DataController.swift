@@ -13,6 +13,7 @@ class DataController {
     private let baseURL = "http://reg.infobasket.ru/Widget/"
     
     private enum Method: String {
+        case Regions = "GetRegions"
         case GameStats = "gameBoxScore"
     }
     
@@ -23,9 +24,64 @@ class DataController {
     
     // MARK: - Public
     
+    func getRegions(success: () -> Void, fail: (NSError? -> Void)) -> NSURLSessionTask {
+        let urlString = String(format: "\(self.baseURL)\(Method.Regions.rawValue)?\(Keys.Format.rawValue)=\(Keys.Json.rawValue)&country=1")
+        return Alamofire.request(.GET,
+            urlString,
+            parameters: nil,
+            encoding: .JSON)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .Success(let JSON):
+                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+                    context.parentContext = self.mainContext
+                    context.performBlock() {
+                        if let resultArray = JSON as? [[String:AnyObject]] {
+                            var regionIdsToSave = [NSNumber]()
+                            for regionDict in resultArray {
+                                let region = Region.regionWithDict(regionDict, inContext: context)
+                                
+                                if let regionId = region?.objectId {
+                                    regionIdsToSave.append(regionId)
+                                }
+                            }
+                            
+                            // Удаляем из Core Data регионы
+                            let fetchRequest = NSFetchRequest(entityName: Region.entityName())
+                            
+                            do {
+                                let all = try context.executeFetchRequest(fetchRequest) as! [Region]
+                                for region in all {
+                                    if let regionId = region.objectId {
+                                        if regionIdsToSave.contains(regionId) == false {
+                                            print("DELETE REGION \(region.nameRu)")
+                                            context.deleteObject(region)
+                                        }
+                                    }
+                                }
+                            }
+                            catch {}
+                            
+                            self.saveContext(context)
+                            dispatch_async(dispatch_get_main_queue()) {
+                                success()
+                            }
+                        } else {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                fail(nil)
+                            }
+                        }
+                    }
+                case .Failure(let error):
+                    print("FAIL \(response.request): response = \(response)")
+                    fail(error)
+                }
+            }.task
+    }
+    
     func getGameStats(gameId: NSNumber, success: () -> Void, fail: (NSError? -> Void)) -> NSURLSessionTask {
         let urlString = String(format: "\(self.baseURL)\(Method.GameStats.rawValue)/\(gameId)?\(Keys.Format.rawValue)=\(Keys.Json.rawValue)")
-        print(urlString)
         return Alamofire.request(.GET,
             urlString,
             parameters: nil,
@@ -111,7 +167,7 @@ class DataController {
     
     // MARK: - Core Data Saving support
     
-    private func saveContext(context: NSManagedObjectContext) {
+    func saveContext(context: NSManagedObjectContext) {
         do {
             try context.save()
             if let parent = context.parentContext {

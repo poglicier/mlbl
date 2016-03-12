@@ -71,7 +71,8 @@ extension UINavigationController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationBar.tintColor = UIColor.whiteColor()
+        self.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
         self.navigationBar.setBackgroundImage(UIImage.imageForNavigationBar(portrait: true), forBarMetrics: .Default)
     }
     

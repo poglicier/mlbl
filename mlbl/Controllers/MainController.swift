@@ -20,6 +20,7 @@ class MainController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.hidesBackButton = true
         self.setupButtons()
     }
     

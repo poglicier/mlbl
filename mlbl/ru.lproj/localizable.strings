@@ -1,0 +1,11 @@
+/* 
+  localizable.strings
+  mlbl
+
+  Created by Valentin Shamardin on 12.03.16.
+  Copyright © 2016 Valentin Shamardin. All rights reserved.
+*/
+
+"Choose region" = "Выберите регион";
+"Error" = "Ошибка";
+"Total" = "Всего";

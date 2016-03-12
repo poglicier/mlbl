@@ -23,10 +23,10 @@ class Game: NSManagedObject {
         case TeamA = "TeamA"
         case TeamB = "TeamB"
     }
+    
     static func gameWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Game? {
         var res: Game?
         
-        print(dict)
         if let objectId = dict[Keys.GameId.rawValue] as? NSNumber {
             let fetchRequest = NSFetchRequest(entityName: Game.entityName())
             fetchRequest.predicate = NSPredicate(format: "objectId = %@", objectId)
