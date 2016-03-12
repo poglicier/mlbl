@@ -22,6 +22,14 @@ class DataController {
         case Json = "json"
     }
     
+    lazy var language: String! = {
+        var prefLanguage = NSLocale.preferredLanguages().first
+        if prefLanguage == nil {
+            prefLanguage = ""
+        }
+        return prefLanguage!
+    }()
+    
     // MARK: - Public
     
     func getRegions(success: () -> Void, fail: (NSError? -> Void)) -> NSURLSessionTask {

@@ -67,13 +67,14 @@ extension UIImage {
     }
 }
 
-extension UINavigationController {
+extension UINavigationController: UINavigationControllerDelegate {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
         self.navigationBar.setBackgroundImage(UIImage.imageForNavigationBar(portrait: true), forBarMetrics: .Default)
+        self.delegate = self
     }
     
     public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -91,6 +92,16 @@ extension UINavigationController {
         }
         
         self.navigationBar.setBackgroundImage(image, forBarMetrics: .Default)
+    }
+    
+    public func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if toVC is ChooseRegionController {
+            let animator = FadeAnimator()
+            animator.presenting = true
+            return animator
+        } else {
+            return nil
+        }
     }
 }
 

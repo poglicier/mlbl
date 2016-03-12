@@ -32,6 +32,8 @@ class ChooseRegionController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.goButton.title = NSLocalizedString("Go", comment: "")
+        
         do {
             try self.fetchedResultsController.performFetch()
         } catch {}
@@ -72,12 +74,7 @@ class ChooseRegionController: BaseController {
     private func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
         let region = fetchedResultsController.objectAtIndexPath(indexPath) as! Region
         
-        var language = NSLocale.preferredLanguages().first
-        if language == nil {
-            language = ""
-        }
-        
-        if language!.containsString("ru") {
+        if self.dataController.language.containsString("ru") {
             cell.textLabel?.text = region.nameRu
         } else {
             cell.textLabel?.text = region.nameEn
@@ -86,6 +83,15 @@ class ChooseRegionController: BaseController {
     
     @IBAction private func goToMain() {
         if let selectedPath = self.tableView.indexPathForSelectedRow {
+            let fetchRequest = NSFetchRequest(entityName: Region.entityName())
+            fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
+            
+            do {
+                if let region = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Region {
+                    region.isChoosen = false
+                }
+            } catch {}
+            
             let region = self.fetchedResultsController.objectAtIndexPath(selectedPath) as! Region
             region.isChoosen = true
             self.dataController.saveContext(self.dataController.mainContext)
@@ -99,6 +105,9 @@ class ChooseRegionController: BaseController {
         if segue.identifier == "goToMain" {
             (segue.destinationViewController as? BaseController)?.dataController = self.dataController
         }
+    }
+    
+    @IBAction private func prepareForUnwind(segue: UIStoryboardSegue) {
     }
 }
 

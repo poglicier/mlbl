@@ -9,7 +9,7 @@
         <!--Choose Region Controller-->
         <scene sceneID="bbK-B7-hYc">
             <objects>
-                <viewController id="QIn-yo-6rW" customClass="ChooseRegionController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChooseRegionController" id="QIn-yo-6rW" customClass="ChooseRegionController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YT1-wT-dUL"/>
                         <viewControllerLayoutGuide type="bottom" id="Fto-yQ-y32"/>
@@ -98,7 +98,7 @@
         <!--Main Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="MainController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="mainController" automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="MainController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -277,7 +277,14 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="PYS-Zn-hhy"/>
+                    <navigationItem key="navigationItem" id="PYS-Zn-hhy">
+                        <barButtonItem key="rightBarButtonItem" image="gear" id="CIm-gM-K2n">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="goToChooseRegion" destination="BYZ-38-t0r" id="gmj-e6-mSM"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="buttonsScrollView" destination="QT1-IJ-G1g" id="Gpo-bk-7I2"/>
                         <outlet property="contentView" destination="CId-vU-Q2G" id="Xuo-bT-3Vf"/>
@@ -1100,6 +1107,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="gear" width="14" height="14"/>
         <image name="teamStub" width="65" height="65"/>
     </resources>
 </document>

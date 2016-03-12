@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 class MainController: BaseController {
 
@@ -16,19 +17,54 @@ class MainController: BaseController {
     @IBOutlet private var contentView: UIView!
     @IBOutlet private var selectedIndicatorView: UIView!
     private var containerController: ContainerController!
+    private var choosenRegion: Region!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.hidesBackButton = true
+        self.setupNavigatioBar()
         self.setupButtons()
     }
     
     // MARK: - Private
     
+    private func setupNavigatioBar() {
+        self.navigationItem.hidesBackButton = true
+        
+        let fetchRequest = NSFetchRequest(entityName: Region.entityName())
+        fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
+        
+        do {
+            if let region = try dataController.mainContext.executeFetchRequest(fetchRequest).first as? Region {
+                self.choosenRegion = region
+                
+                if self.dataController.language.containsString("ru") {
+                    self.title = self.choosenRegion.nameRu
+                } else {
+                    self.title = self.choosenRegion.nameEn
+                }
+            }
+        } catch {}
+    }
+    
     private func setupButtons() {
         for (idx, button) in sectionButtons.enumerate() {
             button.tag = idx
+            
+            if let controllerType = ContainerController.ControllerType(rawValue: idx) {
+                switch controllerType {
+                case .Games:
+                    button.setTitle(NSLocalizedString("Games", comment: "").uppercaseString, forState: .Normal)
+                case .Teams:
+                    button.setTitle(NSLocalizedString("Teams", comment: "").uppercaseString, forState: .Normal)
+                case .Players:
+                    button.setTitle(NSLocalizedString("Players", comment: "").uppercaseString, forState: .Normal)
+                case .Schedule:
+                    button.setTitle(NSLocalizedString("Schedule", comment: "").uppercaseString, forState: .Normal)
+                case .Ratings:
+                    button.setTitle(NSLocalizedString("Player ratings", comment: "").uppercaseString, forState: .Normal)
+                }
+            }
         }
         
         if let first = self.sectionButtons.first {
@@ -52,6 +88,13 @@ class MainController: BaseController {
         
         if let type = ContainerController.ControllerType(rawValue: sender.tag) {
             self.containerController.goToControllerWithControllerType(type)
+        }
+    }
+    
+    @IBAction private func goToChooseRegion() {
+        if let chooseRegionController = self.storyboard?.instantiateViewControllerWithIdentifier("ChooseRegionController") as? BaseController {
+            chooseRegionController.dataController = self.dataController
+            self.navigationController?.setViewControllers([chooseRegionController], animated: true)
         }
     }
     
