@@ -62,7 +62,7 @@ class MainController: BaseController {
                 case .Schedule:
                     button.setTitle(NSLocalizedString("Schedule", comment: "").uppercaseString, forState: .Normal)
                 case .Ratings:
-                    button.setTitle(NSLocalizedString("Player ratings", comment: "").uppercaseString, forState: .Normal)
+                    button.setTitle(NSLocalizedString("Players rating", comment: "").uppercaseString, forState: .Normal)
                 }
             }
         }
@@ -74,7 +74,7 @@ class MainController: BaseController {
     
     @IBAction private func sectionButtonDidTap(sender: UIButton) {
         for sectionButton in self.sectionButtons {
-            sectionButton.selected = sectionButton == sender
+            sectionButton.enabled = sectionButton != sender
         }
         
         self.selectedIndicatorView.snp_remakeConstraints(closure: { (make) -> Void in
