@@ -48,6 +48,8 @@ class MainController: BaseController {
     }
     
     private func setupButtons() {
+        self.buttonsScrollView.scrollsToTop = false
+        
         for (idx, button) in sectionButtons.enumerate() {
             button.tag = idx
             
