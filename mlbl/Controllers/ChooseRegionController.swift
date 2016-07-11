@@ -49,15 +49,9 @@ class ChooseRegionController: BaseController {
         self.tableView.hidden = true
         self.navigationItem.rightBarButtonItem = nil
         
-        self.dataController.getRegions({ [weak self] in
+        self.dataController.getRegions() { [weak self] (error) in
             if let strongSelf = self {
-                strongSelf.activityView.hidden = true
-                strongSelf.activityView.stopAnimating()
-                strongSelf.tableView.hidden = false
-                strongSelf.title = NSLocalizedString("Choose region", comment: "")
-            }
-            }) { [weak self] (let error) -> Void in
-                if let strongSelf = self {
+                if let _ = error {
                     strongSelf.activityView.hidden = true
                     strongSelf.activityView.stopAnimating()
                     let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: "Failed to connect", preferredStyle: .Alert)
@@ -67,7 +61,13 @@ class ChooseRegionController: BaseController {
                     alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                     
                     self?.presentViewController(alert, animated: true, completion: nil)
+                } else {
+                    strongSelf.activityView.hidden = true
+                    strongSelf.activityView.stopAnimating()
+                    strongSelf.tableView.hidden = false
+                    strongSelf.title = NSLocalizedString("Choose region", comment: "")
                 }
+            }
         }
     }
     

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15F34" minimumToolsVersion="Automatic">
     <entity name="Game" representedClassName=".Game" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -27,6 +27,8 @@
         <attribute name="objectId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="regionNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="regionNameRu" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shortNameEn" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="shortNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="guestGames" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Game" inverseName="teamB" inverseEntity="Game" syncable="YES"/>
         <relationship name="homeGames" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Game" inverseName="teamA" inverseEntity="Game" syncable="YES"/>
         <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="team" inverseEntity="Player" syncable="YES"/>
@@ -34,7 +36,7 @@
     <elements>
         <element name="Game" positionX="-63" positionY="-18" width="128" height="180"/>
         <element name="Player" positionX="-27" positionY="81" width="128" height="75"/>
-        <element name="Team" positionX="-54" positionY="36" width="128" height="165"/>
         <element name="Region" positionX="-54" positionY="81" width="128" height="105"/>
+        <element name="Team" positionX="-54" positionY="36" width="128" height="195"/>
     </elements>
 </model>

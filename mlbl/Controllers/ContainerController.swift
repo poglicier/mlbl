@@ -35,8 +35,8 @@ class ContainerController: BaseController {
     private var currentControllerType = ControllerType.Games
     private var activeController: UIViewController?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
 
         self.performSegueWithIdentifier(self.currentControllerType.description, sender: nil)
     }
@@ -60,17 +60,6 @@ class ContainerController: BaseController {
                         segue.destinationViewController.didMoveToParentViewController(self)
                     }
         self.activeController = segue.destinationViewController
-//                case .Teams:
-//                    break
-//                case .Players:
-//                    break
-//                case .Schedule:
-//                    break
-//                case .Ratings:
-//                    break
-//                }
-//            }
-//        }
     }
     
     private func swapFromViewController(fromViewController: UIViewController, toViewController:UIViewController) {
@@ -94,6 +83,27 @@ class ContainerController: BaseController {
     
     func goToControllerWithControllerType(type: ControllerType) {
         self.currentControllerType = type
-        self.performSegueWithIdentifier(self.currentControllerType.description, sender:nil)
+        
+        var toViewController: UIViewController?
+        
+        switch type {
+        case .Games:
+            toViewController = self.childViewControllers.filter { $0 is GamesController }.first
+        case .Players:
+            toViewController = self.childViewControllers.filter { $0 is PlayersController }.first
+        case .Ratings:
+            toViewController = self.childViewControllers.filter { $0 is BaseController }.first
+        case .Schedule:
+            toViewController = self.childViewControllers.filter { $0 is BaseController }.first
+        case .Teams:
+            toViewController = self.childViewControllers.filter { $0 is BaseController }.first
+        }
+        
+        if let _ = toViewController {
+            self.swapFromViewController(self.activeController!, toViewController:toViewController!)
+            self.activeController = toViewController
+        } else {
+            self.performSegueWithIdentifier(self.currentControllerType.description, sender:nil)
+        }
     }
 }

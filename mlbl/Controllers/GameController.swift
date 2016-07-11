@@ -17,7 +17,7 @@ class GameController: BaseController {
         case Count
     }
     
-    var gameId: NSNumber!
+    var gameId: Int!
     private var game: Game?
     @IBOutlet private var tableView: UITableView!
     
@@ -37,20 +37,24 @@ class GameController: BaseController {
     }
     
     private func getData() {
-        self.dataController.getGameStats(self.gameId,
-            success: { [weak self] in
+        self.dataController.getGameStats(self.gameId) { [weak self] (error) in
                 if let strongSelf = self {
-                    let fetchRequest = NSFetchRequest(entityName: Game.entityName())
-                    fetchRequest.predicate = NSPredicate(format: "objectId = %@", strongSelf.gameId)
-                    do {
-                        strongSelf.game = try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Game
-                    } catch {}
-                    
-                    strongSelf.tableView.reloadData()
+                    if let _ = error {
+                        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: error!.userInfo[NSLocalizedDescriptionKey] as? String, preferredStyle: .Alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: .Cancel, handler: nil))
+                        
+                        self?.presentViewController(alert, animated: true, completion: nil)
+                    } else {
+                        let fetchRequest = NSFetchRequest(entityName: Game.entityName())
+                        fetchRequest.predicate = NSPredicate(format: "objectId = %@", strongSelf.gameId)
+                        do {
+                            strongSelf.game = try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Game
+                        } catch {}
+                        
+                        strongSelf.tableView.reloadData()
+                    }
                 }
-            }) { (let error) -> Void in
-                
-        }
+            }
     }
     
     private func configureCell(cell: GameScoreCell, atIndexPath indexPath: NSIndexPath) {

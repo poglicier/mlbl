@@ -9,9 +9,7 @@
 import CoreData
 import Alamofire
 
-class DataController {
-    private let baseURL = "http://reg.infobasket.ru/Widget/"
-    
+class DataController {    
     private enum Method: String {
         case Regions = "GetRegions"
         case GameStats = "gameBoxScore"
@@ -30,94 +28,84 @@ class DataController {
         return prefLanguage!
     }()
     
+    private let queue = NSOperationQueue()
+    private var privateContext: NSManagedObjectContext!
+    private(set) var mainContext: NSManagedObjectContext!
+    
     // MARK: - Public
     
-    func getRegions(success: () -> Void, fail: (NSError? -> Void)) -> NSURLSessionTask {
-        let urlString = String(format: "\(self.baseURL)\(Method.Regions.rawValue)?\(Keys.Format.rawValue)=\(Keys.Json.rawValue)&country=1")
-        return Alamofire.request(.GET,
-            urlString,
-            parameters: nil,
-            encoding: .JSON)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .Success(let JSON):
-                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                    context.parentContext = self.mainContext
-                    context.performBlock() {
-                        if let resultArray = JSON as? [[String:AnyObject]] {
-                            var regionIdsToSave = [NSNumber]()
-                            for regionDict in resultArray {
-                                let region = Region.regionWithDict(regionDict, inContext: context)
-                                
-                                if let regionId = region?.objectId {
-                                    regionIdsToSave.append(regionId)
-                                }
-                            }
-                            
-                            // Удаляем из Core Data регионы
-                            let fetchRequest = NSFetchRequest(entityName: Region.entityName())
-                            
-                            do {
-                                let all = try context.executeFetchRequest(fetchRequest) as! [Region]
-                                for region in all {
-                                    if let regionId = region.objectId {
-                                        if regionIdsToSave.contains(regionId) == false {
-                                            print("DELETE REGION \(region.nameRu)")
-                                            context.deleteObject(region)
-                                        }
-                                    }
-                                }
-                            }
-                            catch {}
-                            
-                            self.saveContext(context)
-                            dispatch_async(dispatch_get_main_queue()) {
-                                success()
-                            }
-                        } else {
-                            dispatch_async(dispatch_get_main_queue()) {
-                                fail(nil)
-                            }
-                        }
-                    }
-                case .Failure(let error):
-                    print("FAIL \(response.request): response = \(response)")
-                    fail(error)
-                }
-            }.task
+    init () {
+        self.privateContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+        self.privateContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+        
+        self.mainContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+        self.mainContext!.parentContext = self.privateContext
     }
     
-    func getGameStats(gameId: NSNumber, success: () -> Void, fail: (NSError? -> Void)) -> NSURLSessionTask {
-        let urlString = String(format: "\(self.baseURL)\(Method.GameStats.rawValue)/\(gameId)?\(Keys.Format.rawValue)=\(Keys.Json.rawValue)")
-        return Alamofire.request(.GET,
-            urlString,
-            parameters: nil,
-            encoding: .JSON)
-            .validate()
-            .responseJSON { response in
-                switch response.result {
-                case .Success(let JSON):
-                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                    context.parentContext = self.mainContext
-                    context.performBlock() {
-                        if let resultDict = JSON as? [String:AnyObject] {
-                            Game.gameWithDict(resultDict, inContext: context)
-                            self.saveContext(context)
-                            dispatch_async(dispatch_get_main_queue()) {
-                                success()
-                            }
-                        } else {
-                            dispatch_async(dispatch_get_main_queue()) {
-                                fail(nil)
-                            }
-                        }
-                    }
-                case .Failure(let error):
-                    print("FAIL \(response.request): response = \(response)")
-                    fail(error)
-                }
-            }.task
+    func getRegions(completion: (NSError? -> ())?) {
+        let request = RegionsRequest()
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func getGamesForDate(date: NSDate, completion: ((NSError?, prevDate: NSDate?, nextDate: NSDate?) -> ())?) {
+        let request = GamesRequest(date: date)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error, prevDate: request.prevDate, nextDate: request.nextDate)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func getGameStats(gameId: Int, completion: (NSError? -> ())?) {
+        let request = GameStatsRequest(gameId: gameId)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+        
+//        let urlString = String(format: "\(self.baseURL)\(Method.GameStats.rawValue)/\(gameId)?\(Keys.Format.rawValue)=\(Keys.Json.rawValue)")
+//        return Alamofire.request(.GET,
+//            urlString,
+//            parameters: nil,
+//            encoding: .JSON)
+//            .validate()
+//            .responseJSON { response in
+//                switch response.result {
+//                case .Success(let JSON):
+//                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+//                    context.parentContext = self.mainContext
+//                    context.performBlock() {
+//                        if let resultDict = JSON as? [String:AnyObject] {
+//                            Game.gameWithDict(resultDict, inContext: context)
+//                            self.saveContext(context)
+//                            dispatch_async(dispatch_get_main_queue()) {
+//                                success()
+//                            }
+//                        } else {
+//                            dispatch_async(dispatch_get_main_queue()) {
+//                                fail(nil)
+//                            }
+//                        }
+//                    }
+//                case .Failure(let error):
+//                    print("FAIL \(response.request): response = \(response)")
+//                    fail(error)
+//                }
+//            }.task
     }
     
     // MARK: - Core Data stack
@@ -159,45 +147,21 @@ class DataController {
         return coordinator
     }()
     
-    lazy private var privateContext: NSManagedObjectContext = {
-        // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
-        let coordinator = self.persistentStoreCoordinator
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-        managedObjectContext.persistentStoreCoordinator = coordinator
-        return managedObjectContext
-    }()
-    
-    lazy var mainContext: NSManagedObjectContext = {
-        var managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
-        managedObjectContext.parentContext = self.privateContext
-        return managedObjectContext
-    }()
-    
     // MARK: - Core Data Saving support
     
     func saveContext(context: NSManagedObjectContext) {
-        do {
-            try context.save()
-            if let parent = context.parentContext {
-                parent.performBlock({ () -> Void in
-                    do {
-                        try parent.save()
-                        if let grandParent = parent.parentContext {
-                            grandParent.performBlock({ () -> Void in
-                                do {
-                                    try grandParent.save()
-                                } catch {
-                                    let nserror = error as NSError
-                                    NSLog("Private Writer Unresolved error \(nserror), \(nserror.userInfo)")
-                                }
-                            })
-                        }
-                    } catch {
-                        let nserror = error as NSError
-                        NSLog("Main Context Unresolved error \(nserror), \(nserror.userInfo)")
+        context.performBlock {
+            if context.hasChanges == true {
+                do {
+                    try context.save()
+                    if let parent = context.parentContext {
+                        self.saveContext(parent)
                     }
-                })
+                } catch {
+                    let nserror = error as NSError
+                    NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
             }
-        } catch {}
+        }
     }
 }

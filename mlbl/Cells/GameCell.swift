@@ -14,20 +14,36 @@ class GameCell: UITableViewCell {
     @IBOutlet private var background: UIView!
     @IBOutlet private var avatarA: UIImageView!
     @IBOutlet private var avatarB: UIImageView!
+    @IBOutlet private var titleLabel: UILabel!
+    @IBOutlet private var statusLabel: UILabel!
+    @IBOutlet private var teamAScoreLabel: UILabel!
+    @IBOutlet private var teamBScoreLabel: UILabel!
+    @IBOutlet private var teamANameLabel: UILabel!
+    @IBOutlet private var teamBNameLabel: UILabel!
+    
+    var language: String!
     
     var game: Game! {
         didSet {
-            if let teamAId = game.teamA?.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
-                    self.avatarA.setImageWithUrl(url)
+            if let teamA = game.teamA {
+                if let teamAId = game.teamA?.objectId {
+                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
+                        self.avatarA.setImageWithUrl(url)
+                    }
                 }
+                self.teamANameLabel.text = self.language.containsString("ru") ? teamA.nameRu : teamA.nameEn
             }
+            self.teamAScoreLabel.text = game.scoreA?.stringValue ?? "-"
             
-            if let teamBId = game.teamB?.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
-                    self.avatarB.setImageWithUrl(url)
+            if let teamB = game.teamB {
+                if let teamBId = game.teamB?.objectId {
+                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
+                        self.avatarB.setImageWithUrl(url)
+                    }
                 }
+                self.teamBNameLabel.text = self.language.containsString("ru") ? teamB.nameRu : teamB.nameEn
             }
+            self.teamBScoreLabel.text = game.scoreB?.stringValue ?? "-"
         }
     }
     

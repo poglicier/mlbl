@@ -11,19 +11,23 @@ import UIKit
 class BaseController: UIViewController {
 
     var dataController: DataController!
-    var tasks = [NSURLSessionTask]()
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        for task in tasks {
-            task.cancel()
-        }
-        
-        self.tasks.removeAll()
-    }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
+    }
+    
+    // MARK: - Private
+    
+    private func hideTopBar(hide: Bool) {
+        self.navigationController?.setNavigationBarHidden(hide, animated: true)
+        UIApplication.sharedApplication().setStatusBarHidden(hide, withAnimation: .Slide)
+    }
+}
+
+extension BaseController: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        if fabs(velocity.y) > 1 {
+            self.hideTopBar(velocity.y > 0)
+        }
     }
 }
