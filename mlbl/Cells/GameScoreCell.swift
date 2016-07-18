@@ -21,7 +21,10 @@ class GameScoreCell: UITableViewCell {
     @IBOutlet private var scoreB: UILabel!
     @IBOutlet private var regionB: UILabel!
     @IBOutlet private var collectionView: UICollectionView!
+    
     private var scoreByPeriods: [(Int, Int)]!
+    
+    var language: String!
     
     var game: Game! {
         didSet {
@@ -37,12 +40,30 @@ class GameScoreCell: UITableViewCell {
                 }
             }
             
-            self.titleA.text = game.teamA?.nameRu
-            self.regionA.text = game.teamA?.regionNameRu
+            if let teamA = game.teamA {
+                if let teamAId = game.teamA?.objectId {
+                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
+                        self.avatarA.setImageWithUrl(url)
+                    }
+                }
+                self.titleA.text = self.language.containsString("ru") ? teamA.nameRu : teamA.nameEn
+            }
+            self.scoreA.text = game.scoreA?.stringValue ?? "-"
+            
+            if let teamB = game.teamB {
+                if let teamBId = game.teamB?.objectId {
+                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
+                        self.avatarB.setImageWithUrl(url)
+                    }
+                }
+                self.titleB.text = self.language.containsString("ru") ? teamB.nameRu : teamB.nameEn
+            }
+            
+            
+            self.regionA.text = self.language.containsString("ru") ? game.teamA?.regionNameRu : game.teamA?.regionNameEn
             self.scoreA.text = game.scoreA?.stringValue
             
-            self.titleB.text = game.teamB?.nameRu
-            self.regionB.text = game.teamB?.regionNameRu
+            self.regionB.text = self.language.containsString("ru") ? game.teamB?.regionNameRu : game.teamA?.regionNameEn
             self.scoreB.text = game.scoreB?.stringValue
             
             if let teamAId = game.teamA?.objectId {
@@ -93,6 +114,14 @@ class GameScoreCell: UITableViewCell {
         self.background.layer.shadowOpacity = 0.5
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false
+        
+        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+            self.titleA.text = self.language.containsString("ru") ? self.game.teamA?.shortNameRu : self.game.teamA?.shortNameEn
+            self.titleB.text = self.language.containsString("ru") ? self.game.teamB?.shortNameRu : self.game.teamB?.shortNameEn
+        } else {
+            self.titleA.text = self.language.containsString("ru") ? self.game.teamA?.nameRu : self.game.teamA?.nameEn
+            self.titleB.text = self.language.containsString("ru") ? self.game.teamB?.nameRu : self.game.teamB?.nameEn
+        }
     }
 }
 

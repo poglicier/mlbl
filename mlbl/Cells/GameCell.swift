@@ -49,6 +49,12 @@ class GameCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        for view in self.background.subviews {
+            if let label = view as? UILabel {
+                label.highlightedTextColor = UIColor.mlblLightOrangeColor()
+            }
+        }
     }
     
     override func layoutSubviews() {
@@ -61,12 +67,31 @@ class GameCell: UITableViewCell {
         self.background.layer.shadowOpacity = 0.5
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false
+        
+        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+            self.teamANameLabel.text = self.language.containsString("ru") ? self.game.teamA?.shortNameRu : self.game.teamA?.shortNameEn
+            self.teamBNameLabel.text = self.language.containsString("ru") ? self.game.teamB?.shortNameRu : self.game.teamB?.shortNameEn
+        } else {
+            self.teamANameLabel.text = self.language.containsString("ru") ? self.game.teamA?.nameRu : self.game.teamA?.nameEn
+            self.teamBNameLabel.text = self.language.containsString("ru") ? self.game.teamB?.nameRu : self.game.teamB?.nameEn
+        }
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
+        let color = self.background.backgroundColor
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        
+        if (selected) {
+            self.background.backgroundColor = color
+        }
     }
-
+    
+    override func setHighlighted(highlighted: Bool, animated: Bool) {
+        let color = self.background.backgroundColor
+        super.setHighlighted(highlighted, animated: animated)
+        
+        if (highlighted) {
+            self.background.backgroundColor = color
+        }
+    }
 }

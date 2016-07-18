@@ -23,7 +23,7 @@ class GameStatsRequest: NetworkRequest {
             return
         }
         
-        guard let url = NSURL(string: "gameBoxScore?gameId=\(self.gameId)&format=json", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        guard let url = NSURL(string: "GameBoxScore/\(self.gameId)?format=json", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
         
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
@@ -35,11 +35,6 @@ class GameStatsRequest: NetworkRequest {
                 return
             }
         }
-        
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.setValue("application/json", forHTTPHeaderField: "Accept")
-//        request.setValue("1.0", forHTTPHeaderField: self.versionKey)
-//        request.setValue(self.sessionId, forHTTPHeaderField: self.sessionIdKey)
         
         self.sessionTask = localURLSession.dataTaskWithRequest(request)
         self.sessionTask?.resume()
@@ -58,11 +53,11 @@ class GameStatsRequest: NetworkRequest {
                     }
                     
                     self.error = NSError(domain: "Error", code: code, userInfo: userInfo)
-                } else if let result = dict["result"]?["user"] as? [String:AnyObject] {
+                } else {
                     let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
                     context.parentContext = self.dataController?.mainContext
-                    context.performBlock({
-//                        User.userWithDict(result, inContext: context)
+                    context.performBlockAndWait({
+                        Game.gameWithStatDict(dict, inContext: context)
                         self.dataController?.saveContext(context)
                     })
                 }

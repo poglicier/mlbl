@@ -13,10 +13,10 @@ class GamesController: BaseController {
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var dateLabel: UILabel!
     @IBOutlet private var emptyLabel: UILabel!
-    @IBOutlet private var activityView: UIActivityIndicatorView!
     @IBOutlet private var datesView: UIView!
     @IBOutlet private var prevButton: UIButton!
     @IBOutlet private var nextButton: UIButton!
+    @IBOutlet private var tableViewCenterX: NSLayoutConstraint!
     
     private var selectedGameId: Int?
     private var prevDate: NSDate?
@@ -94,12 +94,9 @@ class GamesController: BaseController {
     
     private func getData() {
         if let date = self.currentDate {
-            self.activityView.hidden = false
             self.activityView.startAnimating()
             self.tableView.hidden = true
-            self.prevButton.enabled = false
-            self.nextButton.enabled = false
-            
+
             let dates = self.datesIntervalForDate(date)
             self.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "date > %@ AND date < %@", dates.0, dates.1)
             
@@ -110,7 +107,7 @@ class GamesController: BaseController {
             
             self.dataController.getGamesForDate(date) { [weak self] (error, newPrevDate, newNextDate) in
                 if let strongSelf = self {
-                    strongSelf.activityView.hidden = true
+                    strongSelf.activityView.stopAnimating()
 
                     if let _ = error {
                         strongSelf.prevButton.enabled = strongSelf.prevDate != nil
@@ -140,11 +137,16 @@ class GamesController: BaseController {
     @IBAction private func goToPrevDate() {
         self.currentDate = self.prevDate
         
-        var tableViewFrame = self.tableView.frame
-        tableViewFrame.origin.x = self.tableView.frame.size.width
-        UIView.animateWithDuration(0.3, animations: { 
-            self.tableView.frame = tableViewFrame
+        self.prevButton.enabled = false
+        self.nextButton.enabled = false
+        
+        self.tableViewCenterX.constant = self.tableView.frame.size.width
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
             }) { (Bool) in
+                self.tableViewCenterX.constant = 0
+                self.view.layoutIfNeeded()
+                
                 self.getData()
             }
     }
@@ -152,11 +154,16 @@ class GamesController: BaseController {
     @IBAction private func goToNextDate() {
         self.currentDate = self.nextDate
         
-        var tableViewFrame = self.tableView.frame
-        tableViewFrame.origin.x = -self.tableView.frame.size.width
+        self.prevButton.enabled = false
+        self.nextButton.enabled = false
+        
+        self.tableViewCenterX.constant = -self.tableView.frame.size.width
         UIView.animateWithDuration(0.3, animations: {
-            self.tableView.frame = tableViewFrame
+            self.view.layoutIfNeeded()
         }) { (Bool) in
+            self.tableViewCenterX.constant = 0
+            self.view.layoutIfNeeded()
+            
             self.getData()
         }
     }

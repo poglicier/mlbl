@@ -35,8 +35,20 @@ class PlayerCell: UITableViewCell {
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
+        let color = self.background.backgroundColor
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        
+        if (selected) {
+            self.background.backgroundColor = color
+        }
+    }
+    
+    override func setHighlighted(highlighted: Bool, animated: Bool) {
+        let color = self.background.backgroundColor
+        super.setHighlighted(highlighted, animated: animated)
+        
+        if (highlighted) {
+            self.background.backgroundColor = color
+        }
     }
 }

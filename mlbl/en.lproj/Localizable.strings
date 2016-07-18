@@ -11,9 +11,8 @@
 "Total" = "Total";
 "Go" = "Go";
 "Games" = "Games";
-"Teams" = "Teams";
-"Players" = "Players";
-"Schedule" = "Schedule";
+"Table" = "Leage table";
+"Statistics" = "Statistics";
 "Players rating" = "Players rating";
 
 "No games stub" = "No games for selected date";

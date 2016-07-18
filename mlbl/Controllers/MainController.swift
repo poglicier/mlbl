@@ -51,26 +51,27 @@ class MainController: BaseController {
         self.buttonsScrollView.scrollsToTop = false
         
         for (idx, button) in sectionButtons.enumerate() {
+            if idx == 0 {
+                self.selectedIndicatorView.snp_remakeConstraints(closure: { (make) -> Void in
+                    make.centerX.equalTo(button.snp_centerX)
+                    make.width.equalTo(button.snp_width)
+                })
+            }
+            
             button.tag = idx
             
             if let controllerType = ContainerController.ControllerType(rawValue: idx) {
                 switch controllerType {
                 case .Games:
                     button.setTitle(NSLocalizedString("Games", comment: "").uppercaseString, forState: .Normal)
-                case .Teams:
-                    button.setTitle(NSLocalizedString("Teams", comment: "").uppercaseString, forState: .Normal)
-                case .Players:
-                    button.setTitle(NSLocalizedString("Players", comment: "").uppercaseString, forState: .Normal)
-                case .Schedule:
-                    button.setTitle(NSLocalizedString("Schedule", comment: "").uppercaseString, forState: .Normal)
+                case .Table:
+                    button.setTitle(NSLocalizedString("Table", comment: "").uppercaseString, forState: .Normal)
+                case .Statistics:
+                    button.setTitle(NSLocalizedString("Statistics", comment: "").uppercaseString, forState: .Normal)
                 case .Ratings:
                     button.setTitle(NSLocalizedString("Players rating", comment: "").uppercaseString, forState: .Normal)
                 }
             }
-        }
-        
-        if let first = self.sectionButtons.first {
-            self.sectionButtonDidTap(first)
         }
     }
     

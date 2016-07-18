@@ -37,8 +37,13 @@ class GameController: BaseController {
     }
     
     private func getData() {
+        self.activityView.hidden = false
+        self.activityView.startAnimating()
+        
         self.dataController.getGameStats(self.gameId) { [weak self] (error) in
                 if let strongSelf = self {
+                    strongSelf.activityView.hidden = true
+                    
                     if let _ = error {
                         let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: error!.userInfo[NSLocalizedDescriptionKey] as? String, preferredStyle: .Alert)
                         alert.addAction(UIAlertAction(title: "Ok", style: .Cancel, handler: nil))
@@ -46,7 +51,7 @@ class GameController: BaseController {
                         self?.presentViewController(alert, animated: true, completion: nil)
                     } else {
                         let fetchRequest = NSFetchRequest(entityName: Game.entityName())
-                        fetchRequest.predicate = NSPredicate(format: "objectId = %@", strongSelf.gameId)
+                        fetchRequest.predicate = NSPredicate(format: "objectId = \(strongSelf.gameId)")
                         do {
                             strongSelf.game = try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Game
                         } catch {}
@@ -58,6 +63,7 @@ class GameController: BaseController {
     }
     
     private func configureCell(cell: GameScoreCell, atIndexPath indexPath: NSIndexPath) {
+        cell.language = self.dataController.language
         cell.game = self.game
     }
     
@@ -79,11 +85,26 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var res = 0
+        
         if self.game == nil {
-            return 0
+            res = 0
         } else {
-            return 3
+            if let gameSection = Sections(rawValue: section) {
+                switch gameSection {
+                case .Hat:
+                    res = 1
+                case .TeamA:
+                    res = 1
+                case .TeamB:
+                    res = 1
+                default:
+                    res = 0
+                }
+            }
         }
+        
+        return res
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

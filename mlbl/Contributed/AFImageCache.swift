@@ -125,13 +125,15 @@ extension UIImageView {
                     if request.URL!.isEqual(self.af_requestImageOperation.request?.URL) {
                         let image:UIImage? = UIImage(data: data)
                         if image != nil {
-                            if success != nil {
-                                success!(request: request, response: response, image: image!, fromCache:false)
+                            if image!.size != CGSizeMake(1, 1) {
+                                if success != nil {
+                                    success!(request: request, response: response, image: image!, fromCache:false)
+                                }
+                                else {
+                                    self.image = image!
+                                }
+                                UIImageView.sharedImageCache().cacheImage(image!, forRequest: request)
                             }
-                            else {
-                                self.image = image!
-                            }
-                            UIImageView.sharedImageCache().cacheImage(image!, forRequest: request)
                         }
                         
                         self.af_requestImageOperation = (nil, nil)

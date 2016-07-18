@@ -11,6 +11,13 @@ import UIKit
 class BaseController: UIViewController {
 
     var dataController: DataController!
+    private(set) var activityView: UIActivityIndicatorView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.setupActivityView()
+    }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
@@ -20,7 +27,20 @@ class BaseController: UIViewController {
     
     private func hideTopBar(hide: Bool) {
         self.navigationController?.setNavigationBarHidden(hide, animated: true)
-        UIApplication.sharedApplication().setStatusBarHidden(hide, withAnimation: .Slide)
+    }
+    
+    private func setupActivityView() {
+        let av = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        av.hidesWhenStopped = true
+        av.color = UIColor.mlblLightOrangeColor()
+        self.view.addSubview(av)
+        av.snp_makeConstraints { (make) in
+            make.centerX.equalTo(0)
+            make.centerY.equalTo(0)
+        }
+        av.hidden = true
+        
+        self.activityView = av
     }
 }
 

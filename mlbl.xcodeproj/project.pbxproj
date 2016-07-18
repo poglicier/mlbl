@@ -32,6 +32,8 @@
 		FC74B8131C8F646F000E6CC6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC74B8121C8F646F000E6CC6 /* Extensions.swift */; };
 		FC74B8151C8F648E000E6CC6 /* AFImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC74B8141C8F648E000E6CC6 /* AFImageCache.swift */; };
 		FC74B8171C8F733A000E6CC6 /* PeriodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC74B8161C8F733A000E6CC6 /* PeriodCell.swift */; };
+		FC8F7A151D3CF2A50056C4D4 /* TableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8F7A141D3CF2A50056C4D4 /* TableController.swift */; };
+		FC8F7A171D3CF33E0056C4D4 /* RatingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC8F7A161D3CF33E0056C4D4 /* RatingsController.swift */; };
 		FC97930D1C8B5D9C00D4D5D9 /* GamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC97930C1C8B5D9C00D4D5D9 /* GamesController.swift */; };
 		FC9793111C8B5F2A00D4D5D9 /* mlbl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC97930F1C8B5F2A00D4D5D9 /* mlbl.xcdatamodeld */; };
 		FC9793181C8B6ADB00D4D5D9 /* Team+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9793121C8B6ADB00D4D5D9 /* Team+CoreDataProperties.swift */; };
@@ -78,6 +80,8 @@
 		FC74B8121C8F646F000E6CC6 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FC74B8141C8F648E000E6CC6 /* AFImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AFImageCache.swift; sourceTree = "<group>"; };
 		FC74B8161C8F733A000E6CC6 /* PeriodCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodCell.swift; sourceTree = "<group>"; };
+		FC8F7A141D3CF2A50056C4D4 /* TableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableController.swift; sourceTree = "<group>"; };
+		FC8F7A161D3CF33E0056C4D4 /* RatingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingsController.swift; sourceTree = "<group>"; };
 		FC97930C1C8B5D9C00D4D5D9 /* GamesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamesController.swift; sourceTree = "<group>"; };
 		FC9793101C8B5F2A00D4D5D9 /* mlbl.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = mlbl.xcdatamodel; sourceTree = "<group>"; };
 		FC9793121C8B6ADB00D4D5D9 /* Team+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Team+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -202,6 +206,8 @@
 				FC321FA71C82DF8D00674271 /* PlayersController.swift */,
 				FC97930C1C8B5D9C00D4D5D9 /* GamesController.swift */,
 				FC9793251C8D8AEA00D4D5D9 /* GameController.swift */,
+				FC8F7A141D3CF2A50056C4D4 /* TableController.swift */,
+				FC8F7A161D3CF33E0056C4D4 /* RatingsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -394,9 +400,11 @@
 				FC705D4F1C80F8FC00216AB8 /* BaseController.swift in Sources */,
 				FC97930D1C8B5D9C00D4D5D9 /* GamesController.swift in Sources */,
 				FC74B8131C8F646F000E6CC6 /* Extensions.swift in Sources */,
+				FC8F7A151D3CF2A50056C4D4 /* TableController.swift in Sources */,
 				FC97931C1C8B6ADB00D4D5D9 /* Player+CoreDataProperties.swift in Sources */,
 				FC637E541C94568A009EE880 /* GameStatsCell.swift in Sources */,
 				FC9793191C8B6ADB00D4D5D9 /* Team.swift in Sources */,
+				FC8F7A171D3CF33E0056C4D4 /* RatingsController.swift in Sources */,
 				FC9793231C8B729100D4D5D9 /* DataController.swift in Sources */,
 				FC39395C1D2EE0E700F8361E /* TournamentsRequest.swift in Sources */,
 				FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */,

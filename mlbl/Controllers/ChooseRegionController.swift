@@ -11,7 +11,6 @@ import CoreData
 
 class ChooseRegionController: BaseController {
     @IBOutlet private var tableView: UITableView!
-    @IBOutlet private var activityView: UIActivityIndicatorView!
     @IBOutlet private var goButton: UIBarButtonItem!
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {

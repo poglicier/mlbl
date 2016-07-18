@@ -11,21 +11,18 @@ import UIKit
 class ContainerController: BaseController {
     enum ControllerType: Int, CustomStringConvertible {
         case Games
-        case Teams
-        case Players
-        case Schedule
+        case Table
+        case Statistics
         case Ratings
         
         var description: String {
             switch self {
             case .Games:
                 return "Games"
-            case .Teams:
-                return "Teams"
-            case .Players:
-                return "Players"
-            case .Schedule:
-                return "Schedule"
+            case .Table:
+                return "Table"
+            case .Statistics:
+                return "Statistics"
             case .Ratings:
                 return "Ratings"
             }
@@ -38,45 +35,36 @@ class ContainerController: BaseController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-        self.performSegueWithIdentifier(self.currentControllerType.description, sender: nil)
+        if self.activeController == nil {
+            self.performSegueWithIdentifier(self.currentControllerType.description, sender: nil)
+        }
     }
     
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        if let identifier = segue.identifier {
-//            if let segueId = SegueId(rawValue: identifier) {
-//                switch segueId {
-//                case .Games:
-                    if self.childViewControllers.count > 0 {
-                        self.swapFromViewController(self.activeController!, toViewController:segue.destinationViewController)
-                    }
-                    else {
-                        (segue.destinationViewController as? BaseController)?.dataController = self.dataController
-
-                        self.addChildViewController(segue.destinationViewController)
-                        segue.destinationViewController.view.frame = self.view.bounds
-                        self.view.addSubview(segue.destinationViewController.view)
-                        segue.destinationViewController.didMoveToParentViewController(self)
-                    }
-        self.activeController = segue.destinationViewController
-    }
-    
-    private func swapFromViewController(fromViewController: UIViewController, toViewController:UIViewController) {
-        (toViewController as? BaseController)?.dataController = self.dataController
-        
-        toViewController.view.frame = self.view.bounds
-        
-        fromViewController.willMoveToParentViewController(nil)
-        self.addChildViewController(toViewController)
-        self.transitionFromViewController(fromViewController,
-            toViewController: toViewController,
-            duration: 0.3,
-            options: .TransitionCrossDissolve,
-            animations: nil) { (_) -> Void in
-                fromViewController.removeFromParentViewController()
-                toViewController.didMoveToParentViewController(self)
+        if self.childViewControllers.count > 0 {
+            segue.destinationViewController.view.frame = self.view.bounds
+            self.activeController?.willMoveToParentViewController(segue.destinationViewController)
+            self.addChildViewController(segue.destinationViewController)
+            self.transitionFromViewController(self.activeController!,
+                                              toViewController: segue.destinationViewController,
+                                              duration: 0.3,
+                                              options: .TransitionCrossDissolve,
+                                              animations: nil) { (_) -> Void in
+                                                segue.destinationViewController.didMoveToParentViewController(self)
+            }
         }
+        else {
+            (segue.destinationViewController as? BaseController)?.dataController = self.dataController
+
+            self.addChildViewController(segue.destinationViewController)
+            segue.destinationViewController.view.frame = self.view.bounds
+            self.view.addSubview(segue.destinationViewController.view)
+            segue.destinationViewController.didMoveToParentViewController(self)
+        }
+        
+        self.activeController = segue.destinationViewController
     }
 
     // MARK: - Public
@@ -89,18 +77,26 @@ class ContainerController: BaseController {
         switch type {
         case .Games:
             toViewController = self.childViewControllers.filter { $0 is GamesController }.first
-        case .Players:
+        case .Statistics:
             toViewController = self.childViewControllers.filter { $0 is PlayersController }.first
         case .Ratings:
-            toViewController = self.childViewControllers.filter { $0 is BaseController }.first
-        case .Schedule:
-            toViewController = self.childViewControllers.filter { $0 is BaseController }.first
-        case .Teams:
-            toViewController = self.childViewControllers.filter { $0 is BaseController }.first
+            toViewController = self.childViewControllers.filter { $0 is RatingsController }.first
+        case .Table:
+            toViewController = self.childViewControllers.filter { $0 is TableController }.first
         }
         
         if let _ = toViewController {
-            self.swapFromViewController(self.activeController!, toViewController:toViewController!)
+            toViewController!.view.frame = self.view.bounds
+            self.activeController?.willMoveToParentViewController(toViewController)
+            self.addChildViewController(toViewController!)
+            self.transitionFromViewController(self.activeController!,
+                                              toViewController: toViewController!,
+                                              duration: 0.3,
+                                              options: .TransitionCrossDissolve,
+                                              animations: nil) { (_) -> Void in
+                                                toViewController!.didMoveToParentViewController(self)
+            }
+            
             self.activeController = toViewController
         } else {
             self.performSegueWithIdentifier(self.currentControllerType.description, sender:nil)
