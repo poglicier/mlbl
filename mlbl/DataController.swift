@@ -7,7 +7,6 @@
 //
 
 import CoreData
-import Alamofire
 
 class DataController {    
     private enum Method: String {
