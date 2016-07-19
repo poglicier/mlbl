@@ -12,13 +12,23 @@
         <relationship name="teamB" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="guestGames" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Player" representedClassName=".Player" syncable="YES">
+        <attribute name="birth" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="firstNameEn" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstNameRu" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gender" optional="YES" attributeType="Integer 16" syncable="YES"/>
+        <attribute name="height" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastNameEn" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="players" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="Region" representedClassName=".Region" syncable="YES">
         <attribute name="isChoosen" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="nameEn" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nameEnOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="nameRu" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="nameRuOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Team" representedClassName=".Team" syncable="YES">
@@ -35,8 +45,8 @@
     </entity>
     <elements>
         <element name="Game" positionX="-63" positionY="-18" width="128" height="180"/>
-        <element name="Player" positionX="-27" positionY="81" width="128" height="75"/>
-        <element name="Region" positionX="-54" positionY="81" width="128" height="105"/>
+        <element name="Player" positionX="-27" positionY="81" width="128" height="195"/>
+        <element name="Region" positionX="-54" positionY="81" width="128" height="135"/>
         <element name="Team" positionX="-54" positionY="36" width="128" height="195"/>
     </elements>
 </model>

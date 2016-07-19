@@ -15,7 +15,8 @@ class ChooseRegionController: BaseController {
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Region.entityName())
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "objectId", ascending: true)]
+        let isRusLanguage = self.dataController.language.containsString("ru")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: isRusLanguage ? "nameRuOrder" : "nameEnOrder", ascending: true), NSSortDescriptor(key: isRusLanguage ? "nameRu" : "nameEn", ascending: true)]
         
         let frc = NSFetchedResultsController(
             fetchRequest: fetchRequest,
@@ -43,26 +44,22 @@ class ChooseRegionController: BaseController {
     // MARK: - Private
     
     private func getData() {
-        self.activityView.hidden = false
         self.activityView.startAnimating()
         self.tableView.hidden = true
         self.navigationItem.rightBarButtonItem = nil
         
         self.dataController.getRegions() { [weak self] (error) in
             if let strongSelf = self {
+                strongSelf.activityView.stopAnimating()
                 if let _ = error {
-                    strongSelf.activityView.hidden = true
-                    strongSelf.activityView.stopAnimating()
                     let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: "Failed to connect", preferredStyle: .Alert)
                     alert.addAction(UIAlertAction(title: "Retry", style: .Default, handler: { (_) -> Void in
                         strongSelf.getData()
                     }))
                     alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                     
-                    self?.presentViewController(alert, animated: true, completion: nil)
+                    strongSelf.presentViewController(alert, animated: true, completion: nil)
                 } else {
-                    strongSelf.activityView.hidden = true
-                    strongSelf.activityView.stopAnimating()
                     strongSelf.tableView.hidden = false
                     strongSelf.title = NSLocalizedString("Choose region", comment: "")
                 }
@@ -179,5 +176,10 @@ extension ChooseRegionController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.navigationItem.rightBarButtonItem = self.goButton
+    }
+    
+    override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        // Пустая реализация нужна для того, чтобы затереть реализацию BaseController,
+        // в которой прячется navigationBar
     }
 }

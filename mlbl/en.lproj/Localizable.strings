@@ -13,6 +13,13 @@
 "Games" = "Games";
 "Table" = "Leage table";
 "Statistics" = "Statistics";
-"Players rating" = "Players rating";
+"Players rating" = "Players";
 
 "No games stub" = "No games for selected date";
+"No players stub" = "No players loaded";
+
+"Date" = "Date";
+"Height" = "Height";
+"Weight" = "Weight";
+"cm" = "cm";
+"kg" = "kg";

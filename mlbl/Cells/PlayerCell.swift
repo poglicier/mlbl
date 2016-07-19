@@ -11,15 +11,66 @@ import UIKit
 class PlayerCell: UITableViewCell {
     @IBOutlet private var background: UIView!
     @IBOutlet private var avatarView: UIImageView!
+    @IBOutlet private var nameLabel: UILabel!
+    @IBOutlet private var dateTitleLabel: UILabel!
+    @IBOutlet private var dateValueLabel: UILabel!
+    @IBOutlet private var heightTitleLabel: UILabel!
+    @IBOutlet private var heightValueLabel: UILabel!
+    @IBOutlet private var weightTitleLabel: UILabel!
+    @IBOutlet private var weightValueLabel: UILabel!
     
-    var player: AnyObject! {
+    static private var dateFormatter: NSDateFormatter = {
+        let res = NSDateFormatter()
+        res.dateFormat = "dd.MM.yyyy"
+        return res
+    }()
+    
+    var language: String!
+    var player: Player! {
         didSet {
             self.avatarView.image = UIImage(named: "avatarStub\(1+arc4random_uniform(3))")
+            
+            let isLanguageRu = self.language.containsString("ru")
+            
+            let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn
+            let lastName = isLanguageRu ? player.lastNameRu : player.lastNameEn
+            
+            if lastName != nil {
+                if firstName != nil {
+                    self.nameLabel.text = lastName! + " " + firstName!
+                } else {
+                    self.nameLabel.text = lastName
+                }
+            } else {
+                self.nameLabel.text = "-"
+            }
+            
+            if let date = player.birth {
+                self.dateValueLabel.text = PlayerCell.dateFormatter.stringFromDate(date)
+            } else {
+                self.dateValueLabel.text = "-"
+            }
+            
+            if let height = player.height {
+                self.heightValueLabel.text = "\(height)" + " " + NSLocalizedString("cm", comment: "")
+            } else {
+                self.heightValueLabel.text = "-"
+            }
+            
+            if let weight = player.weight {
+                self.weightValueLabel.text = "\(weight)" + " " + NSLocalizedString("kg", comment: "")
+            } else {
+                self.weightValueLabel.text = "-"
+            }
         }
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        self.dateTitleLabel.text = NSLocalizedString("Date", comment: "") + ":"
+        self.heightTitleLabel.text = NSLocalizedString("Height", comment: "") + ":"
+        self.weightTitleLabel.text = NSLocalizedString("Weight", comment: "") + ":"
     }
     
     override func layoutSubviews() {

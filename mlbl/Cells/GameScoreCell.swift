@@ -28,16 +28,18 @@ class GameScoreCell: UITableViewCell {
     
     var game: Game! {
         didSet {
+            let isLanguageRu = self.language.containsString("ru")
+            
             self.titleLabel.text = nil
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "dd MMMM yyyy, hh:mm"
             if let date = game.date {
                 var titleString = dateFormatter.stringFromDate(date)
                 
-                if let venue = game.venueRu {
+                if let venue = isLanguageRu ? game.venueRu : game.venueEn {
                     titleString += " \(venue)"
-                    self.titleLabel.text = titleString
                 }
+                self.titleLabel.text = titleString
             }
             
             if let teamA = game.teamA {
@@ -46,7 +48,7 @@ class GameScoreCell: UITableViewCell {
                         self.avatarA.setImageWithUrl(url)
                     }
                 }
-                self.titleA.text = self.language.containsString("ru") ? teamA.nameRu : teamA.nameEn
+                self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
             }
             self.scoreA.text = game.scoreA?.stringValue ?? "-"
             
@@ -56,14 +58,13 @@ class GameScoreCell: UITableViewCell {
                         self.avatarB.setImageWithUrl(url)
                     }
                 }
-                self.titleB.text = self.language.containsString("ru") ? teamB.nameRu : teamB.nameEn
+                self.titleB.text = isLanguageRu ? teamB.nameRu : teamB.nameEn
             }
             
-            
-            self.regionA.text = self.language.containsString("ru") ? game.teamA?.regionNameRu : game.teamA?.regionNameEn
+            self.regionA.text = isLanguageRu ? game.teamA?.regionNameRu : game.teamA?.regionNameEn
             self.scoreA.text = game.scoreA?.stringValue
             
-            self.regionB.text = self.language.containsString("ru") ? game.teamB?.regionNameRu : game.teamA?.regionNameEn
+            self.regionB.text = isLanguageRu ? game.teamB?.regionNameRu : game.teamA?.regionNameEn
             self.scoreB.text = game.scoreB?.stringValue
             
             if let teamAId = game.teamA?.objectId {

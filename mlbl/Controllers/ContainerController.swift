@@ -21,10 +21,10 @@ class ContainerController: BaseController {
                 return "Games"
             case .Table:
                 return "Table"
-            case .Statistics:
-                return "Statistics"
             case .Ratings:
                 return "Ratings"
+            case .Statistics:
+                return "Statistics"
             }
         }
     }
@@ -43,6 +43,8 @@ class ContainerController: BaseController {
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        (segue.destinationViewController as? BaseController)?.dataController = self.dataController
+        
         if self.childViewControllers.count > 0 {
             segue.destinationViewController.view.frame = self.view.bounds
             self.activeController?.willMoveToParentViewController(segue.destinationViewController)
@@ -56,8 +58,6 @@ class ContainerController: BaseController {
             }
         }
         else {
-            (segue.destinationViewController as? BaseController)?.dataController = self.dataController
-
             self.addChildViewController(segue.destinationViewController)
             segue.destinationViewController.view.frame = self.view.bounds
             self.view.addSubview(segue.destinationViewController.view)
@@ -86,6 +86,8 @@ class ContainerController: BaseController {
         }
         
         if let _ = toViewController {
+            (toViewController as? BaseController)?.dataController = self.dataController
+            
             toViewController!.view.frame = self.view.bounds
             self.activeController?.willMoveToParentViewController(toViewController)
             self.addChildViewController(toViewController!)

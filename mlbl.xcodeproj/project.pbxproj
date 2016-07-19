@@ -23,6 +23,7 @@
 		FC637E5A1C945EC7009EE880 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E581C945EC7009EE880 /* Region.swift */; };
 		FC637E5D1C946617009EE880 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC637E5F1C946617009EE880 /* Localizable.strings */; };
 		FC637E641C94AB0B009EE880 /* FadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E631C94AB0B009EE880 /* FadeAnimator.swift */; };
+		FC6FC1621D3D4807004B49E1 /* PlayersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC6FC1611D3D4807004B49E1 /* PlayersRequest.swift */; };
 		FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC705D361C80F00A00216AB8 /* AppDelegate.swift */; };
 		FC705D3C1C80F00A00216AB8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC705D3A1C80F00A00216AB8 /* Main.storyboard */; };
 		FC705D411C80F00A00216AB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC705D401C80F00A00216AB8 /* Assets.xcassets */; };
@@ -69,6 +70,7 @@
 		FC637E5E1C946617009EE880 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FC637E601C946626009EE880 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FC637E631C94AB0B009EE880 /* FadeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeAnimator.swift; sourceTree = "<group>"; };
+		FC6FC1611D3D4807004B49E1 /* PlayersRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayersRequest.swift; sourceTree = "<group>"; };
 		FC705D331C80F00A00216AB8 /* mlbl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mlbl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC705D361C80F00A00216AB8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC705D3B1C80F00A00216AB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				FC3939571D2ED52800F8361E /* GameStatsRequest.swift */,
 				FC3939591D2EDFEF00F8361E /* GamesRequest.swift */,
 				FC39395B1D2EE0E700F8361E /* TournamentsRequest.swift */,
+				FC6FC1611D3D4807004B49E1 /* PlayersRequest.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -397,6 +400,7 @@
 				FCE18BAE1C8DF8120077A51A /* GameScoreCell.swift in Sources */,
 				FC97931A1C8B6ADB00D4D5D9 /* Game+CoreDataProperties.swift in Sources */,
 				FC321FAC1C82F97900674271 /* EmptySegue.swift in Sources */,
+				FC6FC1621D3D4807004B49E1 /* PlayersRequest.swift in Sources */,
 				FC705D4F1C80F8FC00216AB8 /* BaseController.swift in Sources */,
 				FC97930D1C8B5D9C00D4D5D9 /* GamesController.swift in Sources */,
 				FC74B8131C8F646F000E6CC6 /* Extensions.swift in Sources */,

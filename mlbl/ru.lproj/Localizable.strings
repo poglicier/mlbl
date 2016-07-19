@@ -13,6 +13,13 @@
 "Games" = "Игры";
 "Table" = "Таблица";
 "Statistics" = "Статистика";
-"Players rating" = "Рейтинг игроков";
+"Players rating" = "Игроки";
 
 "No games stub" = "На выбранную дату игры не запланированы";
+"No players stub" = "Игроки не загружены";
+
+"Date" = "Дата";
+"Height" = "Рост";
+"Weight" = "Вес";
+"cm" = "см";
+"kg" = "кг";

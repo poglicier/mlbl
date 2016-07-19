@@ -96,6 +96,7 @@ class GamesController: BaseController {
         if let date = self.currentDate {
             self.activityView.startAnimating()
             self.tableView.hidden = true
+            self.emptyLabel.hidden = true
 
             let dates = self.datesIntervalForDate(date)
             self.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "date > %@ AND date < %@", dates.0, dates.1)
@@ -112,10 +113,13 @@ class GamesController: BaseController {
                     if let _ = error {
                         strongSelf.prevButton.enabled = strongSelf.prevDate != nil
                         strongSelf.nextButton.enabled = strongSelf.nextDate != nil
+                        strongSelf.emptyLabel.text = error?.localizedDescription
                     } else {
                         strongSelf.tableView.hidden = false
+                        strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
                         strongSelf.prevButton.enabled = newPrevDate != nil
                         strongSelf.nextButton.enabled = newNextDate != nil
+                        strongSelf.emptyLabel.text = NSLocalizedString("No games stub", comment: "")
                         
                         strongSelf.prevDate = newPrevDate
                         strongSelf.nextDate = newNextDate
@@ -237,7 +241,8 @@ extension GamesController: UITableViewDataSource, UITableViewDelegate {
             res = currentSection.numberOfObjects
         }
         
-        self.emptyLabel.hidden = res > 0
+        self.emptyLabel.hidden = res > 0 ||
+            tableView.hidden
         
         return res
     }

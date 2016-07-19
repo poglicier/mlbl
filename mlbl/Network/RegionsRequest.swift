@@ -28,11 +28,6 @@ class RegionsRequest: NetworkRequest {
             }
         }
         
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.setValue("application/json", forHTTPHeaderField: "Accept")
-//        request.setValue("1.0", forHTTPHeaderField: self.versionKey)
-//        request.setValue(self.sessionId, forHTTPHeaderField: self.sessionIdKey)
-        
         self.sessionTask = localURLSession.dataTaskWithRequest(request)
         self.sessionTask?.resume()
     }
@@ -43,7 +38,7 @@ class RegionsRequest: NetworkRequest {
             if let resultArray = json as? [[String:AnyObject]] {
                 let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
                 context.parentContext = self.dataController?.mainContext
-                context.performBlock() {
+                context.performBlockAndWait() {
                     var regionIdsToSave = [NSNumber]()
                     for regionDict in resultArray {
                         let region = Region.regionWithDict(regionDict, inContext: context)

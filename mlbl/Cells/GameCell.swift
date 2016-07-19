@@ -20,17 +20,25 @@ class GameCell: UITableViewCell {
     @IBOutlet private var teamANameLabel: UILabel!
     @IBOutlet private var teamBNameLabel: UILabel!
     
+    static private var dateFormatter: NSDateFormatter = {
+        let res = NSDateFormatter()
+        res.dateFormat = "dd MMMM yyyy, hh:mm"
+        return res
+    }()
+    
     var language: String!
     
     var game: Game! {
         didSet {
+            let isLanguageRu = self.language.containsString("ru")
+            
             if let teamA = game.teamA {
                 if let teamAId = game.teamA?.objectId {
                     if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
                         self.avatarA.setImageWithUrl(url)
                     }
                 }
-                self.teamANameLabel.text = self.language.containsString("ru") ? teamA.nameRu : teamA.nameEn
+                self.teamANameLabel.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
             }
             self.teamAScoreLabel.text = game.scoreA?.stringValue ?? "-"
             
@@ -40,9 +48,20 @@ class GameCell: UITableViewCell {
                         self.avatarB.setImageWithUrl(url)
                     }
                 }
-                self.teamBNameLabel.text = self.language.containsString("ru") ? teamB.nameRu : teamB.nameEn
+                self.teamBNameLabel.text = isLanguageRu ? teamB.nameRu : teamB.nameEn
             }
             self.teamBScoreLabel.text = game.scoreB?.stringValue ?? "-"
+            
+            self.titleLabel.text = nil
+            if let date = game.date {
+                var titleString = GameCell.dateFormatter.stringFromDate(date)
+                
+                if let venue = isLanguageRu ? game.venueRu : game.venueEn {
+                    titleString += " \(venue)"
+                }
+                
+                self.titleLabel.text = titleString
+            }
         }
     }
     
