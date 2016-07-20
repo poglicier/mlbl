@@ -12,8 +12,8 @@ class ContainerController: BaseController {
     enum ControllerType: Int, CustomStringConvertible {
         case Games
         case Table
+        case Players
         case Statistics
-        case Ratings
         
         var description: String {
             switch self {
@@ -21,8 +21,8 @@ class ContainerController: BaseController {
                 return "Games"
             case .Table:
                 return "Table"
-            case .Ratings:
-                return "Ratings"
+            case .Players:
+                return "Players"
             case .Statistics:
                 return "Statistics"
             }
@@ -78,9 +78,9 @@ class ContainerController: BaseController {
         case .Games:
             toViewController = self.childViewControllers.filter { $0 is GamesController }.first
         case .Statistics:
-            toViewController = self.childViewControllers.filter { $0 is PlayersController }.first
-        case .Ratings:
             toViewController = self.childViewControllers.filter { $0 is RatingsController }.first
+        case .Players:
+            toViewController = self.childViewControllers.filter { $0 is PlayersController }.first
         case .Table:
             toViewController = self.childViewControllers.filter { $0 is TableController }.first
         }

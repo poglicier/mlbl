@@ -1,5 +1,5 @@
 //
-//  ChooseRegionController.swift
+//  ChooseCompetitionController.swift
 //  mlbl
 //
 //  Created by Valentin Shamardin on 12.03.16.
@@ -9,14 +9,14 @@
 import UIKit
 import CoreData
 
-class ChooseRegionController: BaseController {
+class ChooseCompetitionController: BaseController {
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var goButton: UIBarButtonItem!
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: Region.entityName())
-        let isRusLanguage = self.dataController.language.containsString("ru")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: isRusLanguage ? "nameRuOrder" : "nameEnOrder", ascending: true), NSSortDescriptor(key: isRusLanguage ? "nameRu" : "nameEn", ascending: true)]
+        let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+        fetchRequest.predicate = NSPredicate(format: "children.@count = 2")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "compAbcNameRu" : "compAbcNameEn", ascending: true), NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "compShortNameRu" : "compShortNameEn", ascending: true)]
         
         let frc = NSFetchedResultsController(
             fetchRequest: fetchRequest,
@@ -32,6 +32,7 @@ class ChooseRegionController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.setupTableView()
         self.goButton.title = NSLocalizedString("Go", comment: "")
         
         do {
@@ -43,12 +44,17 @@ class ChooseRegionController: BaseController {
     
     // MARK: - Private
     
+    private func setupTableView() {
+        self.tableView.layer.cornerRadius = 10
+        self.tableView.layer.masksToBounds = true
+    }
+    
     private func getData() {
         self.activityView.startAnimating()
         self.tableView.hidden = true
         self.navigationItem.rightBarButtonItem = nil
         
-        self.dataController.getRegions() { [weak self] (error) in
+        self.dataController.getCompetitions() { [weak self] (error) in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
                 if let _ = error {
@@ -61,35 +67,60 @@ class ChooseRegionController: BaseController {
                     strongSelf.presentViewController(alert, animated: true, completion: nil)
                 } else {
                     strongSelf.tableView.hidden = false
-                    strongSelf.title = NSLocalizedString("Choose region", comment: "")
+                    strongSelf.title = NSLocalizedString("Choose competition", comment: "")
                 }
             }
         }
     }
     
     private func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
-        let region = fetchedResultsController.objectAtIndexPath(indexPath) as! Region
+        let comp = fetchedResultsController.objectAtIndexPath(indexPath) as! Competition
         
-        if self.dataController.language.containsString("ru") {
-            cell.textLabel?.text = region.nameRu
+        let isLanguageRu = self.dataController.language.containsString("ru")
+        let abcName = isLanguageRu ? comp.compAbcNameRu : comp.compAbcNameEn
+        let shortName = isLanguageRu ? comp.compShortNameRu : comp.compShortNameEn
+        
+        if abcName != nil {
+            if shortName != nil {
+                cell.textLabel?.text = "\(abcName!)-\(shortName!)"
+            } else {
+                cell.textLabel?.text = "\(abcName!)"
+            }
         } else {
-            cell.textLabel?.text = region.nameEn
+            if shortName != nil {
+                cell.textLabel?.text = shortName!
+            } else {
+                cell.textLabel?.text = "-"
+            }
         }
     }
     
     @IBAction private func goToMain() {
         if let selectedPath = self.tableView.indexPathForSelectedRow {
-            let fetchRequest = NSFetchRequest(entityName: Region.entityName())
+            let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
             fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
             
             do {
-                if let region = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Region {
-                    region.isChoosen = false
+                if let oldComp = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Competition {
+                    let newComp = self.fetchedResultsController.objectAtIndexPath(selectedPath) as! Competition
+                    if oldComp != newComp {
+                        oldComp.isChoosen = false
+                        newComp.isChoosen = true
+
+                        // Удаляем игроков старого чемпионата
+                        let playersRequest = NSFetchRequest(entityName: Player.entityName())
+                        do {
+                            if let players = try self.dataController.mainContext.executeFetchRequest(playersRequest) as? [Player] {
+                                for player in players {
+                                    self.dataController.mainContext.deleteObject(player)
+                                    print("DELETE Player \(player.lastNameRu)")
+                                }
+                            }
+                        }
+                    }
                 }
             } catch {}
             
-            let region = self.fetchedResultsController.objectAtIndexPath(selectedPath) as! Region
-            region.isChoosen = true
             self.dataController.saveContext(self.dataController.mainContext)
             self.performSegueWithIdentifier("goToMain", sender: nil)
         }
@@ -107,7 +138,7 @@ class ChooseRegionController: BaseController {
     }
 }
 
-extension ChooseRegionController: NSFetchedResultsControllerDelegate {
+extension ChooseCompetitionController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(frc: NSFetchedResultsController) {
         self.tableView.beginUpdates()
     }
@@ -147,7 +178,7 @@ extension ChooseRegionController: NSFetchedResultsControllerDelegate {
     }
 }
 
-extension ChooseRegionController: UITableViewDataSource, UITableViewDelegate {
+extension ChooseCompetitionController: UITableViewDataSource, UITableViewDelegate {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = self.fetchedResultsController.sections {
             let currentSection = sections[section]
@@ -163,7 +194,7 @@ extension ChooseRegionController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell
-        let cellIdentifier = "chooseRegionCell"
+        let cellIdentifier = "chooseCompCell"
         cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
         cell.textLabel?.textColor = UIColor.mlblDarkOrangeColor()
         

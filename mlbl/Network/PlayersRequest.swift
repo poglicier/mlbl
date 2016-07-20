@@ -9,7 +9,18 @@
 import CoreData
 
 class PlayersRequest: NetworkRequest {
-    private let mlblTournamentId = 9001
+    private var compId: Int!
+    private var from: Int!
+    private var count: Int!
+    private(set) var emptyAnswer = false
+    
+    init(from: Int, count: Int, compId: Int) {
+        super.init()
+        
+        self.from = from
+        self.count = count
+        self.compId = compId
+    }
     
     override func start() {
         if cancelled {
@@ -17,7 +28,7 @@ class PlayersRequest: NetworkRequest {
             return
         }
         // http://reg.infobasket.ru/Widget/CompGamePlayers/9001?search=зим&stats=1&skip=0&take=10
-        guard let url = NSURL(string: "CompGamePlayers/\(self.mlblTournamentId)?skip=0&take=10", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        guard let url = NSURL(string: "CompGamePlayers/\(self.compId)?skip=\(self.from)&take=\(self.count)", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
         
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"
@@ -38,37 +49,24 @@ class PlayersRequest: NetworkRequest {
         do {
             let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
             if let playerDicts = json as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlock({
-                    var playerIdsToSave = [NSNumber]()
-                    for playerDict in playerDicts {
-                        let player = Player.playerWithDict(playerDict, inContext: context)
-                        
-                        if let playerId = player?.objectId {
-                            playerIdsToSave.append(playerId)
+                if playerDicts.count == 0 {
+                    self.emptyAnswer = true
+                } else {
+                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+                    context.parentContext = self.dataController?.mainContext
+                    context.performBlock({
+                        var playerIdsToSave = [NSNumber]()
+                        for playerDict in playerDicts {
+                            let player = Player.playerWithDict(playerDict, inContext: context)
+                            
+                            if let playerId = player?.objectId {
+                                playerIdsToSave.append(playerId)
+                            }
                         }
-                    }
-                    
-                    // Удаляем из Core Data игроков
-//                    let fetchRequest = NSFetchRequest(entityName: Game.entityName())
-//                    fetchRequest.predicate = NSPredicate(format: "date = %@", self.date)
-//                    
-//                    do {
-//                        let all = try context.executeFetchRequest(fetchRequest) as! [Game]
-//                        for game in all {
-//                            if let gameId = game.objectId {
-//                                if gameIdsToSave.contains(gameId) == false {
-//                                    print("DELETE Game \(game.teamA?.nameRu):\(game.teamB?.nameRu)")
-//                                    context.deleteObject(game)
-//                                }
-//                            }
-//                        }
-//                    }
-//                    catch {}
-                    
-                    self.dataController?.saveContext(context)
-                })
+                        
+                        self.dataController?.saveContext(context)
+                    })
+                }
             } else {
                 self.error = NSError(domain: "internal app error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Обработка запроса не реализована"])
             }

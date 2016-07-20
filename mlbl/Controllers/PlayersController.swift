@@ -13,9 +13,13 @@ class PlayersController: BaseController {
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var emptyLabel: UILabel!
     
+    private let bunchSize = 10
+    private let rowHeight: CGFloat = 145
+    private var allDataLoaded = false
+    
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Player.entityName())
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "objectId", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "lastNameRu" : "lastNameEn", ascending: true), NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "firstNameRu" : "firstNameEn", ascending: true)]
         
         let frc = NSFetchedResultsController(
             fetchRequest: fetchRequest,
@@ -37,7 +41,7 @@ class PlayersController: BaseController {
             try self.fetchedResultsController.performFetch()
         } catch {}
         
-        self.getData()
+        self.getData(0)
     }    
 
     override func viewWillAppear(animated: Bool) {
@@ -56,6 +60,12 @@ class PlayersController: BaseController {
     
     private func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
+        spinner.startAnimating()
+        spinner.color = UIColor.mlblLightOrangeColor()
+        spinner.frame = CGRectMake(0, 0, 0, 64)
+        self.tableView.tableFooterView = spinner
     }
     
     private func configureCell(cell: PlayerCell, atIndexPath indexPath: NSIndexPath) {
@@ -63,12 +73,14 @@ class PlayersController: BaseController {
         cell.player = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Player
     }
     
-    private func getData() {
-        self.activityView.startAnimating()
-        self.tableView.hidden = true
-        self.emptyLabel.hidden = true
+    private func getData(from: Int) {
+        if from == 0 {
+            self.activityView.startAnimating()
+            self.tableView.hidden = true
+            self.emptyLabel.hidden = true
+        }
         
-        self.dataController.getPlayers { [weak self] error in
+        self.dataController.getPlayers(from, count: self.bunchSize) { [weak self] (error, emptyAnswer) in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
                 
@@ -77,6 +89,14 @@ class PlayersController: BaseController {
                 } else {
                     strongSelf.tableView.hidden = false
                     strongSelf.emptyLabel.text = NSLocalizedString("No players stub", comment: "")
+                    strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
+                    strongSelf.allDataLoaded = emptyAnswer
+                    
+                    if emptyAnswer {
+                        strongSelf.tableView.tableFooterView = nil
+                    } else {
+                        strongSelf.setupTableView()
+                    }
                 }
             }
         }
@@ -102,13 +122,14 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
             res = currentSection.numberOfObjects
         }
         
-        self.emptyLabel.hidden = res > 0
+        self.emptyLabel.hidden = res > 0 ||
+            tableView.hidden
         
         return res
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 145
+        return self.rowHeight
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -118,6 +139,11 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         self.configureCell(cell as! PlayerCell, atIndexPath:indexPath)
+        
+        if !self.allDataLoaded &&
+            indexPath.row >= tableView.numberOfRowsInSection(0) - 1 {
+            self.getData(self.fetchedResultsController.fetchedObjects?.count ?? 0)
+        }
     }
 }
 

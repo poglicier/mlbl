@@ -95,7 +95,7 @@ extension UINavigationController: UINavigationControllerDelegate {
     }
     
     public func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        if toVC is ChooseRegionController {
+        if toVC is ChooseCompetitionController {
             let animator = FadeAnimator()
             animator.presenting = true
             return animator

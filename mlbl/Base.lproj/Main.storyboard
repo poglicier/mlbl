@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Choose Region Controller-->
+        <!--Choose Competition Controller-->
         <scene sceneID="bbK-B7-hYc">
             <objects>
-                <viewController storyboardIdentifier="ChooseRegionController" automaticallyAdjustsScrollViewInsets="NO" id="QIn-yo-6rW" customClass="ChooseRegionController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChooseCompetitionController" automaticallyAdjustsScrollViewInsets="NO" id="QIn-yo-6rW" customClass="ChooseCompetitionController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="YT1-wT-dUL"/>
                         <viewControllerLayoutGuide type="bottom" id="Fto-yQ-y32"/>
@@ -22,7 +22,7 @@
                                 <rect key="frame" x="20" y="84" width="560" height="496"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="chooseRegionCell" id="bd4-zX-UZM">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="chooseCompCell" id="bd4-zX-UZM">
                                         <rect key="frame" x="0.0" y="28" width="560" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bd4-zX-UZM" id="2iw-ob-ekP">
@@ -353,12 +353,18 @@
                                                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9do-Xk-aoE">
                                                     <rect key="frame" x="8" y="4" width="584" height="172"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="d8j-AP-9AH">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="d8j-AP-9AH">
                                                             <rect key="frame" x="503" y="36" width="65" height="65"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="65" id="8Nx-B5-pqG"/>
+                                                                <constraint firstAttribute="width" constant="65" id="IA9-qX-UNy"/>
                                                                 <constraint firstAttribute="height" constant="65" id="IfE-UG-0bc"/>
                                                             </constraints>
+                                                            <variation key="default">
+                                                                <mask key="constraints">
+                                                                    <exclude reference="8Nx-B5-pqG"/>
+                                                                </mask>
+                                                            </variation>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13 февраля 2016, 15:00 УСК ЦСКА" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yKp-VQ-obC">
                                                             <rect key="frame" x="8" y="0.0" width="568" height="36"/>
@@ -369,12 +375,18 @@
                                                             <color key="textColor" red="0.71764705882352942" green="0.25490196078431371" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="Pvu-PM-XKb">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="Pvu-PM-XKb">
                                                             <rect key="frame" x="16" y="36" width="65" height="65"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="65" id="Dwc-G8-wBB"/>
+                                                                <constraint firstAttribute="width" constant="65" id="cku-No-B9J"/>
                                                                 <constraint firstAttribute="width" constant="65" id="wQX-5K-yxe"/>
                                                             </constraints>
+                                                            <variation key="default">
+                                                                <mask key="constraints">
+                                                                    <exclude reference="wQX-5K-yxe"/>
+                                                                </mask>
+                                                            </variation>
                                                         </imageView>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5v3-Iv-PYP">
                                                             <rect key="frame" x="291" y="36" width="2" height="80"/>
@@ -555,7 +567,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jYg-Qt-V94">
                                                     <rect key="frame" x="8" y="4" width="584" height="244"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="KlP-yH-WaE">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="KlP-yH-WaE">
                                                             <rect key="frame" x="503" y="36" width="65" height="65"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="65" id="aCJ-6c-mPg"/>
@@ -571,7 +583,7 @@
                                                             <color key="textColor" red="0.71764705880000002" green="0.25490196079999999" blue="0.074509803920000006" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="Hjz-lI-ZFe">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="Hjz-lI-ZFe">
                                                             <rect key="frame" x="16" y="36" width="65" height="65"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="65" id="4nw-T4-byl"/>
@@ -1010,7 +1022,7 @@
                                                         <constraint firstAttribute="width" constant="95" id="aVu-4k-kLr"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="dXj-rU-pag">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="teamStub" translatesAutoresizingMaskIntoConstraints="NO" id="dXj-rU-pag">
                                                     <rect key="frame" x="524" y="69" width="65" height="65"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Анжанкин Александр" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PON-gC-6ku">
@@ -1210,8 +1222,8 @@
                     <connections>
                         <segue destination="r1A-Xb-dbE" kind="custom" identifier="Games" customClass="EmptySegue" customModule="mlbl" customModuleProvider="target" id="kee-mN-MxE"/>
                         <segue destination="uab-Yy-igx" kind="custom" identifier="Table" customClass="EmptySegue" customModule="mlbl" customModuleProvider="target" id="xSP-pi-fCE"/>
-                        <segue destination="Id3-iN-xv2" kind="custom" identifier="Statistics" customClass="EmptySegue" customModule="mlbl" id="YUO-sp-wfQ"/>
-                        <segue destination="HDr-fg-GWs" kind="custom" identifier="Ratings" customClass="EmptySegue" customModule="mlbl" id="2EG-f7-DzZ"/>
+                        <segue destination="Id3-iN-xv2" kind="custom" identifier="Players" customClass="EmptySegue" customModule="mlbl" id="YUO-sp-wfQ"/>
+                        <segue destination="HDr-fg-GWs" kind="custom" identifier="Statistics" customClass="EmptySegue" customModule="mlbl" id="2EG-f7-DzZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j7s-h8-V8k" userLabel="First Responder" sceneMemberID="firstResponder"/>

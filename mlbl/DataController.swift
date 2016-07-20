@@ -27,9 +27,24 @@ class DataController {
         return prefLanguage!
     }()
     
+    private let mlblCompId = 9001
     private let queue = NSOperationQueue()
     private var privateContext: NSManagedObjectContext!
     private(set) var mainContext: NSManagedObjectContext!
+    
+    // MARK: - Private
+    
+    private func currentCompetitionId() -> Int {
+        let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+        fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
+        do {
+            if let comp = try self.mainContext.executeFetchRequest(fetchRequest).first as? Competition {
+                return comp.objectId as! Int
+            }
+        } catch {}
+        
+        return 0
+    }
     
     // MARK: - Public
     
@@ -53,8 +68,21 @@ class DataController {
         self.queue.addOperation(request)
     }
     
+    func getCompetitions(completion: (NSError? -> ())?) {
+        let request = CompetitionsRequest(parentId: self.mlblCompId)
+        print(self)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
     func getGamesForDate(date: NSDate, completion: ((NSError?, prevDate: NSDate?, nextDate: NSDate?) -> ())?) {
-        let request = GamesRequest(date: date)
+        let request = GamesRequest(date: date, compId: self.currentCompetitionId())
         request.dataController = self
         
         request.completionBlock = {
@@ -77,16 +105,25 @@ class DataController {
         self.queue.addOperation(request)
     }
     
-    func getPlayers(completion: (NSError? -> ())?) {
-        let request = PlayersRequest()
-        request.dataController = self
-        
-        request.completionBlock = {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion?(request.error)
-            })
+    func getPlayers(from: Int, count: Int, completion: ((NSError?, emptyAnswer: Bool) -> ())?) {
+        let operation = self.queue.operations.filter {$0 is PlayersRequest && !$0.cancelled}.first
+        if let playersOperation = operation as? PlayersRequest {
+            playersOperation.completionBlock = {
+                dispatch_async(dispatch_get_main_queue(), {
+                    completion?(playersOperation.error, emptyAnswer: playersOperation.emptyAnswer)
+                })
+            }
+        } else {
+            let request = PlayersRequest(from: from, count: count, compId: self.currentCompetitionId())
+            request.dataController = self
+            
+            request.completionBlock = {
+                dispatch_async(dispatch_get_main_queue(), {
+                    completion?(request.error, emptyAnswer: request.emptyAnswer)
+                })
+            }
+            self.queue.addOperation(request)
         }
-        self.queue.addOperation(request)
     }
     
     // MARK: - Core Data stack

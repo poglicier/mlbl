@@ -18,7 +18,7 @@
 		FC39395A1D2EDFEF00F8361E /* GamesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3939591D2EDFEF00F8361E /* GamesRequest.swift */; };
 		FC39395C1D2EE0E700F8361E /* TournamentsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC39395B1D2EE0E700F8361E /* TournamentsRequest.swift */; };
 		FC637E541C94568A009EE880 /* GameStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E531C94568A009EE880 /* GameStatsCell.swift */; };
-		FC637E561C945819009EE880 /* ChooseRegionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E551C945819009EE880 /* ChooseRegionController.swift */; };
+		FC637E561C945819009EE880 /* ChooseCompetitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E551C945819009EE880 /* ChooseCompetitionController.swift */; };
 		FC637E591C945EC7009EE880 /* Region+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E571C945EC7009EE880 /* Region+CoreDataProperties.swift */; };
 		FC637E5A1C945EC7009EE880 /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E581C945EC7009EE880 /* Region.swift */; };
 		FC637E5D1C946617009EE880 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC637E5F1C946617009EE880 /* Localizable.strings */; };
@@ -46,6 +46,9 @@
 		FC97931F1C8B6AFB00D4D5D9 /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC97931E1C8B6AFB00D4D5D9 /* GameCell.swift */; };
 		FC9793231C8B729100D4D5D9 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9793221C8B729100D4D5D9 /* DataController.swift */; };
 		FC9793261C8D8AEA00D4D5D9 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9793251C8D8AEA00D4D5D9 /* GameController.swift */; };
+		FCD76E121D3F3EC5002BB24A /* CompetitionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD76E111D3F3EC5002BB24A /* CompetitionsRequest.swift */; };
+		FCD76E151D3F4172002BB24A /* Competition+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD76E131D3F4172002BB24A /* Competition+CoreDataProperties.swift */; };
+		FCD76E161D3F4172002BB24A /* Competition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD76E141D3F4172002BB24A /* Competition.swift */; };
 		FCE18BAE1C8DF8120077A51A /* GameScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE18BAD1C8DF8120077A51A /* GameScoreCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,7 +67,7 @@
 		FC3939591D2EDFEF00F8361E /* GamesRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamesRequest.swift; sourceTree = "<group>"; };
 		FC39395B1D2EE0E700F8361E /* TournamentsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TournamentsRequest.swift; sourceTree = "<group>"; };
 		FC637E531C94568A009EE880 /* GameStatsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameStatsCell.swift; sourceTree = "<group>"; };
-		FC637E551C945819009EE880 /* ChooseRegionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseRegionController.swift; sourceTree = "<group>"; };
+		FC637E551C945819009EE880 /* ChooseCompetitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseCompetitionController.swift; sourceTree = "<group>"; };
 		FC637E571C945EC7009EE880 /* Region+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Region+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC637E581C945EC7009EE880 /* Region.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		FC637E5E1C946617009EE880 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -95,6 +98,9 @@
 		FC97931E1C8B6AFB00D4D5D9 /* GameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
 		FC9793221C8B729100D4D5D9 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		FC9793251C8D8AEA00D4D5D9 /* GameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
+		FCD76E111D3F3EC5002BB24A /* CompetitionsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompetitionsRequest.swift; sourceTree = "<group>"; };
+		FCD76E131D3F4172002BB24A /* Competition+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Competition+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		FCD76E141D3F4172002BB24A /* Competition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Competition.swift; sourceTree = "<group>"; };
 		FCE18BAD1C8DF8120077A51A /* GameScoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScoreCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -153,6 +159,7 @@
 			children = (
 				FC3939531D2ED2BC00F8361E /* NetworkRequest.swift */,
 				FC3939551D2ED33F00F8361E /* RegionsRequest.swift */,
+				FCD76E111D3F3EC5002BB24A /* CompetitionsRequest.swift */,
 				FC3939571D2ED52800F8361E /* GameStatsRequest.swift */,
 				FC3939591D2EDFEF00F8361E /* GamesRequest.swift */,
 				FC39395B1D2EE0E700F8361E /* TournamentsRequest.swift */,
@@ -203,7 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				FC705D4C1C80F8D400216AB8 /* MainController.swift */,
-				FC637E551C945819009EE880 /* ChooseRegionController.swift */,
+				FC637E551C945819009EE880 /* ChooseCompetitionController.swift */,
 				FC321FA31C81B13E00674271 /* ContainerController.swift */,
 				FC705D4E1C80F8FC00216AB8 /* BaseController.swift */,
 				FC321FA71C82DF8D00674271 /* PlayersController.swift */,
@@ -229,6 +236,8 @@
 			isa = PBXGroup;
 			children = (
 				FC97930F1C8B5F2A00D4D5D9 /* mlbl.xcdatamodeld */,
+				FCD76E131D3F4172002BB24A /* Competition+CoreDataProperties.swift */,
+				FCD76E141D3F4172002BB24A /* Competition.swift */,
 				FC637E571C945EC7009EE880 /* Region+CoreDataProperties.swift */,
 				FC637E581C945EC7009EE880 /* Region.swift */,
 				FC9793121C8B6ADB00D4D5D9 /* Team+CoreDataProperties.swift */,
@@ -382,6 +391,7 @@
 				FC9793111C8B5F2A00D4D5D9 /* mlbl.xcdatamodeld in Sources */,
 				FC3939581D2ED52800F8361E /* GameStatsRequest.swift in Sources */,
 				FC9793261C8D8AEA00D4D5D9 /* GameController.swift in Sources */,
+				FCD76E121D3F3EC5002BB24A /* CompetitionsRequest.swift in Sources */,
 				FC39395A1D2EDFEF00F8361E /* GamesRequest.swift in Sources */,
 				FC321FAE1C82F9A200674271 /* PlayerCell.swift in Sources */,
 				FC705D4D1C80F8D400216AB8 /* MainController.swift in Sources */,
@@ -391,8 +401,9 @@
 				FC74B8171C8F733A000E6CC6 /* PeriodCell.swift in Sources */,
 				FC97931B1C8B6ADB00D4D5D9 /* Game.swift in Sources */,
 				FC3939561D2ED33F00F8361E /* RegionsRequest.swift in Sources */,
-				FC637E561C945819009EE880 /* ChooseRegionController.swift in Sources */,
+				FC637E561C945819009EE880 /* ChooseCompetitionController.swift in Sources */,
 				FC321FA41C81B13E00674271 /* ContainerController.swift in Sources */,
+				FCD76E151D3F4172002BB24A /* Competition+CoreDataProperties.swift in Sources */,
 				FC637E641C94AB0B009EE880 /* FadeAnimator.swift in Sources */,
 				FC637E591C945EC7009EE880 /* Region+CoreDataProperties.swift in Sources */,
 				FC9793181C8B6ADB00D4D5D9 /* Team+CoreDataProperties.swift in Sources */,
@@ -410,6 +421,7 @@
 				FC9793191C8B6ADB00D4D5D9 /* Team.swift in Sources */,
 				FC8F7A171D3CF33E0056C4D4 /* RatingsController.swift in Sources */,
 				FC9793231C8B729100D4D5D9 /* DataController.swift in Sources */,
+				FCD76E161D3F4172002BB24A /* Competition.swift in Sources */,
 				FC39395C1D2EE0E700F8361E /* TournamentsRequest.swift in Sources */,
 				FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */,
 				FC97931D1C8B6ADB00D4D5D9 /* Player.swift in Sources */,

@@ -10,16 +10,17 @@ import CoreData
 
 class GamesRequest: NetworkRequest {
     private var date: NSDate!
-    
+    private var compId: Int!
     private(set) var prevDate: NSDate?
     private(set) var nextDate: NSDate?
     
-    init(date: NSDate) {
+    init(date: NSDate, compId: Int) {
         super.init()
         
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components([.Year, .Month, .Day], fromDate:date)
         self.date = calendar.dateFromComponents(components)
+        self.compId = compId
     }
     
     static private var dateFormatter: NSDateFormatter = {
@@ -37,7 +38,7 @@ class GamesRequest: NetworkRequest {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "dd.MM.YYYY"
         
-        guard let url = NSURL(string: "CalendarDay/9001?from=\(GamesRequest.dateFormatter.stringFromDate(self.date))", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        guard let url = NSURL(string: "CalendarDay/\(self.compId)?from=\(GamesRequest.dateFormatter.stringFromDate(self.date))", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
         
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"

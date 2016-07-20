@@ -68,7 +68,7 @@ class MainController: BaseController {
                     button.setTitle(NSLocalizedString("Table", comment: "").uppercaseString, forState: .Normal)
                 case .Statistics:
                     button.setTitle(NSLocalizedString("Statistics", comment: "").uppercaseString, forState: .Normal)
-                case .Ratings:
+                case .Players:
                     button.setTitle(NSLocalizedString("Players rating", comment: "").uppercaseString, forState: .Normal)
                 }
             }
@@ -95,9 +95,9 @@ class MainController: BaseController {
     }
     
     @IBAction private func goToChooseRegion() {
-        if let chooseRegionController = self.storyboard?.instantiateViewControllerWithIdentifier("ChooseRegionController") as? BaseController {
-            chooseRegionController.dataController = self.dataController
-            self.navigationController?.setViewControllers([chooseRegionController], animated: true)
+        if let ChooseCompetitionController = self.storyboard?.instantiateViewControllerWithIdentifier("ChooseCompetitionController") as? BaseController {
+            ChooseCompetitionController.dataController = self.dataController
+            self.navigationController?.setViewControllers([ChooseCompetitionController], animated: true)
         }
     }
     

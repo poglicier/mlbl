@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15F34" minimumToolsVersion="Automatic">
+    <entity name="Competition" representedClassName=".Competition" syncable="YES">
+        <attribute name="compAbcNameEn" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="compAbcNameRu" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="compShortNameEn" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="compShortNameRu" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="compSort" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="isChoosen" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="objectId" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Competition" inverseName="parent" inverseEntity="Competition" syncable="YES"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Competition" inverseName="children" inverseEntity="Competition" syncable="YES"/>
+    </entity>
     <entity name="Game" representedClassName=".Game" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -48,5 +59,6 @@
         <element name="Player" positionX="-27" positionY="81" width="128" height="195"/>
         <element name="Region" positionX="-54" positionY="81" width="128" height="135"/>
         <element name="Team" positionX="-54" positionY="36" width="128" height="195"/>
+        <element name="Competition" positionX="-54" positionY="117" width="128" height="180"/>
     </elements>
 </model>
