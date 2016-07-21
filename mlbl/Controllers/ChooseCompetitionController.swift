@@ -101,20 +101,19 @@ class ChooseCompetitionController: BaseController {
             fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
             
             do {
-                if let oldComp = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Competition {
-                    let newComp = self.fetchedResultsController.objectAtIndexPath(selectedPath) as! Competition
-                    if oldComp != newComp {
-                        oldComp.isChoosen = false
-                        newComp.isChoosen = true
+                let oldComp = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Competition
+                let newComp = self.fetchedResultsController.objectAtIndexPath(selectedPath) as! Competition
+                if oldComp != newComp {
+                    oldComp?.isChoosen = false
+                    newComp.isChoosen = true
 
-                        // Удаляем игроков старого чемпионата
-                        let playersRequest = NSFetchRequest(entityName: Player.entityName())
-                        do {
-                            if let players = try self.dataController.mainContext.executeFetchRequest(playersRequest) as? [Player] {
-                                for player in players {
-                                    self.dataController.mainContext.deleteObject(player)
-                                    print("DELETE Player \(player.lastNameRu)")
-                                }
+                    // Удаляем игроков старого чемпионата
+                    let playersRequest = NSFetchRequest(entityName: Player.entityName())
+                    do {
+                        if let players = try self.dataController.mainContext.executeFetchRequest(playersRequest) as? [Player] {
+                            for player in players {
+                                self.dataController.mainContext.deleteObject(player)
+                                print("DELETE Player \(player.lastNameRu)")
                             }
                         }
                     }

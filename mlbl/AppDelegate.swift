@@ -19,13 +19,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         Fabric.with([Crashlytics.self()])
         
-        let fetchRequest = NSFetchRequest(entityName: Region.entityName())
-        fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
         let dataController = DataController()
         
         let rootNavigationController = self.window?.rootViewController as! UINavigationController
         var firstController: BaseController = rootNavigationController.viewControllers.first as! BaseController
-        
+
+        let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+        fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
         do {
             if let _ = try dataController.mainContext.executeFetchRequest(fetchRequest).first {
                 firstController = self.window?.rootViewController?.storyboard?.instantiateViewControllerWithIdentifier("mainController") as! BaseController
@@ -34,16 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {}
         
         firstController.dataController = dataController
-//        if regionIsChoosen {
-//            if let mainController = self.window?.rootViewController?.storyboard?.instantiateViewControllerWithIdentifier("mainController") as? BaseController {
-//                mainController.dataController = dataController
-//                self.window?.rootViewController = rootController
-//            }
-//        } else {
-//            if let mainController =  {
-//                mainController.dataController = dataController
-//            }
-//        }
         
         return true
     }

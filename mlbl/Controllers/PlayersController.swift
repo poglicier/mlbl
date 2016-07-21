@@ -86,6 +86,15 @@ class PlayersController: BaseController {
                 
                 if let _ = error {
                     strongSelf.emptyLabel.text = error?.localizedDescription
+                    
+                    if strongSelf.tableView.numberOfRowsInSection(0) == 0 {
+                        strongSelf.tableView.hidden = true
+                        strongSelf.emptyLabel.hidden = false
+                    } else {
+                        strongSelf.tableView.hidden = false
+                        strongSelf.emptyLabel.hidden = true
+                        // Сообщить о потере интернета
+                    }
                 } else {
                     strongSelf.tableView.hidden = false
                     strongSelf.emptyLabel.text = NSLocalizedString("No players stub", comment: "")

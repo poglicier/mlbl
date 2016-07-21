@@ -32,6 +32,7 @@ class GameCell: UITableViewCell {
         didSet {
             let isLanguageRu = self.language.containsString("ru")
             
+            self.avatarA.image = UIImage(named: "teamStub")
             if let teamA = game.teamA {
                 if let teamAId = game.teamA?.objectId {
                     if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
@@ -42,6 +43,7 @@ class GameCell: UITableViewCell {
             }
             self.teamAScoreLabel.text = game.scoreA?.stringValue ?? "-"
             
+            self.avatarB.image = UIImage(named: "teamStub")
             if let teamB = game.teamB {
                 if let teamBId = game.teamB?.objectId {
                     if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {

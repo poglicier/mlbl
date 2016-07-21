@@ -114,6 +114,18 @@ class GamesController: BaseController {
                         strongSelf.prevButton.enabled = strongSelf.prevDate != nil
                         strongSelf.nextButton.enabled = strongSelf.nextDate != nil
                         strongSelf.emptyLabel.text = error?.localizedDescription
+                        strongSelf.emptyLabel.hidden = false
+                        
+                        let refreshButton = UIButton(type: .Custom)
+                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
+                        refreshButton.setAttributedTitle(attrString, forState: .Normal)
+                        refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), forControlEvents: .TouchUpInside)
+                        strongSelf.view.addSubview(refreshButton)
+                        
+                        refreshButton.snp_makeConstraints(closure: { (make) in
+                            make.centerX.equalTo(0)
+                            make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
+                        })
                     } else {
                         strongSelf.tableView.hidden = false
                         strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
@@ -136,6 +148,11 @@ class GamesController: BaseController {
     private func configureCell(cell: GameCell, atIndexPath indexPath: NSIndexPath) {
         cell.language = self.dataController.language
         cell.game = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Game
+    }
+    
+    func refreshDidTap(sender: UIButton) {
+        sender.removeFromSuperview()
+        self.getData()
     }
     
     @IBAction private func goToPrevDate() {
