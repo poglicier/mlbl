@@ -17,7 +17,8 @@ class Competition: NSManagedObject {
     static private let compShortNameEnKey = "CompShortNameEn"
     static private let compAbcNameRu = "CompAbcNameRu"
     static private let compAbcNameEn = "CompAbcNameEn"
-    static private let compSortKey = "CompSortKey"
+    static private let compSortKey = "CompSort"
+    static private let compTypeKey = "CompType"
     static private let childrenKey = "Children"
     
     static func compWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Competition? {
@@ -39,6 +40,7 @@ class Competition: NSManagedObject {
                 res?.compAbcNameRu = dict[compAbcNameRu] as? String
                 res?.compAbcNameEn = dict[compAbcNameEn] as? String
                 res?.compSort = dict[compSortKey] as? Int
+                res?.compType = dict[compTypeKey] as? Int
                 
                 var childIdsToSave = [NSNumber]()
                 if let children = dict[childrenKey] as? [[String:AnyObject]] {

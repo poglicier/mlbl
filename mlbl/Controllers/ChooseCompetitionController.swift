@@ -12,10 +12,11 @@ import CoreData
 class ChooseCompetitionController: BaseController {
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var goButton: UIBarButtonItem!
+    private var comps = [Competition]()
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
-        fetchRequest.predicate = NSPredicate(format: "children.@count = 2")
+        fetchRequest.predicate = NSPredicate(format: "compType < 0 AND ANY children.compType < 0")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "compAbcNameRu" : "compAbcNameEn", ascending: true), NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "compShortNameRu" : "compShortNameEn", ascending: true)]
         
         let frc = NSFetchedResultsController(
@@ -66,6 +67,17 @@ class ChooseCompetitionController: BaseController {
                     
                     strongSelf.presentViewController(alert, animated: true, completion: nil)
                 } else {
+                    let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+                    //        fetchRequest.predicate = NSPredicate(format: "SUBQUERY(children, x, x.@count = 2).@count = 1")
+                    fetchRequest.sortDescriptors = [NSSortDescriptor(key: strongSelf.dataController.language.containsString("ru") ? "compAbcNameRu" : "compAbcNameEn", ascending: true), NSSortDescriptor(key: strongSelf.dataController.language.containsString("ru") ? "compShortNameRu" : "compShortNameEn", ascending: true)]
+                    do {
+                        strongSelf.comps = try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest) as! [Competition]
+                    } catch{}
+                    let a = strongSelf.comps.filter { $0.children?.count == 2 }
+                    for aa in a {
+                        print(aa.compShortNameRu)
+                    }
+                    
                     strongSelf.tableView.hidden = false
                     strongSelf.title = NSLocalizedString("Choose competition", comment: "")
                 }

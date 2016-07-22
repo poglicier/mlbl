@@ -6,6 +6,7 @@
         <attribute name="compShortNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compShortNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compSort" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="compType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="isChoosen" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Competition" inverseName="parent" inverseEntity="Competition" syncable="YES"/>
@@ -51,7 +52,7 @@
         <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="team" inverseEntity="Player" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Competition" positionX="-54" positionY="117" width="128" height="180"/>
+        <element name="Competition" positionX="-54" positionY="117" width="128" height="195"/>
         <element name="Game" positionX="-63" positionY="-18" width="128" height="180"/>
         <element name="Player" positionX="-27" positionY="81" width="128" height="255"/>
         <element name="Team" positionX="-54" positionY="36" width="128" height="195"/>

@@ -44,7 +44,9 @@ class MainController: BaseController {
                     self.title = self.choosenComp.compAbcNameEn
                 }
             }
-        } catch {}
+        } catch (let error) {
+            print(error)
+        }
     }
     
     private func setupButtons() {
