@@ -56,18 +56,6 @@ class DataController {
         self.mainContext!.parentContext = self.privateContext
     }
     
-    func getRegions(completion: (NSError? -> ())?) {
-        let request = RegionsRequest()
-        request.dataController = self
-        
-        request.completionBlock = {
-            dispatch_async(dispatch_get_main_queue(), {
-                completion?(request.error)
-            })
-        }
-        self.queue.addOperation(request)
-    }
-    
     func getCompetitions(completion: (NSError? -> ())?) {
         let request = CompetitionsRequest(parentId: self.mlblCompId)
         print(self)

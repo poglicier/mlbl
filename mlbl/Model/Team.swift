@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 class Team: NSManagedObject {
-    static let TeamIdKey = "TeamIdKey"
+    static let TeamIdKey = "TeamId"
     static let ShortTeamNameRuKey = "ShortTeamNameRu"
     static let ShortTeamNameEnKey = "ShortTeamNameEn"
     static let TeamNameRuKey = "TeamNameRu"

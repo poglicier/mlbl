@@ -18,6 +18,8 @@ class PlayerCell: UITableViewCell {
     @IBOutlet private var heightValueLabel: UILabel!
     @IBOutlet private var weightTitleLabel: UILabel!
     @IBOutlet private var weightValueLabel: UILabel!
+    @IBOutlet private var teamLabel: UILabel!
+    @IBOutlet private var positionLabel: UILabel!
     
     static private var dateFormatter: NSDateFormatter = {
         let res = NSDateFormatter()
@@ -28,7 +30,12 @@ class PlayerCell: UITableViewCell {
     var language: String!
     var player: Player! {
         didSet {
-            self.avatarView.image = UIImage(named: "avatarStub\(1+arc4random_uniform(3))")
+            self.avatarView.image = UIImage(named: "avatarStub\(1 + ((player.objectId as? Int) ?? 1)%3)")
+            if let personId = player.objectId {
+                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetPersonPhoto/\(personId)") {
+                    self.avatarView.setImageWithUrl(url)
+                }
+            }
             
             let isLanguageRu = self.language.containsString("ru")
             
@@ -44,6 +51,8 @@ class PlayerCell: UITableViewCell {
             } else {
                 self.nameLabel.text = "-"
             }
+            
+            self.positionLabel.text = isLanguageRu ? player.positionShortRu : player.positionShortEn
             
             if let date = player.birth {
                 self.dateValueLabel.text = PlayerCell.dateFormatter.stringFromDate(date)
@@ -61,6 +70,14 @@ class PlayerCell: UITableViewCell {
                 self.weightValueLabel.text = "\(weight)" + " " + NSLocalizedString("kg", comment: "")
             } else {
                 self.weightValueLabel.text = "-"
+            }
+            
+            self.teamLabel.text = isLanguageRu ? player.team?.shortNameRu : player.team?.shortNameEn
+            
+            if let teamId = player.team?.objectId {
+                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamId)") {
+                    self.avatarView.setImageWithUrl(url)
+                }
             }
         }
     }
@@ -83,6 +100,15 @@ class PlayerCell: UITableViewCell {
         self.background.layer.shadowOpacity = 0.5
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false
+        
+        let isLanguageRu = self.language.containsString("ru")
+        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+            self.teamLabel.text = isLanguageRu ? self.player.team?.shortNameRu : self.player.team?.shortNameEn
+            self.positionLabel.text = isLanguageRu ? self.player.positionShortRu : self.player.positionShortEn
+        } else {
+            self.teamLabel.text = isLanguageRu ? self.player.team?.nameRu : self.player.team?.nameEn
+            self.positionLabel.text = isLanguageRu ? self.player.positionRu : self.player.positionEn
+        }
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

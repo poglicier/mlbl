@@ -22,6 +22,17 @@ class Player: NSManagedObject {
     static private let PersonBirthdayKey = "PersonBirthday"
     static private let PersonHeightKey = "PersonHeight"
     static private let PersonWeightKey = "PersonWeight"
+    static private let PersonTeamNameKey = "TeamName"
+    static private let PersonCompTeamShortNameRuKey = "CompTeamShortNameRu"
+    static private let PersonCompTeamShortNameEnKey = "CompTeamShortNameEn"
+    static private let PersonCompTeamNameRuKey = "CompTeamNameRu"
+    static private let PersonCompTeamNameEnKey = "CompTeamNameEn"
+    static private let PersonPlayersKey = "Players"
+    static private let PersonPlayerPositionKey = "Position"
+    static private let PersonPlayerPositionShortEnKey = "PosShortNameEn"
+    static private let PersonPlayerPositionEnKey = "PosNameEn"
+    static private let PersonPlayerPositionShortRuKey = "PosShortNameRu"
+    static private let PersonPlayerPositionRuKey = "PosNameRu"
     
     static func playerWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Player? {
         var res: Player?
@@ -51,6 +62,28 @@ class Player: NSManagedObject {
                         res?.birth = NSDate(timeIntervalSince1970: birthInterval/1000)
                     }
                 }
+                
+                if let playersDicts = personInfo[PersonPlayersKey] as? [[String:AnyObject]] {
+                    if let playerDict = playersDicts.first {
+                        if let positionDict = playerDict[PersonPlayerPositionKey] as? [String:AnyObject] {
+                            res?.positionEn = positionDict[PersonPlayerPositionEnKey] as? String
+                            res?.positionRu = positionDict[PersonPlayerPositionRuKey] as? String
+                            res?.positionShortEn = positionDict[PersonPlayerPositionShortEnKey] as? String
+                            res?.positionShortRu = positionDict[PersonPlayerPositionShortRuKey] as? String
+                        }
+                    }
+                }
+            }
+            
+            if let teamNameDict = dict[PersonTeamNameKey] as? [String:AnyObject] {
+                var teamDict = [String:AnyObject]()
+                teamDict[Team.TeamIdKey] = teamNameDict[Team.TeamIdKey]
+                teamDict[Team.ShortTeamNameRuKey] = teamNameDict[PersonCompTeamShortNameRuKey]
+                teamDict[Team.ShortTeamNameEnKey] = teamNameDict[PersonCompTeamShortNameEnKey]
+                teamDict[Team.TeamNameRuKey] = teamNameDict[PersonCompTeamNameRuKey]
+                teamDict[Team.TeamNameEnKey] = teamNameDict[PersonCompTeamNameEnKey]
+                
+                res?.team = Team.teamWithDict(teamDict, inContext: context)
             }
         }
         return res

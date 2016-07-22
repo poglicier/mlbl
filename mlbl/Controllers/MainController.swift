@@ -17,7 +17,7 @@ class MainController: BaseController {
     @IBOutlet private var contentView: UIView!
     @IBOutlet private var selectedIndicatorView: UIView!
     private var containerController: ContainerController!
-    private var choosenRegion: Region!
+    private var choosenComp: Competition!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,17 +31,17 @@ class MainController: BaseController {
     private func setupNavigatioBar() {
         self.navigationItem.hidesBackButton = true
         
-        let fetchRequest = NSFetchRequest(entityName: Region.entityName())
+        let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
         fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
         
         do {
-            if let region = try dataController.mainContext.executeFetchRequest(fetchRequest).first as? Region {
-                self.choosenRegion = region
+            if let comp = try dataController.mainContext.executeFetchRequest(fetchRequest).first as? Competition {
+                self.choosenComp = comp
                 
                 if self.dataController.language.containsString("ru") {
-                    self.title = self.choosenRegion.nameRu
+                    self.title = self.choosenComp.compAbcNameRu
                 } else {
-                    self.title = self.choosenRegion.nameEn
+                    self.title = self.choosenComp.compAbcNameEn
                 }
             }
         } catch {}
