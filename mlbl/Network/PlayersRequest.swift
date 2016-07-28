@@ -10,16 +10,18 @@ import CoreData
 
 class PlayersRequest: NetworkRequest {
     private var compId: Int!
-    private var from: Int!
-    private var count: Int!
+    var from: Int!
+    var count: Int!
+    var searchText: String?
     private(set) var emptyAnswer = false
     
-    init(from: Int, count: Int, compId: Int) {
+    init(from: Int, count: Int, compId: Int, searchText: String? = nil) {
         super.init()
         
         self.from = from
         self.count = count
         self.compId = compId
+        self.searchText = searchText
     }
     
     override func start() {
@@ -28,7 +30,11 @@ class PlayersRequest: NetworkRequest {
             return
         }
         // http://reg.infobasket.ru/Widget/CompGamePlayers/9001?search=зим&stats=1&skip=0&take=10
-        guard let url = NSURL(string: "CompGamePlayers/\(self.compId)?skip=\(self.from)&take=\(self.count)", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        var urlString = "CompGamePlayers/\(self.compId)?skip=\(self.from)&take=\(self.count)"
+        if let search = self.searchText?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
+            urlString += "&search=\(search)"
+        }
+        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
         
         let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "GET"

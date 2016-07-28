@@ -33,25 +33,23 @@ class GameCell: UITableViewCell {
             let isLanguageRu = self.language.containsString("ru")
             
             self.avatarA.image = UIImage(named: "teamStub")
-            if let teamA = game.teamA {
-                if let teamAId = game.teamA?.objectId {
-                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
-                        self.avatarA.setImageWithUrl(url)
-                    }
-                }
-                self.teamANameLabel.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
-            }
-            self.teamAScoreLabel.text = game.scoreA?.stringValue ?? "-"
-            
             self.avatarB.image = UIImage(named: "teamStub")
-            if let teamB = game.teamB {
-                if let teamBId = game.teamB?.objectId {
-                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
-                        self.avatarB.setImageWithUrl(url)
-                    }
+            
+            if let teamAId = game.teamAId {
+                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
+                    self.avatarA.setImageWithUrl(url)
                 }
-                self.teamBNameLabel.text = isLanguageRu ? teamB.nameRu : teamB.nameEn
             }
+            self.teamANameLabel.text = isLanguageRu ? game.teamNameAru : game.teamNameAen
+
+            if let teamBId = game.teamBId {
+                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
+                    self.avatarB.setImageWithUrl(url)
+                }
+            }
+            self.teamBNameLabel.text = isLanguageRu ? game.teamNameBru : game.teamNameBen
+            
+            self.teamAScoreLabel.text = game.scoreA?.stringValue ?? "-"
             self.teamBScoreLabel.text = game.scoreB?.stringValue ?? "-"
             
             self.titleLabel.text = nil
@@ -88,12 +86,13 @@ class GameCell: UITableViewCell {
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false
         
+        let isLanguageRu = self.language.containsString("ru")
         if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
-            self.teamANameLabel.text = self.language.containsString("ru") ? self.game.teamA?.shortNameRu : self.game.teamA?.shortNameEn
-            self.teamBNameLabel.text = self.language.containsString("ru") ? self.game.teamB?.shortNameRu : self.game.teamB?.shortNameEn
+            self.teamANameLabel.text = isLanguageRu ? game.shortTeamNameAru : game.shortTeamNameAen
+            self.teamBNameLabel.text = isLanguageRu ? game.shortTeamNameBru : game.shortTeamNameBen
         } else {
-            self.teamANameLabel.text = self.language.containsString("ru") ? self.game.teamA?.nameRu : self.game.teamA?.nameEn
-            self.teamBNameLabel.text = self.language.containsString("ru") ? self.game.teamB?.nameRu : self.game.teamB?.nameEn
+            self.teamANameLabel.text = isLanguageRu ? game.teamNameAru : game.teamNameAen
+            self.teamBNameLabel.text = isLanguageRu ? game.teamNameBru : game.teamNameBen
         }
     }
 

@@ -70,38 +70,40 @@ class ContainerController: BaseController {
     // MARK: - Public
     
     func goToControllerWithControllerType(type: ControllerType) {
-        self.currentControllerType = type
-        
-        var toViewController: UIViewController?
-        
-        switch type {
-        case .Games:
-            toViewController = self.childViewControllers.filter { $0 is GamesController }.first
-        case .Statistics:
-            toViewController = self.childViewControllers.filter { $0 is RatingsController }.first
-        case .Players:
-            toViewController = self.childViewControllers.filter { $0 is PlayersController }.first
-        case .Table:
-            toViewController = self.childViewControllers.filter { $0 is TableController }.first
-        }
-        
-        if let _ = toViewController {
-            (toViewController as? BaseController)?.dataController = self.dataController
+        if self.currentControllerType != type {
+            self.currentControllerType = type
             
-            toViewController!.view.frame = self.view.bounds
-            self.activeController?.willMoveToParentViewController(toViewController)
-            self.addChildViewController(toViewController!)
-            self.transitionFromViewController(self.activeController!,
-                                              toViewController: toViewController!,
-                                              duration: 0.3,
-                                              options: .TransitionCrossDissolve,
-                                              animations: nil) { (_) -> Void in
-                                                toViewController!.didMoveToParentViewController(self)
+            var toViewController: UIViewController?
+            
+            switch type {
+            case .Games:
+                toViewController = self.childViewControllers.filter { $0 is GamesController }.first
+            case .Statistics:
+                toViewController = self.childViewControllers.filter { $0 is RatingsController }.first
+            case .Players:
+                toViewController = self.childViewControllers.filter { $0 is PlayersController }.first
+            case .Table:
+                toViewController = self.childViewControllers.filter { $0 is TableController }.first
             }
             
-            self.activeController = toViewController
-        } else {
-            self.performSegueWithIdentifier(self.currentControllerType.description, sender:nil)
+            if let _ = toViewController {
+                (toViewController as? BaseController)?.dataController = self.dataController
+                
+                toViewController!.view.frame = self.view.bounds
+                self.activeController?.willMoveToParentViewController(toViewController)
+                self.addChildViewController(toViewController!)
+                self.transitionFromViewController(self.activeController!,
+                                                  toViewController: toViewController!,
+                                                  duration: 0.3,
+                                                  options: .TransitionCrossDissolve,
+                                                  animations: nil) { (_) -> Void in
+                                                    toViewController!.didMoveToParentViewController(self)
+                }
+                
+                self.activeController = toViewController
+            } else {
+                self.performSegueWithIdentifier(self.currentControllerType.description, sender:nil)
+            }
         }
     }
 }

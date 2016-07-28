@@ -42,42 +42,33 @@ class GameScoreCell: UITableViewCell {
                 self.titleLabel.text = titleString
             }
             
-            if let teamA = game.teamA {
-                if let teamAId = game.teamA?.objectId {
-                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
-                        self.avatarA.setImageWithUrl(url)
+            if let statistics = game.statistics as? Set<GameStatistics> {
+                if let statisticsA = (statistics.filter {$0.teamNumber?.integerValue == 1}).first {
+                    if let teamA = statisticsA.team {
+                        if let teamAId = teamA.objectId {
+                            if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
+                                self.avatarA.setImageWithUrl(url)
+                            }
+                        }
+                        self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
+                        self.regionA.text = isLanguageRu ? teamA.regionNameRu : teamA.regionNameEn
                     }
                 }
-                self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
+                
+                if let statisticsB = (statistics.filter {$0.teamNumber?.integerValue == 2}).first {
+                    if let teamB = statisticsB.team {
+                        if let teamBId = teamB.objectId {
+                            if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
+                                self.avatarB.setImageWithUrl(url)
+                            }
+                        }
+                        self.titleB.text = isLanguageRu ? teamB.nameRu : teamB.nameEn
+                        self.regionB.text = isLanguageRu ? teamB.regionNameRu : teamB.regionNameEn
+                    }
+                }
             }
             self.scoreA.text = game.scoreA?.stringValue ?? "-"
-            
-            if let teamB = game.teamB {
-                if let teamBId = game.teamB?.objectId {
-                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
-                        self.avatarB.setImageWithUrl(url)
-                    }
-                }
-                self.titleB.text = isLanguageRu ? teamB.nameRu : teamB.nameEn
-            }
-            
-            self.regionA.text = isLanguageRu ? game.teamA?.regionNameRu : game.teamA?.regionNameEn
-            self.scoreA.text = game.scoreA?.stringValue
-            
-            self.regionB.text = isLanguageRu ? game.teamB?.regionNameRu : game.teamA?.regionNameEn
-            self.scoreB.text = game.scoreB?.stringValue
-            
-            if let teamAId = game.teamA?.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
-                    self.avatarA.setImageWithUrl(url)
-                }
-            }
-            
-            if let teamBId = game.teamB?.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
-                    self.avatarB.setImageWithUrl(url)
-                }
-            }
+            self.scoreB.text = game.scoreB?.stringValue ?? "-"
             
             self.scoreByPeriods = [(Int, Int)]()
             if let periodScores = game.scoreByPeriods?.componentsSeparatedByString(", ") {
@@ -116,12 +107,28 @@ class GameScoreCell: UITableViewCell {
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false
         
-        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
-            self.titleA.text = self.language.containsString("ru") ? self.game.teamA?.shortNameRu : self.game.teamA?.shortNameEn
-            self.titleB.text = self.language.containsString("ru") ? self.game.teamB?.shortNameRu : self.game.teamB?.shortNameEn
-        } else {
-            self.titleA.text = self.language.containsString("ru") ? self.game.teamA?.nameRu : self.game.teamA?.nameEn
-            self.titleB.text = self.language.containsString("ru") ? self.game.teamB?.nameRu : self.game.teamB?.nameEn
+        if let statistics = game.statistics as? Set<GameStatistics> {
+            let isLanguageRu = self.language.containsString("ru")
+            
+            if let statisticsA = (statistics.filter {$0.teamNumber?.integerValue == 1}).first {
+                if let teamA = statisticsA.team {
+                    if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+                      self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
+                    } else {
+                        self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
+                    }
+                }
+            }
+            
+            if let statisticsB = (statistics.filter {$0.teamNumber?.integerValue == 2}).first {
+                if let teamB = statisticsB.team {
+                    if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+                        self.titleB.text = isLanguageRu ? teamB.shortNameRu : teamB.shortNameEn
+                    } else {
+                        self.titleB.text = isLanguageRu ? teamB.nameRu : teamB.nameEn
+                    }
+                }
+            }
         }
     }
 }

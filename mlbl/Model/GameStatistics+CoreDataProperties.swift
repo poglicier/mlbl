@@ -1,0 +1,39 @@
+//
+//  GameStatistics+CoreDataProperties.swift
+//  
+//
+//  Created by Valentin Shamardin on 27.07.16.
+//
+//
+//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
+//  to delete and recreate this implementation file for your updated model.
+//
+
+import Foundation
+import CoreData
+
+extension GameStatistics {
+
+    @NSManaged var playerNumber: NSNumber?
+    @NSManaged var seconds: NSNumber?
+    @NSManaged var points: NSNumber?
+    @NSManaged var goal1: NSNumber?
+    @NSManaged var goal2: NSNumber?
+    @NSManaged var goal3: NSNumber?
+    @NSManaged var shot1: NSNumber?
+    @NSManaged var shot2: NSNumber?
+    @NSManaged var shot3: NSNumber?
+    @NSManaged var offensiveRebounds: NSNumber?
+    @NSManaged var defensiveRebounds: NSNumber?
+    @NSManaged var isStart: NSNumber?
+    @NSManaged var plusMinus: NSNumber?
+    @NSManaged var blocks: NSNumber?
+    @NSManaged var teamNumber: NSNumber?
+    @NSManaged var steals: NSNumber?
+    @NSManaged var assists: NSNumber?
+    @NSManaged var turnovers: NSNumber?
+    @NSManaged var player: Player?
+    @NSManaged var team: Team?
+    @NSManaged var game: Game?
+
+}

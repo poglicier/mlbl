@@ -94,12 +94,16 @@ class DataController {
     }
     
     func getPlayers(from: Int, count: Int, completion: ((NSError?, emptyAnswer: Bool) -> ())?) {
-        let operation = self.queue.operations.filter {$0 is PlayersRequest && !$0.cancelled}.first
-        if let playersOperation = operation as? PlayersRequest {
-            playersOperation.completionBlock = {
-                dispatch_async(dispatch_get_main_queue(), {
-                    completion?(playersOperation.error, emptyAnswer: playersOperation.emptyAnswer)
-                })
+        let playersRequests = self.queue.operations.filter {$0 is PlayersRequest && !$0.cancelled} as! [PlayersRequest]
+        let sameOperations = playersRequests.filter {$0.from == from && $0.count == count}
+        
+        if sameOperations.count > 0 {
+            for sameOperation in sameOperations {
+                sameOperation.completionBlock = {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        completion?(sameOperation.error, emptyAnswer: sameOperation.emptyAnswer)
+                    })
+                }
             }
         } else {
             let request = PlayersRequest(from: from, count: count, compId: self.currentCompetitionId())
@@ -112,6 +116,24 @@ class DataController {
             }
             self.queue.addOperation(request)
         }
+    }
+    
+    func searchPlayers(from: Int, count: Int, searchText: String, completion: ((NSError?, emptyAnswer: Bool) -> ())?) {
+        let playersRequests = self.queue.operations.filter {$0 is PlayersRequest && !$0.cancelled} as! [PlayersRequest]
+        let searchOperations = playersRequests.filter {$0.searchText != nil}
+        for searchOperation in searchOperations {
+            searchOperation.cancel()
+        }
+        
+        let request = PlayersRequest(from: from, count: count, compId: self.currentCompetitionId(), searchText: searchText)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error, emptyAnswer: request.emptyAnswer)
+            })
+        }
+        self.queue.addOperation(request)
     }
     
     // MARK: - Core Data stack
@@ -142,8 +164,8 @@ class DataController {
             dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
             dict[NSLocalizedFailureReasonErrorKey] = failureReason
             
-            dict[NSUnderlyingErrorKey] = error as NSError
             let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
+            dict[NSUnderlyingErrorKey] = wrappedError
             // Replace this with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")

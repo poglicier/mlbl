@@ -57,7 +57,7 @@ class GameStatsRequest: NetworkRequest {
                     let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
                     context.parentContext = self.dataController?.mainContext
                     context.performBlockAndWait({
-                        Game.gameWithStatDict(dict, inContext: context)
+                        Game.gameWithDict(dict, inContext: context)
                         self.dataController?.saveContext(context)
                     })
                 }

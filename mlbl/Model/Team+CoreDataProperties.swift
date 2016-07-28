@@ -2,7 +2,7 @@
 //  Team+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 10.07.16.
+//  Created by Valentin Shamardin on 27.07.16.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -21,8 +21,7 @@ extension Team {
     @NSManaged var regionNameRu: String?
     @NSManaged var shortNameEn: String?
     @NSManaged var shortNameRu: String?
-    @NSManaged var guestGames: NSSet?
-    @NSManaged var homeGames: NSSet?
     @NSManaged var players: NSSet?
+    @NSManaged var gameStatistics: NSSet?
 
 }

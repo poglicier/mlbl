@@ -28,6 +28,12 @@ class GameController: BaseController {
         self.setupTableView()
         
         self.getData()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(contextDidChange(_:)), name: NSManagedObjectContextObjectsDidChangeNotification, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     // MARK: - Private 
@@ -55,7 +61,6 @@ class GameController: BaseController {
                         do {
                             strongSelf.game = try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Game
                         } catch {}
-                        
                         strongSelf.tableView.reloadData()
                     }
                 }
@@ -65,6 +70,31 @@ class GameController: BaseController {
     private func configureCell(cell: GameScoreCell, atIndexPath indexPath: NSIndexPath) {
         cell.language = self.dataController.language
         cell.game = self.game
+    }
+    
+    private func configureCell(cell: GameStatsCell, atIndexPath indexPath: NSIndexPath) {
+        cell.language = self.dataController.language
+        if let statistics = ((self.game?.statistics as? Set<GameStatistics>)?.filter {$0.teamNumber?.integerValue == indexPath.section})?.first {
+            cell.statistics = statistics
+        } else {
+            cell.statistics = nil
+        }
+    }
+    
+    @objc private func contextDidChange(notification: NSNotification) {
+        if (notification.object as? NSManagedObjectContext) == self.dataController.mainContext {
+            let inserted = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>
+            let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
+            if (inserted?.filter{ $0 is GameStatistics })?.count > 0 ||
+                (updated?.filter{ $0 is GameStatistics })?.count > 0 {
+                let fetchRequest = NSFetchRequest(entityName: Game.entityName())
+                fetchRequest.predicate = NSPredicate(format: "objectId = \(self.gameId)")
+                do {
+                    self.game = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Game
+                } catch {}
+                self.tableView.reloadData()
+            }
+        }
     }
     
     /*
@@ -113,13 +143,30 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: UITableViewCell
-        let cellIdentifier = "gameScoreCell"
-        cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
+        if let gameSection = Sections(rawValue: indexPath.section) {
+            switch gameSection {
+            case .Hat:
+                let cellIdentifier = "gameScoreCell"
+                cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
+            default:
+                let cellIdentifier = "gameStatsCell"
+                cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
+            }
+        } else {
+            cell = UITableViewCell()
+        }
         
         return cell
     }
-    
+
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        self.configureCell(cell as! GameScoreCell, atIndexPath:indexPath)
+        if let gameSection = Sections(rawValue: indexPath.section) {
+            switch gameSection {
+            case .Hat:
+                self.configureCell(cell as! GameScoreCell, atIndexPath:indexPath)
+            default:
+                self.configureCell(cell as! GameStatsCell, atIndexPath:indexPath)
+            }
+        }
     }
 }

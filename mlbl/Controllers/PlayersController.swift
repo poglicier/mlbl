@@ -16,6 +16,8 @@ class PlayersController: BaseController {
     private let bunchSize = 10
     private let rowHeight: CGFloat = 145
     private var allDataLoaded = false
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var filteredPlayers: [Player]!
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Player.entityName())
@@ -66,11 +68,25 @@ class PlayersController: BaseController {
         spinner.color = UIColor.mlblLightOrangeColor()
         spinner.frame = CGRectMake(0, 0, 0, 64)
         self.tableView.tableFooterView = spinner
+        
+        self.searchController.searchResultsUpdater = self
+        self.searchController.dimsBackgroundDuringPresentation = false
+        self.definesPresentationContext = true
+//        self.tableView.tableHeaderView = self.searchController.searchBar
+        self.searchController.searchBar.barTintColor = UIColor.mlblLightOrangeColor()
+        self.searchController.searchBar.tintColor = UIColor.whiteColor()
+        self.searchController.searchBar.delegate = self
     }
     
     private func configureCell(cell: PlayerCell, atIndexPath indexPath: NSIndexPath) {
         cell.language = self.dataController.language
-        cell.player = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Player
+        
+        if self.searchController.active &&
+            self.searchController.searchBar.text != "" {
+            cell.player = self.filteredPlayers[indexPath.row]
+        } else {
+            cell.player = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Player
+        }
     }
     
     private func getData(from: Int) {
@@ -111,6 +127,29 @@ class PlayersController: BaseController {
         }
     }
     
+    private func filterContentForSearchText(searchText: String) {
+        if searchText.characters.count > 2 {
+            self.dataController.searchPlayers(0,
+                                              count: 15,
+                                              searchText: searchText,
+                                              completion: { [weak self] (error, emptyAnswer) in
+                                                if let strongSelf = self {
+                                                    if let players = strongSelf.fetchedResultsController.fetchedObjects as? [Player] {
+                                                        strongSelf.filteredPlayers = players.filter { player in
+                                                            let lastNameRu = player.lastNameRu?.lowercaseString.containsString(searchText.lowercaseString) ?? false
+                                                            let lastNameEn = player.lastNameEn?.lowercaseString.containsString(searchText.lowercaseString) ?? false
+                                                            let firstNameRu = player.firstNameRu?.lowercaseString.containsString(searchText.lowercaseString) ?? false
+                                                            let firstNameEn = player.firstNameEn?.lowercaseString.containsString(searchText.lowercaseString) ?? false
+                                                            return lastNameRu || lastNameEn || firstNameRu || firstNameEn
+                                                        }
+                                                        
+                                                        strongSelf.tableView.reloadData()
+                                                    }
+                                                }
+            })
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -126,13 +165,19 @@ class PlayersController: BaseController {
 extension PlayersController: UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var res = 0
-        if let sections = self.fetchedResultsController.sections {
-            let currentSection = sections[section]
-            res = currentSection.numberOfObjects
-        }
         
-        self.emptyLabel.hidden = res > 0 ||
-            tableView.hidden
+        if self.searchController.active &&
+            self.searchController.searchBar.text != "" {
+            res = self.filteredPlayers.count
+        } else {
+            if let sections = self.fetchedResultsController.sections {
+                let currentSection = sections[section]
+                res = currentSection.numberOfObjects
+            }
+            
+            self.emptyLabel.hidden = res > 0 ||
+                tableView.hidden
+        }
         
         return res
     }
@@ -149,19 +194,34 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         self.configureCell(cell as! PlayerCell, atIndexPath:indexPath)
         
-        if !self.allDataLoaded &&
-            indexPath.row >= tableView.numberOfRowsInSection(0) - 1 {
-            self.getData(self.fetchedResultsController.fetchedObjects?.count ?? 0)
+        if self.searchController.active &&
+            self.searchController.searchBar.text != "" {
+            self.tableView.tableFooterView = nil
+        } else {
+            if !self.allDataLoaded &&
+                indexPath.row >= tableView.numberOfRowsInSection(0) - 1 {
+                self.getData(self.fetchedResultsController.fetchedObjects?.count ?? 0)
+            }
         }
     }
 }
 
 extension PlayersController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(frc: NSFetchedResultsController) {
+        if self.searchController.active &&
+            self.searchController.searchBar.text != "" {
+            return
+        }
+        
         self.tableView.beginUpdates()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        if self.searchController.active &&
+            self.searchController.searchBar.text != "" {
+            return
+        }
+        
         switch type {
         case .Move:
             self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
@@ -178,6 +238,11 @@ extension PlayersController: NSFetchedResultsControllerDelegate {
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        if self.searchController.active &&
+            self.searchController.searchBar.text != "" {
+            return
+        }
+        
         switch(type) {
         case .Insert:
             self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
@@ -191,6 +256,23 @@ extension PlayersController: NSFetchedResultsControllerDelegate {
     }
     
     func controllerDidChangeContent(_: NSFetchedResultsController) {
+        if self.searchController.active &&
+            self.searchController.searchBar.text != "" {
+            return
+        }
+        
         self.tableView.endUpdates()
+    }
+}
+
+extension PlayersController: UISearchResultsUpdating {
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        self.filterContentForSearchText(searchController.searchBar.text!)
+    }
+}
+
+extension PlayersController: UISearchBarDelegate {
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        self.searchController.resignFirstResponder()
     }
 }
