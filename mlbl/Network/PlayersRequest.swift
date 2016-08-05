@@ -29,7 +29,7 @@ class PlayersRequest: NetworkRequest {
             finished = true
             return
         }
-        // http://reg.infobasket.ru/Widget/CompGamePlayers/9001?search=зим&stats=1&skip=0&take=10
+        
         var urlString = "CompGamePlayers/\(self.compId)?skip=\(self.from)&take=\(self.count)"
         if let search = self.searchText?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
             urlString += "&search=\(search)"
@@ -60,7 +60,7 @@ class PlayersRequest: NetworkRequest {
                 } else {
                     let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
                     context.parentContext = self.dataController?.mainContext
-                    context.performBlock({
+                    context.performBlockAndWait({
                         var playerIdsToSave = [NSNumber]()
                         for playerDict in playerDicts {
                             let player = Player.playerWithDict(playerDict, inContext: context)

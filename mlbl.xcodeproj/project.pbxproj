@@ -47,6 +47,7 @@
 		FCD76E121D3F3EC5002BB24A /* CompetitionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD76E111D3F3EC5002BB24A /* CompetitionsRequest.swift */; };
 		FCD76E151D3F4172002BB24A /* Competition+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD76E131D3F4172002BB24A /* Competition+CoreDataProperties.swift */; };
 		FCD76E161D3F4172002BB24A /* Competition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD76E141D3F4172002BB24A /* Competition.swift */; };
+		FCDB3E8E1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.m in Sources */ = {isa = PBXBuildFile; fileRef = FCDB3E8D1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.m */; };
 		FCE18BAE1C8DF8120077A51A /* GameScoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE18BAD1C8DF8120077A51A /* GameScoreCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -97,6 +98,9 @@
 		FCD76E111D3F3EC5002BB24A /* CompetitionsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompetitionsRequest.swift; sourceTree = "<group>"; };
 		FCD76E131D3F4172002BB24A /* Competition+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Competition+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FCD76E141D3F4172002BB24A /* Competition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Competition.swift; sourceTree = "<group>"; };
+		FCDB3E8B1D54975C00FE3D62 /* mlbl-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mlbl-Bridging-Header.h"; sourceTree = "<group>"; };
+		FCDB3E8C1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+UIViewAppearance_Swift.h"; sourceTree = "<group>"; };
+		FCDB3E8D1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+UIViewAppearance_Swift.m"; sourceTree = "<group>"; };
 		FCE18BAD1C8DF8120077A51A /* GameScoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScoreCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -222,6 +226,9 @@
 				FC74B8121C8F646F000E6CC6 /* Extensions.swift */,
 				FC74B8141C8F648E000E6CC6 /* AFImageCache.swift */,
 				FC637E631C94AB0B009EE880 /* FadeAnimator.swift */,
+				FCDB3E8C1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.h */,
+				FCDB3E8D1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.m */,
+				FCDB3E8B1D54975C00FE3D62 /* mlbl-Bridging-Header.h */,
 			);
 			path = Contributed;
 			sourceTree = "<group>";
@@ -274,7 +281,7 @@
 		FC705D2B1C80F00A00216AB8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Valentin Shamardin";
 				TargetAttributes = {
@@ -387,6 +394,7 @@
 				FC9793261C8D8AEA00D4D5D9 /* GameController.swift in Sources */,
 				FCD76E121D3F3EC5002BB24A /* CompetitionsRequest.swift in Sources */,
 				FC39395A1D2EDFEF00F8361E /* GamesRequest.swift in Sources */,
+				FCDB3E8E1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.m in Sources */,
 				FC321FAE1C82F9A200674271 /* PlayerCell.swift in Sources */,
 				FC705D4D1C80F8D400216AB8 /* MainController.swift in Sources */,
 				FC74B8151C8F648E000E6CC6 /* AFImageCache.swift in Sources */,
@@ -540,6 +548,7 @@
 			baseConfigurationReference = 78ACB04B86F9AEF1DC78789F /* Pods-mlbl.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shamardin Valentin (VQ6W7B6495)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = mlbl/Info.plist;
@@ -547,6 +556,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = ru.poglicier.mlbl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "db859d47-c174-4c30-83fb-a77839906526";
+				SWIFT_OBJC_BRIDGING_HEADER = "mlbl/Contributed/mlbl-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -555,12 +566,14 @@
 			baseConfigurationReference = EF75FE81432D237347A9693D /* Pods-mlbl.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Shamardin Valentin (U7BR77R5M8)";
 				INFOPLIST_FILE = mlbl/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ru.poglicier.mlbl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8dfed0bb-c258-44a0-ab80-9091c150d13f";
+				SWIFT_OBJC_BRIDGING_HEADER = "mlbl/Contributed/mlbl-Bridging-Header.h";
 			};
 			name = Release;
 		};

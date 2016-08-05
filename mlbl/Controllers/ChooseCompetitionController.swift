@@ -129,6 +129,17 @@ class ChooseCompetitionController: BaseController {
                             }
                         }
                     }
+                    
+                    // Удаляем игры старого чемпионата
+                    let gamesRequest = NSFetchRequest(entityName: Game.entityName())
+                    do {
+                        if let games = try self.dataController.mainContext.executeFetchRequest(gamesRequest) as? [Game] {
+                            for game in games {
+                                self.dataController.mainContext.deleteObject(game)
+                                print("DELETE Game \(game.date)")
+                            }
+                        }
+                    }
                 }
             } catch {}
             

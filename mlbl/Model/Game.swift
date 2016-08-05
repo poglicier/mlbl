@@ -165,7 +165,13 @@ class Game: NSManagedObject {
     }
     
     func removeStatisticsObject(value: GameStatistics) {
-        let items = self.mutableSetValueForKey("statistics")
-        items.removeObject(value)
+        var newItems: Set<GameStatistics>
+        if let statistics = self.statistics {
+            newItems = statistics as! Set<GameStatistics>
+        } else {
+            newItems = Set<GameStatistics>()
+        }
+        newItems.remove(value)
+        self.statistics = newItems
     }
 }

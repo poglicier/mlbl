@@ -22,7 +22,7 @@ class GameCell: UITableViewCell {
     
     static private var dateFormatter: NSDateFormatter = {
         let res = NSDateFormatter()
-        res.dateFormat = "dd MMMM yyyy, hh:mm"
+        res.dateFormat = "dd MMMM yyyy, HH:mm"
         return res
     }()
     

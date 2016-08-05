@@ -554,21 +554,6 @@ class GameStatsCell: UITableViewCell {
                     })
                 }
             }
-            
-//            if let teamStat = ((self.game?.statistics as? Set<GameStatistics>)?.filter {$0.teamNumber?.integerValue == self.teamNumber && $0.player == nil }) {
-//                let backgroundLine = UIView()
-//                backgroundLine.backgroundColor = (idx % 2 == 0) ? UIColor(red: 242/255.0, green: 242/255.0, blue: 242/255.0, alpha: 0.1) : UIColor(red: 164/255.0, green: 164/255.0, blue: 164/255.0, alpha: 0.1)
-//                self.background.addSubview(backgroundLine)
-//                backgroundLine.snp_makeConstraints(closure: { (make) in
-//                    make.left.right.equalTo(0)
-//                    make.height.equalTo(27)
-//                    if let _ = predLine {
-//                        make.top.equalTo(predLine!.snp_bottom)
-//                    } else {
-//                        make.top.equalTo(self.hatBackground.snp_bottom)
-//                    }
-//                })
-//            }
         }
     }
     
