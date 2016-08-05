@@ -74,11 +74,8 @@ class GameController: BaseController {
     
     private func configureCell(cell: GameStatsCell, atIndexPath indexPath: NSIndexPath) {
         cell.language = self.dataController.language
-        if let statistics = ((self.game?.statistics as? Set<GameStatistics>)?.filter {$0.teamNumber?.integerValue == indexPath.section})?.first {
-            cell.statistics = statistics
-        } else {
-            cell.statistics = nil
-        }
+        cell.teamNumber = indexPath.section
+        cell.game = self.game
     }
     
     @objc private func contextDidChange(notification: NSNotification) {
@@ -138,7 +135,17 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 252
+        var res: CGFloat = 150
+        
+        if indexPath.section == Sections.Hat.rawValue {
+            res = 252
+        } else {
+            if let statistics = ((self.game?.statistics as? Set<GameStatistics>)?.filter {$0.teamNumber?.integerValue == indexPath.section && $0.player != nil }) {
+                res += CGFloat((statistics.count)*27)
+            }
+        }
+        
+        return res
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

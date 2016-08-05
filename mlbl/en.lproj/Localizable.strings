@@ -24,3 +24,24 @@
 "Weight" = "Weight";
 "cm" = "cm";
 "kg" = "kg";
+
+"Number" = "#";
+"Player" = "Player";
+"Total" = "Total";
+"Coach acronym" = "Co.";
+
+"Time" = "Min";
+"Points" = "Pts";
+"Two pts" = "2pt";
+"Three pts" = "3pt";
+"One pts" = "1pt";
+"Rebounds offensive" = "Off";
+"Rebounds defensive" = "Def";
+"Rebounds" = "Reb";
+"Assists" = "Ast";
+"Steals" = "Bs";
+"Turnovers" = "T";
+"Blockshots" = "Blk";
+"Fouls" = "Pf";
+"Earned fouls" = "Fo";
+"Team" = "Team";

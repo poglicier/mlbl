@@ -43,7 +43,7 @@ class GameScoreCell: UITableViewCell {
             }
             
             if let statistics = game.statistics as? Set<GameStatistics> {
-                if let statisticsA = (statistics.filter {$0.teamNumber?.integerValue == 1}).first {
+                if let statisticsA = (statistics.filter {$0.teamNumber?.integerValue == 1 && $0.player == nil}).first {
                     if let teamA = statisticsA.team {
                         if let teamAId = teamA.objectId {
                             if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
@@ -55,7 +55,7 @@ class GameScoreCell: UITableViewCell {
                     }
                 }
                 
-                if let statisticsB = (statistics.filter {$0.teamNumber?.integerValue == 2}).first {
+                if let statisticsB = (statistics.filter {$0.teamNumber?.integerValue == 2 && $0.player == nil}).first {
                     if let teamB = statisticsB.team {
                         if let teamBId = teamB.objectId {
                             if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {

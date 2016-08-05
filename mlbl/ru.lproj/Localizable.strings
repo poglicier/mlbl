@@ -24,3 +24,24 @@
 "Weight" = "Вес";
 "cm" = "см";
 "kg" = "кг";
+
+"Number" = "№";
+"Player" = "Игрок";
+"Total" = "Всего";
+"Coach acronym" = "Тр.";
+
+"Time" = "Мин.";
+"Points" = "Очки";
+"Two pts" = "2-х";
+"Three pts" = "3-х";
+"One pts" = "1-х";
+"Rebounds offensive" = "Пн";
+"Rebounds defensive" = "Пз";
+"Rebounds" = "Под";
+"Assists" = "Ап";
+"Steals" = "Пх";
+"Turnovers" = "Пт";
+"Blockshots" = "Бш";
+"Fouls" = "Ф";
+"Earned fouls" = "Фс";
+"Team" = "Команда";

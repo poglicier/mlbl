@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15F34" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15G31" minimumToolsVersion="Automatic">
     <entity name="Competition" representedClassName=".Competition" syncable="YES">
         <attribute name="compAbcNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compAbcNameRu" optional="YES" attributeType="String" syncable="YES"/>
@@ -36,11 +36,13 @@
         <attribute name="assists" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="blocks" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="defensiveRebounds" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="fouls" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="goal1" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="goal2" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="goal3" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="isStart" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="offensiveRebounds" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="opponentFouls" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="playerNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="plusMinus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="points" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -49,7 +51,9 @@
         <attribute name="shot2" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="shot3" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="steals" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="teamDefensiveRebounds" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="teamNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="teamOffensiveRebounds" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="turnovers" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="game" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Game" inverseName="statistics" inverseEntity="Game" syncable="YES"/>
         <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="gameStatistics" inverseEntity="Player" syncable="YES"/>
@@ -86,7 +90,7 @@
     <elements>
         <element name="Competition" positionX="-54" positionY="117" width="128" height="195"/>
         <element name="Game" positionX="-63" positionY="-18" width="128" height="315"/>
-        <element name="GameStatistics" positionX="-36" positionY="144" width="128" height="360"/>
+        <element name="GameStatistics" positionX="-36" positionY="144" width="128" height="420"/>
         <element name="Player" positionX="-27" positionY="81" width="128" height="270"/>
         <element name="Team" positionX="-54" positionY="36" width="128" height="180"/>
     </elements>

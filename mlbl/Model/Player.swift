@@ -12,16 +12,16 @@ import CoreData
 
 class Player: NSManagedObject {
 
-    static private let PlayerIdKey = "PersonID"
-    static private let PersonInfoKey = "PersonInfo"
-    static private let PersonLastNameRuKey = "PersonLastNameRu"
-    static private let PersonFirstNameRuKey = "PersonFirstNameRu"
-    static private let PersonLastNameEnKey = "PersonLastNameEn"
-    static private let PersonFirstNameEnKey = "PersonFirstNameEn"
+    static let PlayerIdKey = "PersonID"
+    static let PersonInfoKey = "PersonInfo"
+    static let PersonLastNameRuKey = "PersonLastNameRu"
+    static let PersonFirstNameRuKey = "PersonFirstNameRu"
+    static let PersonLastNameEnKey = "PersonLastNameEn"
+    static let PersonFirstNameEnKey = "PersonFirstNameEn"
     static private let PersonGenderKey = "PersonGender"
-    static private let PersonBirthdayKey = "PersonBirthday"
-    static private let PersonHeightKey = "PersonHeight"
-    static private let PersonWeightKey = "PersonWeight"
+    static let PersonBirthdayKey = "PersonBirthday"
+    static let PersonHeightKey = "PersonHeight"
+    static let PersonWeightKey = "PersonWeight"
     static private let PersonTeamNameKey = "TeamName"
     static private let PersonCompTeamShortNameRuKey = "CompTeamShortNameRu"
     static private let PersonCompTeamShortNameEnKey = "CompTeamShortNameEn"
@@ -54,9 +54,15 @@ class Player: NSManagedObject {
                 res?.lastNameRu = personInfo[PersonLastNameRuKey] as? String
                 res?.firstNameEn = personInfo[PersonFirstNameEnKey] as? String
                 res?.lastNameEn = personInfo[PersonLastNameEnKey] as? String
-                res?.gender = personInfo[PersonGenderKey] as? Int
-                res?.height = personInfo[PersonHeightKey] as? Int
-                res?.weight = personInfo[PersonWeightKey] as? Int
+                if let gender = personInfo[PersonGenderKey] as? Int {
+                    res?.gender = gender
+                }
+                if let height = personInfo[PersonHeightKey] as? Int {
+                    res?.height = height
+                }
+                if let weight = personInfo[PersonWeightKey] as? Int {
+                    res?.weight = weight
+                }
                 if let birthIntervalString = personInfo[PersonBirthdayKey] as? NSString {
                     if let birthInterval = Double((birthIntervalString.stringByReplacingOccurrencesOfString("/Date(", withString: "") as NSString).stringByReplacingOccurrencesOfString(")/", withString: "")) {
                         res?.birth = NSDate(timeIntervalSince1970: birthInterval/1000)

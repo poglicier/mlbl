@@ -32,6 +32,8 @@ class Game: NSManagedObject {
     static private let TeamNameBenKey = "TeamNameBen"
     static private let TeamAIdKey = "TeamAid"
     static private let TeamBIdKey = "TeamBid"
+    static private let PlayersKey = "Players"
+    static private let CoachKey = "Coach"
     
     static private var dateFormatter: NSDateFormatter = {
         let res = NSDateFormatter()
@@ -69,12 +71,40 @@ class Game: NSManagedObject {
                 if let statisticsADict = dict[TeamAKey] as? [String:AnyObject] {
                     if let statisticsA = GameStatistics.gameStatisticsWithDict(statisticsADict, gameId: objectId as Int, inContext: context) {
                         res?.addStatisticsObject(statisticsA)
+                        
+                        if let playersDicts = statisticsADict[PlayersKey] as? [[String:AnyObject]] {
+                            for playerDict in playersDicts {
+                                if let playerStat = GameStatistics.gameStatisticsWithDict(playerDict, gameId: objectId as Int, inContext: context) {
+                                    res?.addStatisticsObject(playerStat)
+                                }
+                            }
+                        }
+                        
+                        if let coachDict = statisticsADict[CoachKey] as? [String:AnyObject] {
+                            if let coachStat = GameStatistics.gameStatisticsWithDict(coachDict, gameId: objectId as Int, inContext: context) {
+                                res?.addStatisticsObject(coachStat)
+                            }
+                        }
                     }
                 }
                 
                 if let statisticsBDict = dict[TeamBKey] as? [String:AnyObject] {
                     if let statisticsB = GameStatistics.gameStatisticsWithDict(statisticsBDict, gameId: objectId as Int, inContext: context) {
                         res?.addStatisticsObject(statisticsB)
+                        
+                        if let playersDicts = statisticsBDict[PlayersKey] as? [[String:AnyObject]] {
+                            for playerDict in playersDicts {
+                                if let playerStat = GameStatistics.gameStatisticsWithDict(playerDict, gameId: objectId as Int, inContext: context) {
+                                    res?.addStatisticsObject(playerStat)
+                                }
+                            }
+                        }
+                        
+                        if let coachDict = statisticsBDict[CoachKey] as? [String:AnyObject] {
+                            if let coachStat = GameStatistics.gameStatisticsWithDict(coachDict, gameId: objectId as Int, inContext: context) {
+                                res?.addStatisticsObject(coachStat)
+                            }
+                        }
                     }
                 }
                 
