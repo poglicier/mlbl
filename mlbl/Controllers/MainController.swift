@@ -58,6 +58,7 @@ class MainController: BaseController {
                     make.centerX.equalTo(button.snp_centerX)
                     make.width.equalTo(button.snp_width)
                 })
+                button.enabled = false
             }
             
             button.tag = idx

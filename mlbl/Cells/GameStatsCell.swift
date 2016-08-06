@@ -122,7 +122,7 @@ class GameStatsCell: UITableViewCell {
                             make.left.equalTo(oneLabel.snp_right)
                             make.width.equalTo(oneLabel.snp_width)
                             make.height.equalTo(oneLabel.snp_height)
-                            make.top.equalTo(oneLabel.snp_top)
+                            make.top.equalTo(predLine!.snp_bottom)
                         })
                         
                         let defLabel = UILabel()

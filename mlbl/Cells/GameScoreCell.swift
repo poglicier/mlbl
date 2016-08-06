@@ -82,6 +82,8 @@ class GameScoreCell: UITableViewCell {
                 }
             }
             self.collectionView.reloadData()
+            
+             self.setNeedsLayout()
         }
     }
     
@@ -91,13 +93,17 @@ class GameScoreCell: UITableViewCell {
         self.collectionView.scrollsToTop = false
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
         
         let path = UIBezierPath(roundedRect:self.bottomGrayView.bounds, byRoundingCorners:[.BottomRight, .BottomLeft], cornerRadii: CGSizeMake(5, 5))
         let maskLayer = CAShapeLayer()
         maskLayer.path = path.CGPath
         self.bottomGrayView.layer.mask = maskLayer
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
         
         self.background.layer.cornerRadius = 5
         self.background.layer.shadowRadius = 1
