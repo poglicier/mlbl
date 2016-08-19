@@ -131,6 +131,13 @@ extension UIImageView {
                                 }
                                 else {
                                     self.image = image!
+                                    
+                                    let transition = CATransition()
+                                    transition.duration = 0.3
+                                    transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                                    transition.type = kCATransitionFade
+                                    
+                                    self.layer.addAnimation(transition, forKey:nil)
                                 }
                                 UIImageView.sharedImageCache().cacheImage(image!, forRequest: request)
                             }

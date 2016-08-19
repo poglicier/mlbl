@@ -13,7 +13,7 @@ class PlayersRequest: NetworkRequest {
     var from: Int!
     var count: Int!
     var searchText: String?
-    private(set) var emptyAnswer = false
+    private(set) var responseCount = 0
     
     init(from: Int, count: Int, compId: Int, searchText: String? = nil) {
         super.init()
@@ -55,24 +55,17 @@ class PlayersRequest: NetworkRequest {
         do {
             let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
             if let playerDicts = json as? [[String:AnyObject]] {
-                if playerDicts.count == 0 {
-                    self.emptyAnswer = true
-                } else {
-                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                    context.parentContext = self.dataController?.mainContext
-                    context.performBlockAndWait({
-                        var playerIdsToSave = [NSNumber]()
-                        for playerDict in playerDicts {
-                            let player = Player.playerWithDict(playerDict, inContext: context)
-                            
-                            if let playerId = player?.objectId {
-                                playerIdsToSave.append(playerId)
-                            }
+                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+                context.parentContext = self.dataController?.mainContext
+                context.performBlockAndWait({
+                    for playerDict in playerDicts {
+                        if let _ = Player.playerWithDict(playerDict, inContext: context) {
+                            self.responseCount += 1
                         }
-                        
-                        self.dataController?.saveContext(context)
-                    })
-                }
+                    }
+                    
+                    self.dataController?.saveContext(context)
+                })
             } else {
                 self.error = NSError(domain: "internal app error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Обработка запроса не реализована"])
             }

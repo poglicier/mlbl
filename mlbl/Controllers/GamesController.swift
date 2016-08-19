@@ -150,7 +150,7 @@ class GamesController: BaseController {
         cell.game = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Game
     }
     
-    func refreshDidTap(sender: UIButton) {
+    @objc private func refreshDidTap(sender: UIButton) {
         sender.removeFromSuperview()
         self.getData()
     }

@@ -93,7 +93,7 @@ class DataController {
         self.queue.addOperation(request)
     }
     
-    func getPlayers(from: Int, count: Int, completion: ((NSError?, emptyAnswer: Bool) -> ())?) {
+    func getPlayers(from: Int, count: Int, completion: ((NSError?, responseCount: Int) -> ())?) {
         let playersRequests = self.queue.operations.filter {$0 is PlayersRequest && !$0.cancelled} as! [PlayersRequest]
         let sameOperations = playersRequests.filter {$0.from == from && $0.count == count}
         
@@ -101,7 +101,7 @@ class DataController {
             for sameOperation in sameOperations {
                 sameOperation.completionBlock = {
                     dispatch_async(dispatch_get_main_queue(), {
-                        completion?(sameOperation.error, emptyAnswer: sameOperation.emptyAnswer)
+                        completion?(sameOperation.error, responseCount: sameOperation.responseCount)
                     })
                 }
             }
@@ -111,14 +111,38 @@ class DataController {
             
             request.completionBlock = {
                 dispatch_async(dispatch_get_main_queue(), {
-                    completion?(request.error, emptyAnswer: request.emptyAnswer)
+                    completion?(request.error, responseCount: request.responseCount)
                 })
             }
             self.queue.addOperation(request)
         }
     }
     
-    func searchPlayers(from: Int, count: Int, searchText: String, completion: ((NSError?, emptyAnswer: Bool) -> ())?) {
+    func getStatParameters(completion: (NSError? -> ())?) {
+        let request = StatParametersRequest()
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func getBestPlayers(paramId: Int, completion: ((NSError?, responseCount: Int) -> ())?) {
+        let request = BestPlayersRequest(paramId: paramId, compId: self.currentCompetitionId())
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error, responseCount: request.responseCount)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func searchPlayers(from: Int, count: Int, searchText: String, completion: ((NSError?, responseCount: Int) -> ())?) {
         let playersRequests = self.queue.operations.filter {$0 is PlayersRequest && !$0.cancelled} as! [PlayersRequest]
         let searchOperations = playersRequests.filter {$0.searchText != nil}
         for searchOperation in searchOperations {
@@ -130,7 +154,7 @@ class DataController {
         
         request.completionBlock = {
             dispatch_async(dispatch_get_main_queue(), {
-                completion?(request.error, emptyAnswer: request.emptyAnswer)
+                completion?(request.error, responseCount: request.responseCount)
             })
         }
         self.queue.addOperation(request)

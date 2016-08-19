@@ -19,6 +19,7 @@ class GameCell: UITableViewCell {
     @IBOutlet private var teamBScoreLabel: UILabel!
     @IBOutlet private var teamANameLabel: UILabel!
     @IBOutlet private var teamBNameLabel: UILabel!
+    @IBOutlet private var separatorLine: UIView!
     
     static private var dateFormatter: NSDateFormatter = {
         let res = NSDateFormatter()
@@ -103,6 +104,8 @@ class GameCell: UITableViewCell {
         if (selected) {
             self.background.backgroundColor = color
         }
+        
+        self.separatorLine.backgroundColor = UIColor.mlblLightOrangeColor()
     }
     
     override func setHighlighted(highlighted: Bool, animated: Bool) {
@@ -112,5 +115,7 @@ class GameCell: UITableViewCell {
         if (highlighted) {
             self.background.backgroundColor = color
         }
+        
+        self.separatorLine.backgroundColor = UIColor.mlblLightOrangeColor()
     }
 }

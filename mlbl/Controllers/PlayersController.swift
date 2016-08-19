@@ -14,7 +14,8 @@ class PlayersController: BaseController {
     @IBOutlet private var emptyLabel: UILabel!
     @IBOutlet private var searchBar: UISearchBar!
     
-    private let bunchSize = 10
+    private var numberOfLoadedPlayers = 0
+    private let playersRequestBunchCount = 10
     private let rowHeight: CGFloat = 148
     private var allDataLoaded = false
     private var filteredPlayers: [Player]!
@@ -46,7 +47,7 @@ class PlayersController: BaseController {
             try self.fetchedResultsController.performFetch()
         } catch {}
         
-        self.getData(0)
+        self.getData()
     }    
 
     override func viewWillAppear(animated: Bool) {
@@ -88,14 +89,15 @@ class PlayersController: BaseController {
         cell.player = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Player
     }
     
-    private func getData(from: Int) {
-        if from == 0 {
+    private func getData() {
+        // Если это - запрос первых игроков
+        if self.numberOfLoadedPlayers == 0 {
             self.activityView.startAnimating()
             self.tableView.hidden = true
             self.emptyLabel.hidden = true
         }
         
-        self.dataController.getPlayers(from, count: self.bunchSize) { [weak self] (error, emptyAnswer) in
+        self.dataController.getPlayers(self.numberOfLoadedPlayers, count: self.playersRequestBunchCount) { [weak self] (error, responseCount) in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
                 
@@ -114,13 +116,15 @@ class PlayersController: BaseController {
                     strongSelf.tableView.hidden = false
                     strongSelf.emptyLabel.text = NSLocalizedString("No players stub", comment: "")
                     strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
-                    strongSelf.allDataLoaded = emptyAnswer
+                    strongSelf.allDataLoaded = responseCount < strongSelf.playersRequestBunchCount
                     
-                    if emptyAnswer {
+                    if strongSelf.allDataLoaded {
                         strongSelf.tableView.tableFooterView = nil
                     } else {
                         strongSelf.setupTableView()
                     }
+                    
+                    strongSelf.numberOfLoadedPlayers += responseCount
                 }
             }
         }
@@ -201,8 +205,8 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
             self.searchBar.text != "" {
         } else {
             if !self.allDataLoaded &&
-                indexPath.row >= tableView.numberOfRowsInSection(0) - 1 {
-                self.getData(self.fetchedResultsController.fetchedObjects?.count ?? 0)
+                indexPath.row >= self.numberOfLoadedPlayers - 1 {
+                self.getData()
             }
         }
     }

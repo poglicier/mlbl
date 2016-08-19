@@ -1,5 +1,5 @@
 PODS:
-  - Crashlytics (3.7.2):
+  - Crashlytics (3.7.3):
     - Fabric (~> 1.6.3)
   - Fabric (1.6.6)
   - SnapKit (0.19.1)
@@ -10,7 +10,7 @@ DEPENDENCIES:
   - SnapKit
 
 SPEC CHECKSUMS:
-  Crashlytics: 130ab943f8c78cda7a814b434f270b2e2c8a3cba
+  Crashlytics: 76f6beaff70acf226139582c09c78461597c2b98
   Fabric: 1abc1e59f11fa39ede6f690ef7309d8563e3ec59
   SnapKit: eff58d6e3451bf2f482db2eccf86aecf371dc62d
 

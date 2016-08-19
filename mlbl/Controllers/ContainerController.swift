@@ -79,7 +79,7 @@ class ContainerController: BaseController {
             case .Games:
                 toViewController = self.childViewControllers.filter { $0 is GamesController }.first
             case .Statistics:
-                toViewController = self.childViewControllers.filter { $0 is RatingsController }.first
+                toViewController = self.childViewControllers.filter { $0 is StatisticsController }.first
             case .Players:
                 toViewController = self.childViewControllers.filter { $0 is PlayersController }.first
             case .Table:
