@@ -32,9 +32,9 @@ class DataController {
     private var privateContext: NSManagedObjectContext!
     private(set) var mainContext: NSManagedObjectContext!
     
-    // MARK: - Private
+    // MARK: - Public
     
-    private func currentCompetitionId() -> Int {
+    func currentCompetitionId() -> Int {
         let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
         fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
         do {
@@ -46,8 +46,6 @@ class DataController {
         return 0
     }
     
-    // MARK: - Public
-    
     init () {
         self.privateContext = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         self.privateContext.persistentStoreCoordinator = self.persistentStoreCoordinator
@@ -58,7 +56,6 @@ class DataController {
     
     func getCompetitions(completion: (NSError? -> ())?) {
         let request = CompetitionsRequest(parentId: self.mlblCompId)
-        print(self)
         request.dataController = self
         
         request.completionBlock = {
@@ -155,6 +152,18 @@ class DataController {
         request.completionBlock = {
             dispatch_async(dispatch_get_main_queue(), {
                 completion?(request.error, responseCount: request.responseCount)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func getRoundRobin(completion: (NSError? -> ())?) {
+        let request = RoundRobinRequest(compId: self.currentCompetitionId())
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
             })
         }
         self.queue.addOperation(request)

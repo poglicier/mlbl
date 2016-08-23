@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		89242E74280504C254BE86A7 /* Pods_mlbl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF0BF998002FB4DA321E13E /* Pods_mlbl.framework */; };
+		FC0645451D6C73FA0047FE1D /* RoundRobinRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0645441D6C73FA0047FE1D /* RoundRobinRequest.swift */; };
+		FC0645471D6C7C250047FE1D /* RobinTeamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */; };
 		FC321FA41C81B13E00674271 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FA31C81B13E00674271 /* ContainerController.swift */; };
 		FC321FA81C82DF8D00674271 /* PlayersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FA71C82DF8D00674271 /* PlayersController.swift */; };
 		FC321FAC1C82F97900674271 /* EmptySegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FAB1C82F97900674271 /* EmptySegue.swift */; };
@@ -64,6 +66,8 @@
 		BBF0BF998002FB4DA321E13E /* Pods_mlbl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mlbl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF75FE81432D237347A9693D /* Pods-mlbl.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mlbl.release.xcconfig"; path = "Pods/Target Support Files/Pods-mlbl/Pods-mlbl.release.xcconfig"; sourceTree = "<group>"; };
 		F6CA67808BC7A749E6A768D7 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC0645441D6C73FA0047FE1D /* RoundRobinRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundRobinRequest.swift; sourceTree = "<group>"; };
+		FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RobinTeamCell.swift; sourceTree = "<group>"; };
 		FC321FA31C81B13E00674271 /* ContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
 		FC321FA71C82DF8D00674271 /* PlayersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayersController.swift; sourceTree = "<group>"; };
 		FC321FAB1C82F97900674271 /* EmptySegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptySegue.swift; sourceTree = "<group>"; };
@@ -160,6 +164,7 @@
 				FC74B8161C8F733A000E6CC6 /* PeriodCell.swift */,
 				FC637E531C94568A009EE880 /* GameStatsCell.swift */,
 				FCEEA9261D5BBCB800686DD6 /* ParameterCell.swift */,
+				FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -182,6 +187,7 @@
 				FC6FC1611D3D4807004B49E1 /* PlayersRequest.swift */,
 				FCEEA91E1D5B514500686DD6 /* StatParametersRequest.swift */,
 				FC77C09F1D64C78800A12D1E /* BestPlayersRequest.swift */,
+				FC0645441D6C73FA0047FE1D /* RoundRobinRequest.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -414,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC9793111C8B5F2A00D4D5D9 /* mlbl.xcdatamodeld in Sources */,
+				FC0645451D6C73FA0047FE1D /* RoundRobinRequest.swift in Sources */,
 				FC3939581D2ED52800F8361E /* GameStatsRequest.swift in Sources */,
 				FC9793261C8D8AEA00D4D5D9 /* GameController.swift in Sources */,
 				FCD76E121D3F3EC5002BB24A /* CompetitionsRequest.swift in Sources */,
@@ -425,6 +432,7 @@
 				FC74B8151C8F648E000E6CC6 /* AFImageCache.swift in Sources */,
 				FC97931F1C8B6AFB00D4D5D9 /* GameCell.swift in Sources */,
 				FC74B8171C8F733A000E6CC6 /* PeriodCell.swift in Sources */,
+				FC0645471D6C7C250047FE1D /* RobinTeamCell.swift in Sources */,
 				FC97931B1C8B6ADB00D4D5D9 /* Game.swift in Sources */,
 				FCEEA9251D5BB26E00686DD6 /* PlayerStatCell.swift in Sources */,
 				FC637E561C945819009EE880 /* ChooseCompetitionController.swift in Sources */,

@@ -51,6 +51,7 @@ class StatisticsController: BaseController {
         self.setupTableView()
         self.setupFiltersCollectionView()
         self.setupParameterLabel()
+        self.setupParameterButton()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(contextDidChange(_:)), name: NSManagedObjectContextObjectsDidChangeNotification, object: nil)
 
@@ -80,6 +81,11 @@ class StatisticsController: BaseController {
     
     private func setupParameterLabel() {
         self.parameterLabel.text = nil
+    }
+    
+    private func setupParameterButton() {
+        self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblDarkOrangeColor()), forState: .Normal)
+        self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblLightOrangeColor()), forState: .Highlighted)
     }
     
     private func setParamaterLabelText(text: String?) {

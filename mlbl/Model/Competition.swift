@@ -77,4 +77,23 @@ class Competition: NSManagedObject {
         
         return res
     }
+    
+    private func compTypeStr() -> String {
+        switch self.compType?.integerValue ?? 0 {
+        case 0:
+            return "Группа"
+        case 1, 2, 3, 5, 7:
+            return "Раунд плей-офф"
+        case 4, 8, 10:
+            return "Плей-офф"
+        default:
+            return "Неизвестна"
+        }
+    }
+    
+    override var description: String {
+        get {
+            return String(format: "\(self.compAbcNameRu) Стадия: \(compTypeStr())\n\(super.description)")
+        }
+    }
 }
