@@ -15,7 +15,8 @@ class PlayerStatCell: UITableViewCell {
     @IBOutlet private var firstNameLabel: UILabel!
     @IBOutlet private var teamLabel: UILabel!
     @IBOutlet private var valueLabel: UILabel!
-
+    
+    var formatter: NSNumberFormatter!
     var language: String!
     var rank: PlayerRank! {
         didSet {
@@ -38,7 +39,21 @@ class PlayerStatCell: UITableViewCell {
                 self.teamLabel.text = nil
             }
             
-            self.valueLabel.text = String(format: "%.1f", rank.res?.doubleValue ?? 0)
+            if let res = rank.res {
+                if rank.parameter?.name?.containsString("время") == true {
+                    let seconds = res.integerValue
+                    self.valueLabel.text = String(format: "\(seconds/60):%02zd", seconds % 60)
+                } else {
+                    self.valueLabel.text = self.formatter.stringFromNumber(res)
+                    
+                    if rank.parameter?.name?.containsString("Точность") == true ||
+                        rank.parameter?.name?.containsString("коэффициент") == true {
+                        self.valueLabel.text! += " %"
+                    }
+                }
+            } else {
+                self.valueLabel.text = "0"
+            }
         }
     }
     

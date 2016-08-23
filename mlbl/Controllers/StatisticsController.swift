@@ -37,6 +37,13 @@ class StatisticsController: BaseController {
         return frc
     }()
     
+    lazy private var formatter: NSNumberFormatter = {
+        let f = NSNumberFormatter()
+        f.maximumFractionDigits = 1
+        return f
+    }()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -284,7 +291,8 @@ extension StatisticsController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("playerStatCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("playerStatCell", forIndexPath: indexPath) as! PlayerStatCell
+        cell.formatter = self.formatter
         return cell
     }
     
