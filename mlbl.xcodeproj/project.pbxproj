@@ -44,6 +44,12 @@
 		FC97931F1C8B6AFB00D4D5D9 /* GameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC97931E1C8B6AFB00D4D5D9 /* GameCell.swift */; };
 		FC9793231C8B729100D4D5D9 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9793221C8B729100D4D5D9 /* DataController.swift */; };
 		FC9793261C8D8AEA00D4D5D9 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9793251C8D8AEA00D4D5D9 /* GameController.swift */; };
+		FC9837B91D701E3900534AB1 /* TeamRoundRank+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837B71D701E3900534AB1 /* TeamRoundRank+CoreDataProperties.swift */; };
+		FC9837BA1D701E3900534AB1 /* TeamRoundRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837B81D701E3900534AB1 /* TeamRoundRank.swift */; };
+		FC9837BC1D7069FD00534AB1 /* PlayoffRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837BB1D7069FD00534AB1 /* PlayoffRequest.swift */; };
+		FC9837BE1D7079E300534AB1 /* PlayoffCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837BD1D7079E300534AB1 /* PlayoffCell.swift */; };
+		FC9837C11D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837BF1D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift */; };
+		FC9837C21D7089AA00534AB1 /* PlayoffSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837C01D7089AA00534AB1 /* PlayoffSerie.swift */; };
 		FCA941411D48D82600D95A7A /* Game+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413C1D48D82600D95A7A /* Game+CoreDataProperties.swift */; };
 		FCA941421D48D82600D95A7A /* Team+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413D1D48D82600D95A7A /* Team+CoreDataProperties.swift */; };
 		FCA941431D48D82600D95A7A /* Player+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413E1D48D82600D95A7A /* Player+CoreDataProperties.swift */; };
@@ -105,6 +111,12 @@
 		FC97931E1C8B6AFB00D4D5D9 /* GameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCell.swift; sourceTree = "<group>"; };
 		FC9793221C8B729100D4D5D9 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		FC9793251C8D8AEA00D4D5D9 /* GameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
+		FC9837B71D701E3900534AB1 /* TeamRoundRank+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TeamRoundRank+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		FC9837B81D701E3900534AB1 /* TeamRoundRank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamRoundRank.swift; sourceTree = "<group>"; };
+		FC9837BB1D7069FD00534AB1 /* PlayoffRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffRequest.swift; sourceTree = "<group>"; };
+		FC9837BD1D7079E300534AB1 /* PlayoffCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffCell.swift; sourceTree = "<group>"; };
+		FC9837BF1D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlayoffSerie+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		FC9837C01D7089AA00534AB1 /* PlayoffSerie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffSerie.swift; sourceTree = "<group>"; };
 		FCA9413C1D48D82600D95A7A /* Game+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Game+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FCA9413D1D48D82600D95A7A /* Team+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Team+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FCA9413E1D48D82600D95A7A /* Player+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Player+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -165,6 +177,7 @@
 				FC637E531C94568A009EE880 /* GameStatsCell.swift */,
 				FCEEA9261D5BBCB800686DD6 /* ParameterCell.swift */,
 				FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */,
+				FC9837BD1D7079E300534AB1 /* PlayoffCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -188,6 +201,7 @@
 				FCEEA91E1D5B514500686DD6 /* StatParametersRequest.swift */,
 				FC77C09F1D64C78800A12D1E /* BestPlayersRequest.swift */,
 				FC0645441D6C73FA0047FE1D /* RoundRobinRequest.swift */,
+				FC9837BB1D7069FD00534AB1 /* PlayoffRequest.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -263,6 +277,8 @@
 			isa = PBXGroup;
 			children = (
 				FC97930F1C8B5F2A00D4D5D9 /* mlbl.xcdatamodeld */,
+				FC9837B71D701E3900534AB1 /* TeamRoundRank+CoreDataProperties.swift */,
+				FC9837B81D701E3900534AB1 /* TeamRoundRank.swift */,
 				FC77C0A11D64E8CC00A12D1E /* PlayerRank+CoreDataProperties.swift */,
 				FC77C0A21D64E8CC00A12D1E /* PlayerRank.swift */,
 				FCEEA9201D5B54F400686DD6 /* StatParameter+CoreDataProperties.swift */,
@@ -275,6 +291,8 @@
 				FC9793151C8B6ADB00D4D5D9 /* Game.swift */,
 				FCA9413E1D48D82600D95A7A /* Player+CoreDataProperties.swift */,
 				FC9793171C8B6ADB00D4D5D9 /* Player.swift */,
+				FC9837BF1D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift */,
+				FC9837C01D7089AA00534AB1 /* PlayoffSerie.swift */,
 				FCA9413F1D48D82600D95A7A /* GameStatistics+CoreDataProperties.swift */,
 				FCA941401D48D82600D95A7A /* GameStatistics.swift */,
 			);
@@ -426,7 +444,10 @@
 				FCD76E121D3F3EC5002BB24A /* CompetitionsRequest.swift in Sources */,
 				FC39395A1D2EDFEF00F8361E /* GamesRequest.swift in Sources */,
 				FCDB3E8E1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.m in Sources */,
+				FC9837B91D701E3900534AB1 /* TeamRoundRank+CoreDataProperties.swift in Sources */,
 				FC321FAE1C82F9A200674271 /* PlayerCell.swift in Sources */,
+				FC9837C21D7089AA00534AB1 /* PlayoffSerie.swift in Sources */,
+				FC9837BE1D7079E300534AB1 /* PlayoffCell.swift in Sources */,
 				FC705D4D1C80F8D400216AB8 /* MainController.swift in Sources */,
 				FCEEA91F1D5B514500686DD6 /* StatParametersRequest.swift in Sources */,
 				FC74B8151C8F648E000E6CC6 /* AFImageCache.swift in Sources */,
@@ -445,8 +466,10 @@
 				FC3939541D2ED2BD00F8361E /* NetworkRequest.swift in Sources */,
 				FCE18BAE1C8DF8120077A51A /* GameScoreCell.swift in Sources */,
 				FCA941441D48D82600D95A7A /* GameStatistics+CoreDataProperties.swift in Sources */,
+				FC9837C11D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift in Sources */,
 				FCEEA9231D5B54F400686DD6 /* StatParameter.swift in Sources */,
 				FC321FAC1C82F97900674271 /* EmptySegue.swift in Sources */,
+				FC9837BA1D701E3900534AB1 /* TeamRoundRank.swift in Sources */,
 				FC6FC1621D3D4807004B49E1 /* PlayersRequest.swift in Sources */,
 				FC705D4F1C80F8FC00216AB8 /* BaseController.swift in Sources */,
 				FC77C0A41D64E8CC00A12D1E /* PlayerRank.swift in Sources */,
@@ -462,6 +485,7 @@
 				FCA941451D48D82600D95A7A /* GameStatistics.swift in Sources */,
 				FCA941431D48D82600D95A7A /* Player+CoreDataProperties.swift in Sources */,
 				FC9793231C8B729100D4D5D9 /* DataController.swift in Sources */,
+				FC9837BC1D7069FD00534AB1 /* PlayoffRequest.swift in Sources */,
 				FCD76E161D3F4172002BB24A /* Competition.swift in Sources */,
 				FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */,
 				FC97931D1C8B6ADB00D4D5D9 /* Player.swift in Sources */,

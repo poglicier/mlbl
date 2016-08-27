@@ -93,7 +93,7 @@ class Competition: NSManagedObject {
     
     override var description: String {
         get {
-            return String(format: "\(self.compAbcNameRu) Стадия: \(compTypeStr())\n\(super.description)")
+            return String(format: "%@ <\(unsafeAddressOf(self))> \(self.objectId) \(self.compShortNameRu ?? "") Стадия: \(compTypeStr())", self.dynamicType.description())
         }
     }
 }

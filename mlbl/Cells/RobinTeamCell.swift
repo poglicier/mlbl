@@ -25,6 +25,34 @@ class RobinTeamCell: UITableViewCell {
     
     var language: String!
     
+    var rank: TeamRoundRank! {
+        didSet {
+            self.placeLabel.text = String(format: "%@", rank.place ?? "")
+            self.avatarView.image = UIImage(named: "teamStub")
+            
+            if let team = rank.team {
+                
+                if let teamId = team.objectId {
+                    if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamId)") {
+                        self.avatarView.setImageWithUrl(url)
+                    }
+                }
+                
+                let isLanguageRu = self.language.containsString("ru")
+                self.teamNameLabel.text = isLanguageRu ? team.nameRu : team.nameEn
+
+                self.winsValueLabel.text = "\(rank.standingWin ?? 0) - \(rank.standingLose ?? 0)"
+                self.diffValueLabel.text = "\(rank.standingsGoalPlus ?? 0) - \(rank.standingsGoalMinus ?? 0)"
+                self.pointsValueLabel.text = "\(rank.standingPoints ?? 0)"
+            } else {
+                self.teamNameLabel.text = nil
+                self.winsValueLabel.text = nil
+                self.diffValueLabel.text = nil
+                self.pointsValueLabel.text = nil
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         

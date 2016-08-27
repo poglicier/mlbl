@@ -11,6 +11,8 @@
         <attribute name="objectId" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Competition" inverseName="parent" inverseEntity="Competition" syncable="YES"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Competition" inverseName="children" inverseEntity="Competition" syncable="YES"/>
+        <relationship name="playoffSeries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayoffSerie" inverseName="competition" inverseEntity="PlayoffSerie" syncable="YES"/>
+        <relationship name="roundRanks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TeamRoundRank" inverseName="competition" inverseEntity="TeamRoundRank" syncable="YES"/>
     </entity>
     <entity name="Game" representedClassName=".Game" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
@@ -30,6 +32,7 @@
         <attribute name="teamNameBru" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="venueEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="venueRu" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="playoffSerie" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PlayoffSerie" inverseName="games" inverseEntity="PlayoffSerie" syncable="YES"/>
         <relationship name="statistics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GameStatistics" inverseName="game" inverseEntity="GameStatistics" syncable="YES"/>
     </entity>
     <entity name="GameStatistics" representedClassName=".GameStatistics" syncable="YES">
@@ -82,6 +85,19 @@
         <relationship name="parameter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StatParameter" inverseName="ranks" inverseEntity="StatParameter" syncable="YES"/>
         <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="ranks" inverseEntity="Player" syncable="YES"/>
     </entity>
+    <entity name="PlayoffSerie" representedClassName=".PlayoffSerie" syncable="YES">
+        <attribute name="round" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="roundNameEn" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="roundNameRu" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="score1" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="score2" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="sectionSort" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="sort" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="competition" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Competition" inverseName="playoffSeries" inverseEntity="Competition" syncable="YES"/>
+        <relationship name="games" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Game" inverseName="playoffSerie" inverseEntity="Game" syncable="YES"/>
+        <relationship name="team1" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="playoffSeries1" inverseEntity="Team" syncable="YES"/>
+        <relationship name="team2" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="playoffSeries2" inverseEntity="Team" syncable="YES"/>
+    </entity>
     <entity name="StatParameter" representedClassName=".StatParameter" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -97,14 +113,29 @@
         <attribute name="shortNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="gameStatistics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GameStatistics" inverseName="team" inverseEntity="GameStatistics" syncable="YES"/>
         <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="team" inverseEntity="Player" syncable="YES"/>
+        <relationship name="playoffSeries1" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayoffSerie" inverseName="team1" inverseEntity="PlayoffSerie" syncable="YES"/>
+        <relationship name="playoffSeries2" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayoffSerie" inverseName="team2" inverseEntity="PlayoffSerie" syncable="YES"/>
+        <relationship name="roundRanks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TeamRoundRank" inverseName="team" inverseEntity="TeamRoundRank" syncable="YES"/>
+    </entity>
+    <entity name="TeamRoundRank" representedClassName=".TeamRoundRank" syncable="YES">
+        <attribute name="place" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="standingLose" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="standingPoints" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="standingsGoalMinus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="standingsGoalPlus" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="standingWin" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="competition" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Competition" inverseName="roundRanks" inverseEntity="Competition" syncable="YES"/>
+        <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="roundRanks" inverseEntity="Team" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Competition" positionX="-54" positionY="117" width="128" height="195"/>
-        <element name="Game" positionX="-63" positionY="-18" width="128" height="315"/>
+        <element name="Competition" positionX="-54" positionY="117" width="128" height="225"/>
+        <element name="Game" positionX="-63" positionY="-18" width="128" height="330"/>
         <element name="GameStatistics" positionX="-36" positionY="144" width="128" height="420"/>
         <element name="Player" positionX="-27" positionY="81" width="128" height="285"/>
-        <element name="StatParameter" positionX="-36" positionY="135" width="128" height="90"/>
-        <element name="Team" positionX="-54" positionY="36" width="128" height="180"/>
         <element name="PlayerRank" positionX="-36" positionY="135" width="128" height="90"/>
+        <element name="StatParameter" positionX="-36" positionY="135" width="128" height="90"/>
+        <element name="Team" positionX="-54" positionY="36" width="128" height="225"/>
+        <element name="TeamRoundRank" positionX="-36" positionY="135" width="128" height="165"/>
+        <element name="PlayoffSerie" positionX="-27" positionY="144" width="128" height="210"/>
     </elements>
 </model>

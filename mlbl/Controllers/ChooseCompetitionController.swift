@@ -12,17 +12,18 @@ import CoreData
 class ChooseCompetitionController: BaseController {
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var goButton: UIBarButtonItem!
-    private var comps = [Competition]()
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
-        fetchRequest.predicate = NSPredicate(format: "compType < 0 AND ANY children.compType < 0")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "compAbcNameRu" : "compAbcNameEn", ascending: true), NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "compShortNameRu" : "compShortNameEn", ascending: true)]
+        fetchRequest.predicate = NSPredicate(format: "compType < 0 AND ANY children.compType >= 0")
+        let isLanguageRu = self.dataController.language.containsString("ru")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: isLanguageRu ? "parent.compShortNameRu" : "parent.compShortNameEn", ascending: true),
+                                        NSSortDescriptor(key: isLanguageRu ? "compAbcNameRu" : "compAbcNameEn", ascending: true), NSSortDescriptor(key: self.dataController.language.containsString("ru") ? "compShortNameRu" : "compShortNameEn", ascending: true)]
         
         let frc = NSFetchedResultsController(
             fetchRequest: fetchRequest,
             managedObjectContext: self.dataController.mainContext,
-            sectionNameKeyPath: nil,
+            sectionNameKeyPath: isLanguageRu ? "parent.compShortNameRu" : "parent.compShortNameEn",
             cacheName: nil)
         
         frc.delegate = self
@@ -67,17 +68,6 @@ class ChooseCompetitionController: BaseController {
                     
                     strongSelf.presentViewController(alert, animated: true, completion: nil)
                 } else {
-                    let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
-                    //        fetchRequest.predicate = NSPredicate(format: "SUBQUERY(children, x, x.@count = 2).@count = 1")
-                    fetchRequest.sortDescriptors = [NSSortDescriptor(key: strongSelf.dataController.language.containsString("ru") ? "compAbcNameRu" : "compAbcNameEn", ascending: true), NSSortDescriptor(key: strongSelf.dataController.language.containsString("ru") ? "compShortNameRu" : "compShortNameEn", ascending: true)]
-                    do {
-                        strongSelf.comps = try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest) as! [Competition]
-                    } catch{}
-                    let a = strongSelf.comps.filter { $0.children?.count == 2 }
-                    for aa in a {
-                        print(aa.compShortNameRu)
-                    }
-                    
                     strongSelf.tableView.hidden = false
                     strongSelf.title = NSLocalizedString("Choose competition", comment: "")
                 }
@@ -89,21 +79,12 @@ class ChooseCompetitionController: BaseController {
         let comp = fetchedResultsController.objectAtIndexPath(indexPath) as! Competition
         
         let isLanguageRu = self.dataController.language.containsString("ru")
-        let abcName = isLanguageRu ? comp.compAbcNameRu : comp.compAbcNameEn
         let shortName = isLanguageRu ? comp.compShortNameRu : comp.compShortNameEn
         
-        if abcName != nil {
-            if shortName != nil {
-                cell.textLabel?.text = "\(abcName!)-\(shortName!)"
-            } else {
-                cell.textLabel?.text = "\(abcName!)"
-            }
+        if let _ = shortName {
+            cell.textLabel?.text = shortName!
         } else {
-            if shortName != nil {
-                cell.textLabel?.text = shortName!
-            } else {
-                cell.textLabel?.text = "-"
-            }
+            cell.textLabel?.text = "-"
         }
     }
     
@@ -201,6 +182,20 @@ extension ChooseCompetitionController: NSFetchedResultsControllerDelegate {
 }
 
 extension ChooseCompetitionController: UITableViewDataSource, UITableViewDelegate {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return self.fetchedResultsController.sections?.count ?? 0
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let sectionInfo = self.fetchedResultsController.sections?[section]
+        if let competition = sectionInfo?.objects?.first as? Competition {
+            let isLanguageRu = self.dataController.language.containsString("ru")
+            return isLanguageRu ? competition.parent?.compShortNameRu : competition.parent?.compShortNameEn
+        } else {
+            return nil
+        }
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let sections = self.fetchedResultsController.sections {
             let currentSection = sections[section]
@@ -212,6 +207,26 @@ extension ChooseCompetitionController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 44
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor.mlblLightOrangeColor()
+        let label = UILabel()
+        if #available(iOS 8.2, *) {
+            label.font = UIFont.systemFontOfSize(17, weight: UIFontWeightMedium)
+        } else {
+            label.font = UIFont.systemFontOfSize(17)
+        }
+        label.text = self.tableView(tableView, titleForHeaderInSection: section)
+        label.textColor = UIColor.whiteColor()
+        view.addSubview(label)
+        label.snp_makeConstraints { (make) in
+            make.left.equalTo(16)
+            make.top.right.bottom.equalTo(0)
+        }
+        
+        return view
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {

@@ -39,9 +39,9 @@ class MainController: BaseController {
                 self.choosenComp = comp
                 
                 if self.dataController.language.containsString("ru") {
-                    self.title = self.choosenComp.compAbcNameRu
+                    self.title = self.choosenComp.compShortNameRu
                 } else {
-                    self.title = self.choosenComp.compAbcNameEn
+                    self.title = self.choosenComp.compShortNameEn
                 }
             }
         } catch (let error) {
@@ -99,8 +99,16 @@ class MainController: BaseController {
     
     @IBAction private func goToChooseRegion() {
         if let ChooseCompetitionController = self.storyboard?.instantiateViewControllerWithIdentifier("ChooseCompetitionController") as? BaseController {
+            let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+            fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
+            do {
+                let comp = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Competition
+                comp?.isChoosen = false
+                self.dataController.saveContext(self.dataController.mainContext)
+            } catch {}
+            
             ChooseCompetitionController.dataController = self.dataController
-            self.navigationController?.setViewControllers([ChooseCompetitionController], animated: true)
+            self.navigationController?.setViewControllers([ChooseCompetitionController], animated: false)
         }
     }
     

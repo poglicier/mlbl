@@ -50,3 +50,6 @@
 
 "Wins" = "Wins";
 "Difference" = "Difference";
+"No round tournaments" = "The competition has not a round-robin stage";
+"No team ranks stub" = "Table does not exist";
+"No playoffs stub" = "Playoff data does not exist";

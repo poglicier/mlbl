@@ -2,7 +2,7 @@
 //  Competition+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 22.07.16.
+//  Created by Valentin Shamardin on 26.08.16.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -19,10 +19,12 @@ extension Competition {
     @NSManaged var compShortNameEn: String?
     @NSManaged var compShortNameRu: String?
     @NSManaged var compSort: NSNumber?
+    @NSManaged var compType: NSNumber?
     @NSManaged var isChoosen: NSNumber?
     @NSManaged var objectId: NSNumber?
-    @NSManaged var compType: NSNumber?
     @NSManaged var children: NSSet?
     @NSManaged var parent: Competition?
+    @NSManaged var roundRanks: NSSet?
+    @NSManaged var playoffSeries: NSSet?
 
 }

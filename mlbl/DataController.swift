@@ -157,8 +157,20 @@ class DataController {
         self.queue.addOperation(request)
     }
     
-    func getRoundRobin(completion: (NSError? -> ())?) {
-        let request = RoundRobinRequest(compId: self.currentCompetitionId())
+    func getRoundRobin(compId: Int, completion: (NSError? -> ())?) {
+        let request = RoundRobinRequest(compId: compId)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func getPlayoff(compId: Int, completion: (NSError? -> ())?) {
+        let request = PlayoffRequest(compId: compId)
         request.dataController = self
         
         request.completionBlock = {
