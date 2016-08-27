@@ -122,7 +122,11 @@ class GameStatsCell: UITableViewCell {
                             make.left.equalTo(oneLabel.snp_right)
                             make.width.equalTo(oneLabel.snp_width)
                             make.height.equalTo(oneLabel.snp_height)
-                            make.top.equalTo(predLine!.snp_bottom)
+                            if let _ = predLine {
+                                make.top.equalTo(predLine!.snp_bottom)
+                            } else {
+                                make.top.equalTo(self.hatBackground.snp_bottom)
+                            }
                         })
                         
                         let defLabel = UILabel()
@@ -138,7 +142,11 @@ class GameStatsCell: UITableViewCell {
                             make.left.equalTo(offLabel.snp_right)
                             make.width.equalTo(offLabel.snp_width)
                             make.height.equalTo(offLabel.snp_height)
-                            make.top.equalTo(predLine!.snp_bottom)
+                            if let _ = predLine {
+                                make.top.equalTo(predLine!.snp_bottom)
+                            } else {
+                                make.top.equalTo(self.hatBackground.snp_bottom)
+                            }
                         })
                         
                         let rebLabel = UILabel()
