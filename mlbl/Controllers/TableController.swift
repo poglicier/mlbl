@@ -17,6 +17,8 @@ class TableController: BaseController {
     @IBOutlet private var stageLabel: UILabel!
     @IBOutlet private var nextButton: UIButton!
     @IBOutlet private var prevButton: UIButton!
+    
+    private var selectedGameId: Int?
     private let rowHeight: CGFloat = 112
     private let playoffRowHeight: CGFloat = 180
     private var childrenComptetitions = [Competition]()
@@ -240,15 +242,15 @@ class TableController: BaseController {
         }
     }
     
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "goToGame" {
+            let gameController = segue.destinationViewController as! GameController
+            gameController.dataController = self.dataController
+            gameController.gameId = self.selectedGameId!
+        }
     }
-    */
 }
 
 extension TableController: UITableViewDelegate, UITableViewDataSource {
@@ -358,6 +360,20 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
             self.configureCell(cell as! RobinTeamCell, atIndexPath:indexPath)
         } else {
             self.configureCell(cell as! PlayoffCell, atIndexPath:indexPath)
+        }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if tableView == self.playoffTableView {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            
+            let playoffSerie = self.playoffFetchedResultsController.objectAtIndexPath(indexPath) as! PlayoffSerie
+            if playoffSerie.games?.count == 1 {
+                self.selectedGameId = (playoffSerie.games?.anyObject() as? Game)?.objectId?.integerValue
+                if let _ = self.selectedGameId {
+                    self.performSegueWithIdentifier("goToGame", sender: nil)
+                }
+            }
         }
     }
 }

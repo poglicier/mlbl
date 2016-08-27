@@ -1624,6 +1624,7 @@
                         <outlet property="roundTableView" destination="WUK-QH-VAk" id="CWO-Pa-Gea"/>
                         <outlet property="stageLabel" destination="gSB-fj-Otz" id="YfR-YE-2vg"/>
                         <outlet property="stageSelectorView" destination="XQy-EV-dBe" id="OcP-wq-r4P"/>
+                        <segue destination="ycI-sX-n8Y" kind="show" identifier="goToGame" id="vhc-iV-55l"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lzg-ph-FTe" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2121,4 +2122,7 @@
         <image name="gear" width="14" height="14"/>
         <image name="teamStub" width="65" height="65"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="vhc-iV-55l"/>
+    </inferredMetricsTieBreakers>
 </document>
