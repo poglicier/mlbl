@@ -19,6 +19,7 @@ class TableController: BaseController {
     @IBOutlet private var prevButton: UIButton!
     
     private var selectedGameId: Int?
+    private var selectedGameIds: [Int]?
     private let rowHeight: CGFloat = 112
     private let playoffRowHeight: CGFloat = 180
     private var childrenComptetitions = [Competition]()
@@ -249,6 +250,10 @@ class TableController: BaseController {
             let gameController = segue.destinationViewController as! GameController
             gameController.dataController = self.dataController
             gameController.gameId = self.selectedGameId!
+        } else if segue.identifier == "goToGamesSerie" {
+            let gameController = segue.destinationViewController as! PlayoffGamesController
+            gameController.dataController = self.dataController
+            gameController.gamesIds = self.selectedGameIds!
         }
     }
 }
@@ -372,6 +377,11 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
                 self.selectedGameId = (playoffSerie.games?.anyObject() as? Game)?.objectId?.integerValue
                 if let _ = self.selectedGameId {
                     self.performSegueWithIdentifier("goToGame", sender: nil)
+                }
+            } else {
+                self.selectedGameIds = (playoffSerie.games?.valueForKey("objectId") as? NSSet)?.allObjects as? [Int]
+                if self.selectedGameIds?.count ?? 0 > 0 {
+                    self.performSegueWithIdentifier("goToGamesSerie", sender: nil)
                 }
             }
         }

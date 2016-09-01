@@ -14,6 +14,8 @@
 		FC321FA81C82DF8D00674271 /* PlayersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FA71C82DF8D00674271 /* PlayersController.swift */; };
 		FC321FAC1C82F97900674271 /* EmptySegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FAB1C82F97900674271 /* EmptySegue.swift */; };
 		FC321FAE1C82F9A200674271 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FAD1C82F9A200674271 /* PlayerCell.swift */; };
+		FC3558D91D75C304004C5080 /* GameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC3558D81D75C304004C5080 /* GameCell.xib */; };
+		FC3558DB1D75C4D2004C5080 /* PlayoffGamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3558DA1D75C4D2004C5080 /* PlayoffGamesController.swift */; };
 		FC3939541D2ED2BD00F8361E /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3939531D2ED2BC00F8361E /* NetworkRequest.swift */; };
 		FC3939581D2ED52800F8361E /* GameStatsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3939571D2ED52800F8361E /* GameStatsRequest.swift */; };
 		FC39395A1D2EDFEF00F8361E /* GamesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3939591D2EDFEF00F8361E /* GamesRequest.swift */; };
@@ -78,6 +80,8 @@
 		FC321FA71C82DF8D00674271 /* PlayersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayersController.swift; sourceTree = "<group>"; };
 		FC321FAB1C82F97900674271 /* EmptySegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptySegue.swift; sourceTree = "<group>"; };
 		FC321FAD1C82F9A200674271 /* PlayerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
+		FC3558D81D75C304004C5080 /* GameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameCell.xib; sourceTree = "<group>"; };
+		FC3558DA1D75C4D2004C5080 /* PlayoffGamesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffGamesController.swift; sourceTree = "<group>"; };
 		FC3939531D2ED2BC00F8361E /* NetworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		FC3939571D2ED52800F8361E /* GameStatsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameStatsRequest.swift; sourceTree = "<group>"; };
 		FC3939591D2EDFEF00F8361E /* GamesRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamesRequest.swift; sourceTree = "<group>"; };
@@ -171,6 +175,7 @@
 			children = (
 				FC321FAD1C82F9A200674271 /* PlayerCell.swift */,
 				FCEEA9241D5BB26E00686DD6 /* PlayerStatCell.swift */,
+				FC3558D81D75C304004C5080 /* GameCell.xib */,
 				FC97931E1C8B6AFB00D4D5D9 /* GameCell.swift */,
 				FCE18BAD1C8DF8120077A51A /* GameScoreCell.swift */,
 				FC74B8161C8F733A000E6CC6 /* PeriodCell.swift */,
@@ -256,6 +261,7 @@
 				FC9793251C8D8AEA00D4D5D9 /* GameController.swift */,
 				FC8F7A141D3CF2A50056C4D4 /* TableController.swift */,
 				FC8F7A161D3CF33E0056C4D4 /* StatisticsController.swift */,
+				FC3558DA1D75C4D2004C5080 /* PlayoffGamesController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -363,6 +369,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC705D441C80F00A00216AB8 /* LaunchScreen.storyboard in Resources */,
+				FC3558D91D75C304004C5080 /* GameCell.xib in Resources */,
 				FC637E5D1C946617009EE880 /* Localizable.strings in Resources */,
 				FC705D411C80F00A00216AB8 /* Assets.xcassets in Resources */,
 				FC705D3C1C80F00A00216AB8 /* Main.storyboard in Resources */,
@@ -484,6 +491,7 @@
 				FCA941421D48D82600D95A7A /* Team+CoreDataProperties.swift in Sources */,
 				FCA941451D48D82600D95A7A /* GameStatistics.swift in Sources */,
 				FCA941431D48D82600D95A7A /* Player+CoreDataProperties.swift in Sources */,
+				FC3558DB1D75C4D2004C5080 /* PlayoffGamesController.swift in Sources */,
 				FC9793231C8B729100D4D5D9 /* DataController.swift in Sources */,
 				FC9837BC1D7069FD00534AB1 /* PlayoffRequest.swift in Sources */,
 				FCD76E161D3F4172002BB24A /* Competition.swift in Sources */,

@@ -23,6 +23,7 @@ class PlayoffSerie: NSManagedObject {
     static private let SortKey = "Sort"
     static private let Score1Key = "Score1"
     static private let Score2Key = "Score2"
+    static private let ScoreKey = "Score"
     static private let ScoresKey = "Scores"
     static private let RoundNameRuKey = "RoundNameRu"
     static private let RoundNameEnKey = "RoundNameEn"
@@ -72,7 +73,29 @@ class PlayoffSerie: NSManagedObject {
                         if let gamesDicts = dict[ScoresKey] as? [[String:AnyObject]] {
                             var games = Set<Game>()
                             for gameDict in gamesDicts {
-                                if let game = Game.gameWithDict(gameDict, inContext: context) {
+                                var fixedGameDict = gameDict
+                                
+                                fixedGameDict[Game.TeamAIdKey] = res?.team1?.objectId
+                                fixedGameDict[Game.TeamBIdKey] = res?.team2?.objectId
+                                fixedGameDict[Game.TeamNameAenKey] = res?.team1?.nameEn
+                                fixedGameDict[Game.TeamNameAruKey] = res?.team1?.nameRu
+                                fixedGameDict[Game.ShortTeamNameAenKey] = res?.team1?.shortNameEn
+                                fixedGameDict[Game.ShortTeamNameAruKey] = res?.team1?.shortNameRu
+                                fixedGameDict[Game.TeamNameBenKey] = res?.team2?.nameEn
+                                fixedGameDict[Game.TeamNameBruKey] = res?.team2?.nameRu
+                                fixedGameDict[Game.ShortTeamNameBenKey] = res?.team2?.shortNameEn
+                                fixedGameDict[Game.ShortTeamNameBruKey] = res?.team2?.shortNameRu
+                                
+                                if let scoresStr = (gameDict[ScoreKey] as? String)?.componentsSeparatedByString(":") {
+                                    if scoresStr.count == 2 {
+                                        let scoreA = Int(scoresStr.first!)
+                                        let scoreB = Int(scoresStr.last!)
+                                        fixedGameDict[Game.ScoreAKey] = scoreA
+                                        fixedGameDict[Game.ScoreBKey] = scoreB
+                                    }
+                                }
+                                
+                                if let game = Game.gameWithDict(fixedGameDict, inContext: context) {
                                     games.insert(game)
                                 }
                             }

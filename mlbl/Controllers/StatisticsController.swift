@@ -164,7 +164,7 @@ class StatisticsController: BaseController {
                     do {
                         try strongSelf.fetchedResultsController.performFetch()
                     } catch { }
-                    self?.tableView.reloadData()
+                    strongSelf.tableView.reloadData()
                 }
             }
             })

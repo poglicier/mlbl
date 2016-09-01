@@ -11,6 +11,7 @@ import UIKit
 class PlayoffCell: UITableViewCell {
 
     @IBOutlet private var background: UIView!
+    @IBOutlet private var scoresBackground: UIView!
     @IBOutlet private var avatarA: UIImageView!
     @IBOutlet private var avatarB: UIImageView!
     @IBOutlet private var teamAScoreLabel: UILabel!
@@ -43,6 +44,39 @@ class PlayoffCell: UITableViewCell {
             
             self.teamAScoreLabel.text = playoffSerie.score1?.stringValue ?? "-"
             self.teamBScoreLabel.text = playoffSerie.score2?.stringValue ?? "-"
+            
+            if playoffSerie.games?.count ?? 0 > 1 {
+                // Добавляем счета по партиям
+                let games = (playoffSerie.games as! Set<Game>).sort { ($0.date?.timeIntervalSince1970 ?? -1) < ($1.date?.timeIntervalSince1970 ?? -1) }
+                var predLabel: UILabel?
+                for (idx, game) in games.enumerate() {
+                    let scoreLabel = UILabel()
+                    scoreLabel.textAlignment = .Center
+                    scoreLabel.font = UIFont.systemFontOfSize(12)
+                    scoreLabel.textColor = UIColor.whiteColor()
+                    scoreLabel.backgroundColor = UIColor.mlblLightOrangeColor()
+                    scoreLabel.text = (game.scoreA?.stringValue ?? "-") + ":" + (game.scoreB?.stringValue ?? "-")
+                    scoreLabel.layer.cornerRadius = self.scoresBackground.frame.size.height/2 - 1
+                    scoreLabel.layer.masksToBounds = true
+                    self.scoresBackground.addSubview(scoreLabel)
+                    
+                    scoreLabel.snp_makeConstraints(closure: { (make) in
+                        make.top.bottom.equalTo(0)
+                        make.width.equalTo(64)
+                        if let _ = predLabel {
+                            make.left.equalTo(predLabel!.snp_right).offset(4)
+                        } else {
+                            make.left.equalTo(0)
+                        }
+                        
+                        if idx == games.count-1 {
+                            make.right.equalTo(0)
+                        }
+                    })
+                    
+                    predLabel = scoreLabel
+                }
+            }
         }
     }
     
@@ -54,6 +88,12 @@ class PlayoffCell: UITableViewCell {
                 label.highlightedTextColor = UIColor.mlblLightOrangeColor()
             }
         }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.scoresBackground.subviews.forEach({ $0.removeFromSuperview() })
     }
     
     override func layoutSubviews() {
@@ -69,20 +109,24 @@ class PlayoffCell: UITableViewCell {
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
-        let color = self.background.backgroundColor
+        let backColor = self.background.backgroundColor
+        let scoresBackColor = self.scoresBackground.backgroundColor
+        
         super.setSelected(selected, animated: animated)
         
         if (selected) {
-            self.background.backgroundColor = color
+            self.background.backgroundColor = backColor
+            self.scoresBackground.backgroundColor = scoresBackColor
         }
     }
     
     override func setHighlighted(highlighted: Bool, animated: Bool) {
-        let color = self.background.backgroundColor
-        super.setHighlighted(highlighted, animated: animated)
+        let backColor = self.background.backgroundColor
+        let scoresBackColor = self.scoresBackground.backgroundColor
         
         if (highlighted) {
-            self.background.backgroundColor = color
+            self.background.backgroundColor = backColor
+            self.scoresBackground.backgroundColor = scoresBackColor
         }
     }
 }

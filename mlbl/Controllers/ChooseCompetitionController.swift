@@ -11,7 +11,6 @@ import CoreData
 
 class ChooseCompetitionController: BaseController {
     @IBOutlet private var tableView: UITableView!
-    @IBOutlet private var goButton: UIBarButtonItem!
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
@@ -35,7 +34,6 @@ class ChooseCompetitionController: BaseController {
         super.viewDidLoad()
         
         self.setupTableView()
-        self.goButton.title = NSLocalizedString("Go", comment: "")
         
         do {
             try self.fetchedResultsController.performFetch()
@@ -54,7 +52,6 @@ class ChooseCompetitionController: BaseController {
     private func getData() {
         self.activityView.startAnimating()
         self.tableView.hidden = true
-        self.navigationItem.rightBarButtonItem = nil
         
         self.dataController.getCompetitions() { [weak self] (error) in
             if let strongSelf = self {
@@ -88,7 +85,7 @@ class ChooseCompetitionController: BaseController {
         }
     }
     
-    @IBAction private func goToMain() {
+    private func goToMain() {
         if let selectedPath = self.tableView.indexPathForSelectedRow {
             let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
             fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
@@ -243,7 +240,7 @@ extension ChooseCompetitionController: UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.navigationItem.rightBarButtonItem = self.goButton
+        self.goToMain()
     }
     
     override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {

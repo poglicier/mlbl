@@ -40,7 +40,6 @@ class GamesController: BaseController {
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Game.entityName())
-        let dates = self.datesIntervalForDate(NSDate())
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
         
         let frc = NSFetchedResultsController(
@@ -143,6 +142,7 @@ class GamesController: BaseController {
     
     private func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        self.tableView.registerNib(UINib(nibName: "GameCell", bundle: nil), forCellReuseIdentifier: "gameCell");
     }
     
     private func configureCell(cell: GameCell, atIndexPath indexPath: NSIndexPath) {
