@@ -71,6 +71,7 @@
         <attribute name="lastNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="playerNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="positionEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="positionRu" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="positionShortEn" optional="YES" attributeType="String" syncable="YES"/>
@@ -131,11 +132,11 @@
         <element name="Competition" positionX="-54" positionY="117" width="128" height="225"/>
         <element name="Game" positionX="-63" positionY="-18" width="128" height="330"/>
         <element name="GameStatistics" positionX="-36" positionY="144" width="128" height="420"/>
-        <element name="Player" positionX="-27" positionY="81" width="128" height="285"/>
+        <element name="Player" positionX="-27" positionY="81" width="128" height="300"/>
         <element name="PlayerRank" positionX="-36" positionY="135" width="128" height="90"/>
+        <element name="PlayoffSerie" positionX="-27" positionY="144" width="128" height="210"/>
         <element name="StatParameter" positionX="-36" positionY="135" width="128" height="90"/>
         <element name="Team" positionX="-54" positionY="36" width="128" height="225"/>
         <element name="TeamRoundRank" positionX="-36" positionY="135" width="128" height="165"/>
-        <element name="PlayoffSerie" positionX="-27" positionY="144" width="128" height="210"/>
     </elements>
 </model>

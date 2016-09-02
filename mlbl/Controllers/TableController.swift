@@ -20,6 +20,7 @@ class TableController: BaseController {
     
     private var selectedGameId: Int?
     private var selectedGameIds: [Int]?
+    private var selectedTeamId: Int?
     private let rowHeight: CGFloat = 112
     private let playoffRowHeight: CGFloat = 180
     private var childrenComptetitions = [Competition]()
@@ -254,6 +255,10 @@ class TableController: BaseController {
             let gameController = segue.destinationViewController as! PlayoffGamesController
             gameController.dataController = self.dataController
             gameController.gamesIds = self.selectedGameIds!
+        } else if segue.identifier == "goToTeam" {
+            let teamController = segue.destinationViewController as! TeamController
+            teamController.dataController = self.dataController
+            teamController.teamId = self.selectedTeamId!;
         }
     }
 }
@@ -368,10 +373,14 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if tableView == self.playoffTableView {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        if tableView == self.roundTableView {
+            self.selectedTeamId = (self.fetchedResultsController.objectAtIndexPath(indexPath) as! TeamRoundRank).team?.objectId?.integerValue
+            if let _ = self.selectedTeamId {
+                self.performSegueWithIdentifier("goToTeam", sender: nil)
+            }
+        } else if tableView == self.playoffTableView {
             let playoffSerie = self.playoffFetchedResultsController.objectAtIndexPath(indexPath) as! PlayoffSerie
             if playoffSerie.games?.count == 1 {
                 self.selectedGameId = (playoffSerie.games?.anyObject() as? Game)?.objectId?.integerValue

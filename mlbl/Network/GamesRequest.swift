@@ -88,7 +88,7 @@ class GamesRequest: NetworkRequest {
                             for game in all {
                                 if let gameId = game.objectId {
                                     if gameIdsToSave.contains(gameId) == false {
-                                        print("DELETE Game \(game.objectId)")
+                                        print("DELETE Game \(game.date)")
                                         context.deleteObject(game)
                                     }
                                 }

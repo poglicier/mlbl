@@ -52,3 +52,12 @@
 "No round tournaments" = "У турнира нет круговой стадии";
 "No team ranks stub" = "Таблица отсутствует";
 "No playoffs stub" = "Данные об играх на вылет отсутствуют";
+"No team info stub" = "Не удалось загрузить данные о команде";
+
+"Roster" = "Состав";
+"Position acronym" = "П";
+"Height acronym" = "Рост";
+"Weight acronym" = "Вес";
+"Age acronym" = "Возр";
+"Opponent" = "Соперник";
+"Score" = "Счёт";

@@ -181,6 +181,42 @@ class DataController {
         self.queue.addOperation(request)
     }
     
+    func getTeamInfo(compId: Int, teamId: Int, completion: (NSError? -> ())?) {
+        let request = TeamInfoRequest(compId: compId, teamId: teamId)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func getTeamRoster(compId: Int, teamId: Int, completion: (NSError? -> ())?) {
+        let request = TeamRosterRequest(compId: compId, teamId: teamId)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func getTeamGames(compId: Int, teamId: Int, completion: (NSError? -> ())?) {
+        let request = TeamGamesRequest(compId: compId, teamId: teamId)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
     // MARK: - Core Data stack
     
     lazy var applicationDocumentsDirectory: NSURL = {

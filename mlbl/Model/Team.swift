@@ -15,6 +15,14 @@ class Team: NSManagedObject {
     static let ShortTeamNameEnKey = "ShortTeamNameEn"
     static let TeamNameRuKey = "TeamNameRu"
     static let TeamNameEnKey = "TeamNameEn"
+    static private let CurrentTeamNameKey = "CurrentTeamName"
+    static private let CurrentTeamIdKey = "TeamID"
+    static private let CompTeamShortNameRuKey = "CompTeamShortNameRu"
+    static private let CompTeamShortNameEnKey = "CompTeamShortNameEn"
+    static private let CompTeamNameRuKey = "CompTeamNameRu"
+    static private let CompTeamNameEnKey = "CompTeamNameEn"
+    static private let CompTeamRegionNameRuKey = "CompTeamRegionNameRu"
+    static private let CompTeamRegionNameEnKey = "CompTeamRegionNameEn"
     
     static func teamWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Team? {
         var res: Team?
@@ -54,6 +62,25 @@ class Team: NSManagedObject {
                     res?.objectId = objectId
                 }
             } catch { }
+        }
+        
+        return res
+    }
+    
+    static func teamWithInfoDict(dict: [String: AnyObject], inContext context: NSManagedObjectContext) -> Team? {
+        var res: Team?
+        
+        if var currentTeamDict = dict[CurrentTeamNameKey] as? [String:AnyObject] {
+            var teamDict = [String:AnyObject]()
+            teamDict[TeamIdKey] = currentTeamDict[CurrentTeamIdKey] as? Int
+            teamDict[ShortTeamNameRuKey] = currentTeamDict[CompTeamShortNameRuKey] as? String
+            teamDict[ShortTeamNameEnKey] = currentTeamDict[CompTeamShortNameEnKey] as? String
+            teamDict[TeamNameRuKey] = currentTeamDict[CompTeamNameRuKey] as? String
+            teamDict[TeamNameEnKey] = currentTeamDict[CompTeamNameEnKey] as? String
+            
+            res = teamWithDict(teamDict, inContext: context)
+            res?.regionNameEn = currentTeamDict[CompTeamRegionNameEnKey] as? String
+            res?.regionNameRu = currentTeamDict[CompTeamRegionNameRuKey] as? String
         }
         
         return res

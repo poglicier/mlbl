@@ -52,7 +52,7 @@ class PlayoffRequest: NetworkRequest {
                 let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
                 context.parentContext = self.dataController?.mainContext
                 context.performBlockAndWait({
-                    // Удаляем все плей-офф, потому что у них не идентификаторов
+                    // Удаляем все плей-офф, потому что у них нет идентификаторов
                     let fetchRequest = NSFetchRequest(entityName: PlayoffSerie.entityName())
                     fetchRequest.predicate = NSPredicate(format: "competition.objectId = %d", self.compId)
                     do {

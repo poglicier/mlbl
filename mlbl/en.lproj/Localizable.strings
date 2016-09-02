@@ -52,3 +52,12 @@
 "No round tournaments" = "The competition has not a round-robin stage";
 "No team ranks stub" = "Table does not exist";
 "No playoffs stub" = "Playoff data does not exist";
+"No team info stub" = "Could not load team info";
+
+"Roster" = "Team";
+"Position acronym" = "P";
+"Height acronym" = "H";
+"Weight acronym" = "W";
+"Age acronym" = "Age";
+"Opponent" = "Opponent";
+"Score" = "Score";
