@@ -173,6 +173,9 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        
         if let gameSection = Sections(rawValue: indexPath.section) {
             switch gameSection {
             case .Hat:

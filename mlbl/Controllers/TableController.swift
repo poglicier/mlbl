@@ -362,10 +362,14 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
         } else {
             cell = tableView.dequeueReusableCellWithIdentifier("playoffCell", forIndexPath: indexPath)
         }
+        
         return cell
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        
         if tableView == self.roundTableView {
             self.configureCell(cell as! RobinTeamCell, atIndexPath:indexPath)
         } else {

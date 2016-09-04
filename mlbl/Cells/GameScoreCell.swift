@@ -150,6 +150,9 @@ extension GameScoreCell: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        
         let periodCell = cell as! PeriodCell
         let count = self.collectionView.numberOfItemsInSection(0)
         

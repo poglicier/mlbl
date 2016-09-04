@@ -327,7 +327,7 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
                 res = 180
             case .Statistics:
                 res = 96
-                res += CGFloat((self.team?.players?.count ?? 0)*27)
+                res += CGFloat((self.team?.teamStatistics?.count ?? 0)*27)
             default:
                 res = 27
             }
@@ -359,6 +359,9 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        
         if let enumSection = Sections(rawValue: indexPath.section) {
             switch enumSection {
             case .Title:

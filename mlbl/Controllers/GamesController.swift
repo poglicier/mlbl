@@ -277,6 +277,9 @@ extension GamesController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        
         self.configureCell(cell as! GameCell, atIndexPath:indexPath)
     }
     

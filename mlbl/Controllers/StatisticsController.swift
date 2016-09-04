@@ -171,14 +171,18 @@ class StatisticsController: BaseController {
     }
     
     private func getPlayers() {
+        var requestReady = false
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-            self.activityView.startAnimating()
+            if !requestReady {
+                self.activityView.startAnimating()
+            }
         }
         self.tableView.hidden = true
         self.emptyLabel.hidden = true
         
         self.dataController.getBestPlayers(self.selectedParameterId,
                                            completion: { [weak self] (error, responseCount) in
+                                            requestReady = true
                                             if let strongSelf = self {
                                                 strongSelf.activityView.stopAnimating()
                                                 
@@ -238,6 +242,8 @@ class StatisticsController: BaseController {
             }
             self.tableView.scrollsToTop = false
             self.filtersCollectionView.scrollsToTop = true
+            
+            self.emptyLabel.hidden = true
         } else {
             var newFrame = self.filtersCollectionView.frame
             newFrame.origin.y = -self.filtersCollectionView.frame.size.height
@@ -303,6 +309,9 @@ extension StatisticsController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        
         self.configureCell(cell as! PlayerStatCell, atIndexPath:indexPath)
     }
 }

@@ -199,6 +199,9 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.backgroundColor = UIColor.clearColor()
+        cell.contentView.backgroundColor = UIColor.clearColor()
+        
         self.configureCell(cell as! PlayerCell, atIndexPath:indexPath)
         
         if self.searchInAction &&
