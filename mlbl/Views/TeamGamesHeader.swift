@@ -43,12 +43,12 @@ class TeamGamesHeader: UIView {
             if let _ = self.background {
                 self.background.layer.cornerRadius = 5
                 
-                self.background.layer.shadowRadius = 1
-                self.background.layer.masksToBounds = true
-                self.background.layer.shadowOffset = CGSizeMake(1, 1)
-                self.background.layer.shadowOpacity = 0.5
-                self.background.layer.masksToBounds = false
-                self.background.clipsToBounds = false
+//                self.background.layer.shadowRadius = 1
+//                self.background.layer.masksToBounds = true
+//                self.background.layer.shadowOffset = CGSizeMake(1, 1)
+//                self.background.layer.shadowOpacity = 0.5
+//                self.background.layer.masksToBounds = false
+//                self.background.clipsToBounds = false
             }
         }
     }

@@ -26,7 +26,6 @@
 
 "Number" = "№";
 "Player" = "Игрок";
-"Total" = "Всего";
 "Coach acronym" = "Тр.";
 
 "Time" = "Мин.";
@@ -61,3 +60,5 @@
 "Age acronym" = "Возр";
 "Opponent" = "Соперник";
 "Score" = "Счёт";
+"Team statistics" = "Статистика команды";
+"Average" = "В среднем";

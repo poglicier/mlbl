@@ -1,5 +1,5 @@
 //
-//  GameStatistics+CoreDataProperties.swift
+//  TeamStatistics+CoreDataProperties.swift
 //  
 //
 //  Created by Valentin Shamardin on 04.09.16.
@@ -12,16 +12,16 @@
 import Foundation
 import CoreData
 
-extension GameStatistics {
+extension TeamStatistics {
 
     @NSManaged var assists: NSNumber?
     @NSManaged var blocks: NSNumber?
     @NSManaged var defensiveRebounds: NSNumber?
     @NSManaged var fouls: NSNumber?
+    @NSManaged var games: NSNumber?
     @NSManaged var goal1: NSNumber?
     @NSManaged var goal2: NSNumber?
     @NSManaged var goal3: NSNumber?
-    @NSManaged var isStart: NSNumber?
     @NSManaged var offensiveRebounds: NSNumber?
     @NSManaged var opponentFouls: NSNumber?
     @NSManaged var playerNumber: NSNumber?
@@ -36,7 +36,6 @@ extension GameStatistics {
     @NSManaged var teamNumber: NSNumber?
     @NSManaged var teamOffensiveRebounds: NSNumber?
     @NSManaged var turnovers: NSNumber?
-    @NSManaged var game: Game?
     @NSManaged var player: Player?
     @NSManaged var team: Team?
 

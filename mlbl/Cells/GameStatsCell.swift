@@ -38,6 +38,7 @@ class GameStatsCell: UITableViewCell {
     @IBOutlet private var scrollView: UIScrollView!
     
     private let fontSize: CGFloat = 15
+    private var addedSubviews = [UIView]()
     
     var language: String!
     var teamNumber: Int!
@@ -74,6 +75,7 @@ class GameStatsCell: UITableViewCell {
                         let backgroundLine = UIView()
                         backgroundLine.backgroundColor = (idx % 2 == 0) ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
                         self.background.insertSubview(backgroundLine, atIndex: 0)
+                        self.addedSubviews.append(backgroundLine)
                         backgroundLine.snp_makeConstraints(closure: { (make) in
                             make.left.right.equalTo(0)
                             make.height.equalTo(27)
@@ -89,6 +91,7 @@ class GameStatsCell: UITableViewCell {
                         numberLabel.font = UIFont.systemFontOfSize(self.fontSize)
                         numberLabel.text = NSLocalizedString("Team", comment: "")
                         backgroundLine.addSubview(numberLabel)
+                        self.addedSubviews.append(numberLabel)
                         numberLabel.snp_makeConstraints(closure: { (make) in
                             make.left.equalTo(12)
                             make.top.bottom.equalTo(0)
@@ -96,6 +99,7 @@ class GameStatsCell: UITableViewCell {
                         
                         let minutesLabel = UILabel()
                         self.scrollContentView.addSubview(minutesLabel)
+                        self.addedSubviews.append(minutesLabel)
                         minutesLabel.snp_makeConstraints(closure: { (make) in
                             make.left.equalTo(0)
                             make.width.equalTo(self.timeLabel.snp_width)
@@ -118,6 +122,7 @@ class GameStatsCell: UITableViewCell {
                             offLabel.text = "\(offs)"
                         }
                         self.scrollContentView.addSubview(offLabel)
+                        self.addedSubviews.append(offLabel)
                         offLabel.snp_makeConstraints(closure: { (make) in
                             make.left.equalTo(oneLabel.snp_right)
                             make.width.equalTo(oneLabel.snp_width)
@@ -138,6 +143,7 @@ class GameStatsCell: UITableViewCell {
                             defLabel.text = "\(defs)"
                         }
                         self.scrollContentView.addSubview(defLabel)
+                        self.addedSubviews.append(defLabel)
                         defLabel.snp_makeConstraints(closure: { (make) in
                             make.left.equalTo(offLabel.snp_right)
                             make.width.equalTo(offLabel.snp_width)
@@ -157,6 +163,7 @@ class GameStatsCell: UITableViewCell {
                             rebLabel.text = "\(offs + defs)"
                         }
                         self.scrollContentView.addSubview(rebLabel)
+                        self.addedSubviews.append(rebLabel)
                         rebLabel.snp_makeConstraints(closure: { (make) in
                             make.left.equalTo(defLabel.snp_right)
                             make.width.equalTo(defLabel.snp_width)
@@ -177,6 +184,7 @@ class GameStatsCell: UITableViewCell {
                             }
                         }
                         self.scrollContentView.addSubview(twoPercentLabel)
+                        self.addedSubviews.append(twoPercentLabel)
                         twoPercentLabel.snp_makeConstraints(closure: { (make) in
                             make.left.equalTo(self.twoLabel.snp_left)
                             make.width.equalTo(self.twoLabel.snp_width)
@@ -196,6 +204,7 @@ class GameStatsCell: UITableViewCell {
                             }
                         }
                         self.scrollContentView.addSubview(threePercentLabel)
+                        self.addedSubviews.append(threePercentLabel)
                         threePercentLabel.snp_makeConstraints(closure: { (make) in
                             make.left.equalTo(self.threeLabel.snp_left)
                             make.width.equalTo(self.threeLabel.snp_width)
@@ -215,6 +224,7 @@ class GameStatsCell: UITableViewCell {
                             }
                         }
                         self.scrollContentView.addSubview(onePercentLabel)
+                        self.addedSubviews.append(onePercentLabel)
                         onePercentLabel.snp_makeConstraints(closure: { (make) in
                             make.left.equalTo(self.oneLabel.snp_left)
                             make.width.equalTo(self.oneLabel.snp_width)
@@ -223,13 +233,12 @@ class GameStatsCell: UITableViewCell {
                         })
                     }
                         
-                    var backgroundLine: UIView
-                    if let _ = stat.team {
-                        backgroundLine = self.totalBackground
-                    } else {
+                    if stat.team == nil {
+                        let backgroundLine: UIView
                         backgroundLine = UIView()
                         backgroundLine.backgroundColor = (idx % 2 == 0) ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
                         self.background.insertSubview(backgroundLine, atIndex: 0)
+                        self.addedSubviews.append(backgroundLine)
                         backgroundLine.snp_makeConstraints(closure: { (make) in
                             make.left.right.equalTo(0)
                             make.height.equalTo(27)
@@ -253,6 +262,7 @@ class GameStatsCell: UITableViewCell {
                             }
                         }
                         backgroundLine.addSubview(numberLabel)
+                        self.addedSubviews.append(numberLabel)
                         numberLabel.snp_makeConstraints(closure: { (make) in
                             make.left.top.bottom.equalTo(0)
                             make.width.equalTo(44)
@@ -282,6 +292,7 @@ class GameStatsCell: UITableViewCell {
                         }
                         
                         backgroundLine.addSubview(nameLabel)
+                        self.addedSubviews.append(nameLabel)
                         nameLabel.snp_makeConstraints(closure: { (make) in
                             make.top.bottom.equalTo(0)
                             make.right.equalTo(self.playerLabel.snp_right)
@@ -301,6 +312,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(minutesLabel)
+                    self.addedSubviews.append(minutesLabel)
                     minutesLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(0)
                         make.width.equalTo(self.timeLabel.snp_width)
@@ -324,6 +336,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(ptsLabel)
+                    self.addedSubviews.append(ptsLabel)
                     ptsLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(minutesLabel.snp_right)
                         make.width.equalTo(minutesLabel.snp_width)
@@ -345,6 +358,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(twoPtsLabel)
+                    self.addedSubviews.append(twoPtsLabel)
                     twoPtsLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(ptsLabel.snp_right)
                         make.width.equalTo(ptsLabel.snp_width)
@@ -366,6 +380,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(threePtsLabel)
+                    self.addedSubviews.append(threePtsLabel)
                     threePtsLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(twoPtsLabel.snp_right)
                         make.width.equalTo(twoPtsLabel.snp_width)
@@ -387,6 +402,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(onePtsLabel)
+                    self.addedSubviews.append(onePtsLabel)
                     onePtsLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(threePtsLabel.snp_right)
                         make.width.equalTo(threePtsLabel.snp_width)
@@ -403,6 +419,7 @@ class GameStatsCell: UITableViewCell {
                         offLabel.text = "\(offs)"
                     }
                     self.scrollContentView.addSubview(offLabel)
+                    self.addedSubviews.append(offLabel)
                     offLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(onePtsLabel.snp_right)
                         make.width.equalTo(onePtsLabel.snp_width)
@@ -419,6 +436,7 @@ class GameStatsCell: UITableViewCell {
                         defLabel.text = "\(defs)"
                     }
                     self.scrollContentView.addSubview(defLabel)
+                    self.addedSubviews.append(defLabel)
                     defLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(offLabel.snp_right)
                         make.width.equalTo(offLabel.snp_width)
@@ -434,6 +452,7 @@ class GameStatsCell: UITableViewCell {
                         rebLabel.text = "\(offs + defs)"
                     }
                     self.scrollContentView.addSubview(rebLabel)
+                    self.addedSubviews.append(rebLabel)
                     rebLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(defLabel.snp_right)
                         make.width.equalTo(defLabel.snp_width)
@@ -451,6 +470,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(asLabel)
+                    self.addedSubviews.append(asLabel)
                     asLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(rebLabel.snp_right)
                         make.width.equalTo(rebLabel.snp_width)
@@ -468,6 +488,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(stealsLabel)
+                    self.addedSubviews.append(stealsLabel)
                     stealsLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(asLabel.snp_right)
                         make.width.equalTo(asLabel.snp_width)
@@ -485,6 +506,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(tLabel)
+                    self.addedSubviews.append(tLabel)
                     tLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(stealsLabel.snp_right)
                         make.width.equalTo(stealsLabel.snp_width)
@@ -502,6 +524,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(blocksLabel)
+                    self.addedSubviews.append(blocksLabel)
                     blocksLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(tLabel.snp_right)
                         make.width.equalTo(tLabel.snp_width)
@@ -519,6 +542,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(foulsLabel)
+                    self.addedSubviews.append(foulsLabel)
                     foulsLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(blocksLabel.snp_right)
                         make.width.equalTo(blocksLabel.snp_width)
@@ -536,6 +560,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(opponentFoulsLabel)
+                    self.addedSubviews.append(opponentFoulsLabel)
                     opponentFoulsLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(foulsLabel.snp_right)
                         make.width.equalTo(foulsLabel.snp_width)
@@ -554,6 +579,7 @@ class GameStatsCell: UITableViewCell {
                         }
                     }
                     self.scrollContentView.addSubview(diffLabel)
+                    self.addedSubviews.append(diffLabel)
                     diffLabel.snp_makeConstraints(closure: { (make) in
                         make.left.equalTo(opponentFoulsLabel.snp_right)
                         make.width.equalTo(opponentFoulsLabel.snp_width)
@@ -612,5 +638,12 @@ class GameStatsCell: UITableViewCell {
                 }
             }
         }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+ 
+        self.addedSubviews.forEach { $0.removeFromSuperview() }
+        self.addedSubviews = [UIView]()
     }
 }

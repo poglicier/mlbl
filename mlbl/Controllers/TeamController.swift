@@ -105,7 +105,7 @@ class TeamController: BaseController {
     }
     
     private func setupTableView() {
-        self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 8, right: 0)
+        self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
     }
     
     private func configureCell(cell: TeamMainCell, atIndexPath indexPath: NSIndexPath) {
@@ -124,10 +124,16 @@ class TeamController: BaseController {
     private func configureCell(cell: TeamGameCell, atIndexPath indexPath: NSIndexPath) {
         cell.language = self.dataController.language
         cell.dateFormatter = self.dateFormatter
+        cell.teamOfInterest = self.team
         let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
         cell.game = self.gamesFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! Game
         cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
         cell.isLast = indexPath.row == (self.gamesFetchedResultsController.fetchedObjects?.count ?? 0) - 1
+    }
+    
+    private func configureCell(cell: TeamStatsCell, atIndexPath indexPath: NSIndexPath) {
+        cell.language = self.dataController.language
+        cell.team = self.team
     }
 
     private func getData() {
@@ -163,6 +169,16 @@ class TeamController: BaseController {
                                          teamId: self.teamId) { [weak self] error in
                                             if error == nil {
                                                 self?.tableView.reloadSections(NSIndexSet(index: Sections.Games.rawValue), withRowAnimation: .None)
+                                            }
+                                            requestError = error
+                                            dispatch_group_leave(dispatchGroup)
+        }
+        
+        dispatch_group_enter(dispatchGroup)
+        self.dataController.getTeamStats(self.dataController.currentCompetitionId(),
+                                         teamId: self.teamId) { [weak self] error in
+                                            if error == nil {
+                                                self?.tableView.reloadSections(NSIndexSet(index: Sections.Statistics.rawValue), withRowAnimation: .None)
                                             }
                                             requestError = error
                                             dispatch_group_leave(dispatchGroup)
@@ -293,14 +309,11 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
                     }
                 }
             case .Statistics:
-                res = 0
+                res = 1
             default:
                 break
             }
         }
-        
-//        self.emptyLabel.hidden = res > 0 ||
-//            tableView.hidden
         
         return res
     }
@@ -312,6 +325,9 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
             switch enumSection {
             case .Title:
                 res = 180
+            case .Statistics:
+                res = 96
+                res += CGFloat((self.team?.players?.count ?? 0)*27)
             default:
                 res = 27
             }
@@ -331,7 +347,7 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
             case .Games:
                 cellIdentifier = "teamGameCell"
             case .Statistics:
-                cellIdentifier = "teamStatisticsCell"
+                cellIdentifier = "teamStatsCell"
             default:
                 return UITableViewCell()
             }
@@ -351,7 +367,8 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
                 self.configureCell(cell as! TeamPlayerCell, atIndexPath: indexPath)
             case .Games:
                 self.configureCell(cell as! TeamGameCell, atIndexPath: indexPath)
-//            case .Statistics:
+            case .Statistics:
+                self.configureCell(cell as! TeamStatsCell, atIndexPath: indexPath)
             default:
                 break
             }

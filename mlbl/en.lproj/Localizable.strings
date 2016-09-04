@@ -26,7 +26,6 @@
 
 "Number" = "#";
 "Player" = "Player";
-"Total" = "Total";
 "Coach acronym" = "Co.";
 
 "Time" = "Min";
@@ -61,3 +60,5 @@
 "Age acronym" = "Age";
 "Opponent" = "Opponent";
 "Score" = "Score";
+"Team statistics" = "Team statistics";
+"Average" = "Average";

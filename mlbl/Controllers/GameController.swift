@@ -24,6 +24,7 @@ class GameController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.automaticallyAdjustsScrollViewInsets = false
         self.setupTableView()
         
@@ -40,6 +41,11 @@ class GameController: BaseController {
     
     private func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+    }
+    
+    override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        // Пустая реализация нужна для того, чтобы затереть реализацию BaseController,
+        // в которой прячется navigationBar
     }
     
     private func getData() {

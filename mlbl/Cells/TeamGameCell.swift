@@ -17,6 +17,7 @@ class TeamGameCell: UITableViewCell {
             self.background.backgroundColor = color
         }
     }
+    var teamOfInterest: Team?
     
     var game: Game! {
         didSet {
@@ -26,20 +27,33 @@ class TeamGameCell: UITableViewCell {
                 self.dateLabel.text = nil
             }
             
-            let isLanguageRu = self.language.containsString("ru")
-            self.opponentLabel.text = isLanguageRu ? game.shortTeamNameBru : game.shortTeamNameBen
-            var score: String
+            var leftScore: String
             if let scoreA = game.scoreA {
-                score = "\(scoreA)"
+                leftScore = "\(scoreA)"
             } else {
-                score = "-"
+                leftScore = "-"
             }
+            
+            var rightScore: String
             if let scoreB = game.scoreB {
-                score += ":\(scoreB)"
+                rightScore = "\(scoreB)"
             } else {
-                score += ":-"
+                rightScore = "-"
             }
-            self.scoreLabel.text = score
+            
+            let isLanguageRu = self.language.containsString("ru")
+            
+            if self.teamOfInterest?.shortNameRu == game.shortTeamNameAru {
+                self.opponentLabel.text = isLanguageRu ? game.shortTeamNameBru : game.shortTeamNameBen
+                self.homeImageView.hidden = false
+                
+                self.scoreLabel.text = "\(leftScore):\(rightScore)"
+            } else {
+                self.opponentLabel.text = isLanguageRu ? game.shortTeamNameAru : game.shortTeamNameAen
+                self.homeImageView.hidden = true
+                
+                self.scoreLabel.text = "\(rightScore):\(leftScore)"
+            }
         }
     }
     
