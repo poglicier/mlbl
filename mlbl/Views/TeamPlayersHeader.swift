@@ -46,17 +46,12 @@ class TeamPlayersHeader: UIView {
         super.drawRect(rect)
         
         if let _ = self.background {
-            let path = UIBezierPath(roundedRect: self.background.bounds,
-                                    byRoundingCorners:[.TopLeft, .TopRight],
-                                    cornerRadii:CGSizeMake(5, 5))
-            let maskLayer = CAShapeLayer()
-            maskLayer.path = path.CGPath
-            self.background.layer.mask = maskLayer
+            self.background.layer.cornerRadius = 5
             
             self.background.layer.shadowRadius = 1
             self.background.layer.masksToBounds = true
             self.background.layer.shadowOffset = CGSizeMake(1, 1)
-            self.background.layer.shadowOpacity = 0.5
+            self.background.layer.shadowOpacity = 0.3
             self.background.layer.masksToBounds = false
             self.background.clipsToBounds = false
         }

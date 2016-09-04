@@ -118,7 +118,7 @@ class TeamController: BaseController {
         let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
         cell.player = self.playersFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! Player
         cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
-        cell.isLast = indexPath.row == (self.playersFetchedResultsController.fetchedObjects?.count ?? 0) - 1
+        cell.isLast = indexPath.row == (self.team?.players?.count ?? 0) - 1
     }
     
     private func configureCell(cell: TeamGameCell, atIndexPath indexPath: NSIndexPath) {
@@ -247,6 +247,9 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
                 break
             }
         }
+        
+        // Чтобы тень от заголовка не падала на сами ячейки
+        res?.layer.zPosition = -1
         
         return res
     }

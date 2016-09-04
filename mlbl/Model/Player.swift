@@ -18,6 +18,7 @@ class Player: NSManagedObject {
     static let PersonFirstNameRuKey = "PersonFirstNameRu"
     static let PersonLastNameEnKey = "PersonLastNameEn"
     static let PersonFirstNameEnKey = "PersonFirstNameEn"
+    static private let PlayerNumberKey = "PlayerNumber"
     static private let PersonGenderKey = "PersonGender"
     static let PersonBirthdayKey = "PersonBirthday"
     static let PersonHeightKey = "PersonHeight"
@@ -80,6 +81,8 @@ class Player: NSManagedObject {
                     }
                 }
             }
+            
+            res?.playerNumber = dict[PlayerNumberKey] as? Int
             
             if let teamNameDict = dict[PersonTeamNameKey] as? [String:AnyObject] {
                 var teamDict = [String:AnyObject]()

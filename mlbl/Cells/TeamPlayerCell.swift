@@ -68,10 +68,18 @@ class TeamPlayerCell: UITableViewCell {
             } else {
                 self.ageLabel.text = nil
             }
+//            
+//            self.setNeedsDisplay()
         }
     }
     
-    var isLast = false
+    var isLast = false //{
+//        didSet {
+//            if oldValue != isLast {
+//                self.setNeedsDisplay()
+//            }
+//        }
+//    }
     
     @IBOutlet private var background: UIView!
     @IBOutlet private var numberLabel: UILabel!
@@ -83,40 +91,38 @@ class TeamPlayerCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        for label in self.background.subviews {
+                
+        for label in self.subviews {
             (label as? UILabel)?.highlightedTextColor = UIColor.mlblLightOrangeColor()
         }
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func drawRect(rect: CGRect) {
+        super.drawRect(rect)
         
-        if self.isLast {
-            let path = UIBezierPath(roundedRect: self.background.bounds,
-                                    byRoundingCorners:[.BottomLeft, .BottomRight],
-                                    cornerRadii:CGSizeMake(5, 5))
-            let maskLayer = CAShapeLayer()
-            maskLayer.path = path.CGPath
-            self.background.layer.mask = maskLayer
-            
-            self.background.layer.shadowRadius = 1
-            self.background.layer.masksToBounds = true
-            self.background.layer.shadowOffset = CGSizeMake(1, 1)
-            self.background.layer.shadowOpacity = 0.5
-            self.background.layer.masksToBounds = false
-            self.background.clipsToBounds = false
-        } else {
-            let path = UIBezierPath()
-            path.moveToPoint(CGPointMake(0, 0))
-            path.addLineToPoint(CGPointMake(self.background.frame.size.width, 0))
-            path.addLineToPoint(CGPointMake(self.background.frame.size.width, self.background.frame.size.height))
-            path.addLineToPoint(CGPointMake(0, self.background.frame.size.height))
-            path.closePath()
-            let maskLayer = CAShapeLayer()
-            maskLayer.path = path.CGPath
-            self.background.layer.mask = maskLayer
-        }
+//        self.background.layer.shadowRadius = 1
+////        self.background.layer.masksToBounds = true
+//        self.background.layer.shadowOffset = CGSizeMake(1, 1)
+//        self.background.layer.shadowOpacity = 0.5
+//
+//        if self.isLast {
+//            let path = UIBezierPath(roundedRect: self.background.bounds,
+//                                    byRoundingCorners:[.BottomLeft, .BottomRight],
+//                                    cornerRadii:CGSizeMake(5, 5))
+//            let maskLayer = CAShapeLayer()
+//            maskLayer.path = path.CGPath
+//            self.background.layer.mask = maskLayer
+//            
+//            self.background.layer.masksToBounds = true
+//            self.background.clipsToBounds = true
+//        } else {
+//            let shadowFrame = self.background.bounds
+//            let shadowPath = UIBezierPath(rect: shadowFrame).CGPath
+//            self.background.layer.shadowPath = shadowPath
+//
+//            self.background.layer.masksToBounds = false
+//            self.background.clipsToBounds = false
+//        }
     }
     
     override func setSelected(selected: Bool, animated: Bool) {
