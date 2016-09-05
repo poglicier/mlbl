@@ -11,6 +11,7 @@ import UIKit
 class PlayerCell: UITableViewCell {
     @IBOutlet private var background: UIView!
     @IBOutlet private var avatarView: UIImageView!
+    @IBOutlet private var teamAvatarView: UIImageView!
     @IBOutlet private var nameLabel: UILabel!
     @IBOutlet private var dateTitleLabel: UILabel!
     @IBOutlet private var dateValueLabel: UILabel!
@@ -74,9 +75,10 @@ class PlayerCell: UITableViewCell {
             
             self.teamLabel.text = isLanguageRu ? player.team?.shortNameRu : player.team?.shortNameEn
             
+            self.teamAvatarView.image = UIImage(named: "teamStub")
             if let teamId = player.team?.objectId {
                 if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamId)") {
-                    self.avatarView.setImageWithUrl(url)
+                    self.teamAvatarView.setImageWithUrl(url)
                 }
             }
         }
