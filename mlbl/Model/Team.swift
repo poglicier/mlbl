@@ -40,10 +40,18 @@ class Team: NSManagedObject {
             } catch { }
         }
         
-        res?.shortNameEn = dict[ShortTeamNameEnKey] as? String
-        res?.shortNameRu = dict[ShortTeamNameRuKey] as? String
-        res?.nameEn = dict[TeamNameEnKey] as? String
-        res?.nameRu = dict[TeamNameRuKey] as? String
+        if let shortNameEn = dict[ShortTeamNameEnKey] as? String {
+            res?.shortNameEn = shortNameEn
+        }
+        if let shortNameRu = dict[ShortTeamNameRuKey] as? String {
+            res?.shortNameRu = shortNameRu
+        }
+        if let nameEn = dict[TeamNameEnKey] as? String {
+             res?.nameEn = nameEn
+        }
+        if let nameRu = dict[TeamNameRuKey] as? String {
+            res?.nameRu = nameRu
+        }
         
         return res
     }

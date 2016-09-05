@@ -20,6 +20,7 @@ class PlayersController: BaseController {
     private var allDataLoaded = false
     private var filteredPlayers: [Player]!
     private var searchInAction = false
+    private var selectedPlayerId: Int?
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Player.entityName())
@@ -70,6 +71,7 @@ class PlayersController: BaseController {
         spinner.color = UIColor.mlblLightOrangeColor()
         spinner.frame = CGRectMake(0, 0, 0, 64)
         self.tableView.tableFooterView = spinner
+        self.tableView.registerNib(UINib(nibName: "PlayerCell", bundle: nil), forCellReuseIdentifier: "playerCell")
     }
     
     private func setupSearchBar() {
@@ -162,16 +164,15 @@ class PlayersController: BaseController {
         }
     }
     
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "goToPlayer" {
+            let playerController = segue.destinationViewController as! PlayerController
+            playerController.dataController = self.dataController
+            playerController.playerId = self.selectedPlayerId!
+        }
     }
-    */
-
 }
 
 extension PlayersController: UITableViewDelegate, UITableViewDataSource {
@@ -211,6 +212,16 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
                 indexPath.row >= self.numberOfLoadedPlayers - 1 {
                 self.getData()
             }
+        }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        self.selectedPlayerId = (self.fetchedResultsController.objectAtIndexPath(indexPath) as! Player).objectId as? Int
+        
+        if let _ = self.selectedPlayerId {
+            self.performSegueWithIdentifier("goToPlayer", sender: nil)
         }
     }
     

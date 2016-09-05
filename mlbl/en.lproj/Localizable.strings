@@ -67,3 +67,9 @@
 "Score" = "Score";
 "Team statistics" = "Team statistics";
 "Average" = "Average";
+
+"No player info stub" = "Player info does not exist";
+"Teams" = "Teams";
+"Season" = "Season";
+"Host" = "Host";
+"Guest" = "Guest";

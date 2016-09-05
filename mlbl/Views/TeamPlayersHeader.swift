@@ -30,18 +30,6 @@ class TeamPlayersHeader: UIView {
         self.initialize()
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        self.titleLabel.text = NSLocalizedString("Roster", comment: "").uppercaseString
-        self.numberLabel.text = NSLocalizedString("Number", comment: "")
-        self.playerLabel.text = NSLocalizedString("Player", comment: "")
-        self.positionLabel.text = NSLocalizedString("Position acronym", comment: "")
-        self.heghtLabel.text = NSLocalizedString("Height acronym", comment: "")
-        self.weightLabel.text = NSLocalizedString("Weight acronym", comment: "")
-        self.ageLabel.text = NSLocalizedString("Age acronym", comment: "")
-    }
-    
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
         
@@ -65,5 +53,13 @@ class TeamPlayersHeader: UIView {
         self.view.snp_makeConstraints { (make) in
             make.left.top.right.bottom.equalTo(0)
         }
+        
+        self.titleLabel.text = NSLocalizedString("Roster", comment: "").uppercaseString
+        self.numberLabel.text = NSLocalizedString("Number", comment: "")
+        self.playerLabel.text = NSLocalizedString("Player", comment: "")
+        self.positionLabel.text = NSLocalizedString("Position acronym", comment: "")
+        self.heghtLabel.text = NSLocalizedString("Height acronym", comment: "")
+        self.weightLabel.text = NSLocalizedString("Weight acronym", comment: "")
+        self.ageLabel.text = NSLocalizedString("Age acronym", comment: "")
     }
 }

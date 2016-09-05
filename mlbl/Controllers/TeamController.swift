@@ -47,7 +47,7 @@ class TeamController: BaseController {
     }
     
     // MARK: - Private
-    
+    private var selectedPlayerId: Int?
     private var selectedGameId: Int?
     
     lazy private var playersFetchedResultsController: NSFetchedResultsController = {
@@ -223,6 +223,10 @@ class TeamController: BaseController {
             let gameController = segue.destinationViewController as! GameController
             gameController.dataController = self.dataController
             gameController.gameId = self.selectedGameId!
+        } else if segue.identifier == "goToPlayer" {
+            let gameController = segue.destinationViewController as! PlayerController
+            gameController.dataController = self.dataController
+            gameController.playerId = self.selectedPlayerId!
         }
     }
 }
@@ -383,14 +387,18 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
         
         if let enumSection = Sections(rawValue: indexPath.section) {
             switch enumSection {
-//            case .Players:
+            case .Players:
+                let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+                self.selectedPlayerId = (self.playersFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! Player).objectId as? Int
+                if let _ = self.selectedPlayerId {
+                    self.performSegueWithIdentifier("goToPlayer", sender: nil)
+                }
             case .Games:
                 let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
                 self.selectedGameId = (self.gamesFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! Game).objectId as? Int
                 if let _ = self.selectedGameId {
                     self.performSegueWithIdentifier("goToGame", sender: nil)
                 }
-            //            case .Statistics:
             default:
                 break
             }

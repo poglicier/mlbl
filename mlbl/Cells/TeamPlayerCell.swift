@@ -92,7 +92,7 @@ class TeamPlayerCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
                 
-        for label in self.subviews {
+        for label in self.background.subviews {
             (label as? UILabel)?.highlightedTextColor = UIColor.mlblLightOrangeColor()
         }
     }

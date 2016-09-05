@@ -229,6 +229,18 @@ class DataController {
         self.queue.addOperation(request)
     }
     
+    func getPlayerTeams(playerId: Int, completion: (NSError? -> ())?) {
+        let request = PlayerTeamsRequest(playerId: playerId)
+        request.dataController = self
+        
+        request.completionBlock = {
+            dispatch_async(dispatch_get_main_queue(), {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
     // MARK: - Core Data stack
     
     lazy var applicationDocumentsDirectory: NSURL = {

@@ -1,21 +1,20 @@
 //
-//  TeamGamesHeader.swift
+//  PlayerTeamsHeader.swift
 //  mlbl
 //
-//  Created by Valentin Shamardin on 03.09.16.
+//  Created by Valentin Shamardin on 05.09.16.
 //  Copyright © 2016 Valentin Shamardin. All rights reserved.
 //
 
 import UIKit
 
-class TeamGamesHeader: UIView {
-    
+class PlayerTeamsHeader: UIView {
+
     @IBOutlet private var view: UIView!
     @IBOutlet private var background: UIView!
     @IBOutlet private var titleLabel: UILabel!
-    @IBOutlet private var dateLabel: UILabel!
-    @IBOutlet private var opponentLabel: UILabel!
-    @IBOutlet private var scoreLabel: UILabel!
+    @IBOutlet private var seasonLabel: UILabel!
+    @IBOutlet private var teamLabel: UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,13 +32,6 @@ class TeamGamesHeader: UIView {
         if let _ = self.background {
             if let _ = self.background {
                 self.background.layer.cornerRadius = 5
-                
-//                self.background.layer.shadowRadius = 1
-//                self.background.layer.masksToBounds = true
-//                self.background.layer.shadowOffset = CGSizeMake(1, 1)
-//                self.background.layer.shadowOpacity = 0.5
-//                self.background.layer.masksToBounds = false
-//                self.background.clipsToBounds = false
             }
         }
     }
@@ -53,9 +45,8 @@ class TeamGamesHeader: UIView {
             make.left.top.right.bottom.equalTo(0)
         }
         
-        self.titleLabel.text = NSLocalizedString("Games", comment: "").uppercaseString
-        self.dateLabel.text = NSLocalizedString("Date", comment: "")
-        self.opponentLabel.text = NSLocalizedString("Opponent", comment: "")
-        self.scoreLabel.text = NSLocalizedString("Score", comment: "")
+        self.titleLabel.text = NSLocalizedString("Teams", comment: "").uppercaseString
+        self.seasonLabel.text = NSLocalizedString("Season", comment: "")
+        self.teamLabel.text = NSLocalizedString("Team", comment: "")
     }
 }

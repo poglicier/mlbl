@@ -43,15 +43,8 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fh4-x6-UHZ" userLabel="homeInvisibleView">
-                                    <rect key="frame" x="108" y="0.0" width="12" height="37"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" constant="12" id="kCO-FE-XYa"/>
-                                    </constraints>
-                                </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Соперник" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UCq-Dl-QVq">
-                                    <rect key="frame" x="120" y="0.0" width="114" height="37"/>
+                                    <rect key="frame" x="100" y="0.0" width="134" height="37"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -70,19 +63,16 @@
                             <constraints>
                                 <constraint firstItem="OmJ-Ow-JvF" firstAttribute="top" secondItem="ryg-Zt-pep" secondAttribute="top" id="BNh-ME-YxA"/>
                                 <constraint firstItem="fTb-Y8-kiT" firstAttribute="top" secondItem="ryg-Zt-pep" secondAttribute="top" id="CEF-nn-LtY"/>
-                                <constraint firstItem="UCq-Dl-QVq" firstAttribute="leading" secondItem="fh4-x6-UHZ" secondAttribute="trailing" id="EKk-Ue-9uW"/>
+                                <constraint firstItem="UCq-Dl-QVq" firstAttribute="leading" secondItem="fTb-Y8-kiT" secondAttribute="trailing" id="EQm-Vy-9a8"/>
                                 <constraint firstAttribute="bottom" secondItem="OmJ-Ow-JvF" secondAttribute="bottom" id="Efb-SB-bl2"/>
                                 <constraint firstItem="UCq-Dl-QVq" firstAttribute="top" secondItem="ryg-Zt-pep" secondAttribute="top" id="QQt-jJ-Lat"/>
                                 <constraint firstItem="OmJ-Ow-JvF" firstAttribute="leading" secondItem="UCq-Dl-QVq" secondAttribute="trailing" id="RJy-8b-vB0"/>
-                                <constraint firstItem="fh4-x6-UHZ" firstAttribute="top" secondItem="ryg-Zt-pep" secondAttribute="top" id="S34-fO-kG5"/>
-                                <constraint firstAttribute="bottom" secondItem="fh4-x6-UHZ" secondAttribute="bottom" id="SdS-Jf-EFe"/>
                                 <constraint firstAttribute="bottom" secondItem="UCq-Dl-QVq" secondAttribute="bottom" id="TgQ-dH-9TP"/>
                                 <constraint firstItem="UCq-Dl-QVq" firstAttribute="leading" secondItem="fTb-Y8-kiT" secondAttribute="trailing" id="bb9-tO-6uA"/>
                                 <constraint firstAttribute="trailing" secondItem="OmJ-Ow-JvF" secondAttribute="trailing" id="eiK-8d-hC8"/>
                                 <constraint firstItem="fTb-Y8-kiT" firstAttribute="leading" secondItem="ryg-Zt-pep" secondAttribute="leading" id="hQ0-pM-CAC"/>
                                 <constraint firstAttribute="bottom" secondItem="fTb-Y8-kiT" secondAttribute="bottom" id="stk-0V-mRX"/>
                                 <constraint firstItem="OmJ-Ow-JvF" firstAttribute="width" secondItem="fTb-Y8-kiT" secondAttribute="width" id="uxe-Op-QJX"/>
-                                <constraint firstItem="fh4-x6-UHZ" firstAttribute="leading" secondItem="fTb-Y8-kiT" secondAttribute="trailing" constant="8" id="wWJ-mS-9Kn"/>
                             </constraints>
                             <variation key="default">
                                 <mask key="constraints">

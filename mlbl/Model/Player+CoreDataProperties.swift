@@ -2,7 +2,7 @@
 //  Player+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 04.09.16.
+//  Created by Valentin Shamardin on 05.09.16.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -32,5 +32,6 @@ extension Player {
     @NSManaged var ranks: NSSet?
     @NSManaged var team: Team?
     @NSManaged var teamStatistics: TeamStatistics?
+    @NSManaged var seasonTeams: NSSet?
 
 }
