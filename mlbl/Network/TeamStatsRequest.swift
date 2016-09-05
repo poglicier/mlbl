@@ -50,10 +50,19 @@ class TeamStatsRequest: NetworkRequest {
                 let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
                 context.parentContext = self.dataController?.mainContext
                 context.performBlockAndWait({
-                    // Удаление старых статистик не предусмотрено
+                    // У статистики нет id, поэтому удалем все старые
+                    let fetchRequest = NSFetchRequest(entityName: TeamStatistics.entityName())
+                    fetchRequest.predicate = NSPredicate(format: "team.objectId = %d", self.teamId)
+                    do {
+                        let all = try context.executeFetchRequest(fetchRequest) as! [TeamStatistics]
+                        for stat in all {
+                            print("DELETE TeamStatistics \(stat.team?.nameRu)")
+                            context.deleteObject(stat)
+                        }
+                    }
+                    catch {}
                     
                     TeamStatistics.teamStatisticsWithDict(teamStatsDict, inContext: context)
-                    
                     self.dataController?.saveContext(context)
                 })
             } else {

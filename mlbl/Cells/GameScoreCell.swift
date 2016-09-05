@@ -42,6 +42,11 @@ class GameScoreCell: UITableViewCell {
                 self.titleLabel.text = titleString
             }
             
+            self.titleA.text = nil
+            self.regionA.text = nil
+            self.titleB.text = nil
+            self.regionB.text = nil
+            
             if let statistics = game.statistics as? Set<GameStatistics> {
                 if let statisticsA = (statistics.filter {$0.teamNumber?.integerValue == 1 && $0.player == nil}).first {
                     if let teamA = statisticsA.team {

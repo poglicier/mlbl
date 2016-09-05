@@ -42,8 +42,6 @@ class TeamStatistics: NSManagedObject {
     static private let IsStartKey = "IsStart"
     static private let FoulsKey = "Foul"
     static private let OpponentFoulsKey = "OpponentFoul"
-    static private let TeamDefReboundKey = "TeamDefRebound"
-    static private let TeamOffReboundKey = "TeamOffRebound"
     static private let AvgShots1Key = "AvgShots1"
     static private let AvgShots2Key = "AvgShots2"
     static private let AvgShots3Key = "AvgShots3"
@@ -76,12 +74,14 @@ class TeamStatistics: NSManagedObject {
                 res = try context.executeFetchRequest(fetchRequest).first as? TeamStatistics
                 
                 if res == nil {
-                    res = TeamStatistics(entity: NSEntityDescription.entityForName(TeamStatistics.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
-                    
                     let fetchRequest = NSFetchRequest(entityName: Team.entityName())
                     fetchRequest.predicate = NSPredicate(format: "objectId = %@", teamId)
                     do {
-                        res?.team = try context.executeFetchRequest(fetchRequest).first as? Team
+                        if let team = try context.executeFetchRequest(fetchRequest).first as? Team {
+                            // Создаём TeamStatistics только когда у него будет команда
+                            res = TeamStatistics(entity: NSEntityDescription.entityForName(TeamStatistics.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                            res?.team = team
+                        }
                     } catch {}
                 }
             } catch {}
@@ -169,12 +169,14 @@ class TeamStatistics: NSManagedObject {
                     res = try context.executeFetchRequest(fetchRequest).first as? TeamStatistics
                     
                     if res == nil {
-                        res = TeamStatistics(entity: NSEntityDescription.entityForName(TeamStatistics.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
-                        
                         let fetchRequest = NSFetchRequest(entityName: Player.entityName())
                         fetchRequest.predicate = NSPredicate(format: "objectId = %d", personId)
                         do {
-                            res?.player = try context.executeFetchRequest(fetchRequest).first as? Player
+                            if let player = try context.executeFetchRequest(fetchRequest).first as? Player {
+                                // Создаём TeamStatistics только когда у него будет игрок
+                                res = TeamStatistics(entity: NSEntityDescription.entityForName(TeamStatistics.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                                res?.player = player
+                            }
                         } catch {}
                     }
                 } catch {}
@@ -196,8 +198,6 @@ class TeamStatistics: NSManagedObject {
             res?.steals = dict[StealsKey] as? Int ?? 0
             res?.offensiveRebounds = dict[OffReboundsKey] as? Int ?? 0
             res?.defensiveRebounds = dict[DefReboundsKey] as? Int ?? 0
-            res?.teamOffensiveRebounds = dict[TeamOffReboundKey] as? Int ?? 0
-            res?.teamDefensiveRebounds = dict[TeamDefReboundKey] as? Int ?? 0
             res?.turnovers = dict[TurnoversKey] as? Int ?? 0
             res?.blocks = dict[BlocksKey] as? Int ?? 0
             res?.plusMinus = dict[PlusMinusKey] as? Int ?? 0

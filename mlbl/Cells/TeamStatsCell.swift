@@ -61,106 +61,9 @@ class TeamStatsCell: UITableViewCell {
             
             for (idx, stat) in statistics.enumerate() {
                 if stat.player == nil {
-                    let backgroundLine = UIView()
-                    backgroundLine.backgroundColor = (idx % 2 == 0) ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
-                    self.background.insertSubview(backgroundLine, atIndex: 0)
-                    self.addedSubviews.append(backgroundLine)
-                    backgroundLine.snp_makeConstraints(closure: { (make) in
-                        make.left.right.equalTo(0)
-                        make.height.equalTo(27)
-                        if let _ = predLine {
-                            make.top.equalTo(predLine!.snp_bottom)
-                        } else {
-                            make.top.equalTo(self.hatBackground.snp_bottom)
-                        }
-                    })
-                    
-                    // Статистика Команды
-                    let numberLabel = UILabel()
-                    numberLabel.font = UIFont.systemFontOfSize(self.fontSize)
-                    numberLabel.text = NSLocalizedString("Team", comment: "")
-                    backgroundLine.addSubview(numberLabel)
-                    self.addedSubviews.append(numberLabel)
-                    numberLabel.snp_makeConstraints(closure: { (make) in
-                        make.left.equalTo(12)
-                        make.top.bottom.equalTo(0)
-                    })
-                    
-                    let minutesLabel = UILabel()
-                    self.scrollContentView.addSubview(minutesLabel)
-                    self.addedSubviews.append(minutesLabel)
-                    minutesLabel.snp_makeConstraints(closure: { (make) in
-                        make.left.equalTo(0)
-                        make.width.equalTo(self.timeLabel.snp_width)
-                        make.height.equalTo(self.timeLabel.snp_height)
-                        
-                        if let _ = predMinsLabel {
-                            make.top.equalTo(predMinsLabel!.snp_bottom)
-                        } else {
-                            make.top.equalTo(self.timeLabel.snp_bottom)
-                        }
-                    })
-                    predMinsLabel = minutesLabel
-                    
-                    let offLabel = UILabel()
-                    offLabel.font = UIFont.systemFontOfSize(self.fontSize)
-                    offLabel.textAlignment = .Center
-                    offLabel.text = nil
-                    let offs = stat.teamOffensiveRebounds as? Float ?? 0
-                    if offs > 0 {
-                        offLabel.text = String(format: "%g", offs)
-                    }
-                    self.scrollContentView.addSubview(offLabel)
-                    self.addedSubviews.append(offLabel)
-                    offLabel.snp_makeConstraints(closure: { (make) in
-                        make.left.equalTo(oneLabel.snp_right)
-                        make.width.equalTo(oneLabel.snp_width)
-                        make.height.equalTo(oneLabel.snp_height)
-                        if let _ = predLine {
-                            make.top.equalTo(predLine!.snp_bottom)
-                        } else {
-                            make.top.equalTo(self.hatBackground.snp_bottom)
-                        }
-                    })
-                    
-                    let defLabel = UILabel()
-                    defLabel.font = UIFont.systemFontOfSize(self.fontSize)
-                    defLabel.textAlignment = .Center
-                    defLabel.text = nil
-                    let defs = stat.teamDefensiveRebounds as? Float ?? 0
-                    if defs > 0 {
-                        defLabel.text = String(format: "%g", defs)
-                    }
-                    self.scrollContentView.addSubview(defLabel)
-                    self.addedSubviews.append(defLabel)
-                    defLabel.snp_makeConstraints(closure: { (make) in
-                        make.left.equalTo(offLabel.snp_right)
-                        make.width.equalTo(offLabel.snp_width)
-                        make.height.equalTo(offLabel.snp_height)
-                        if let _ = predLine {
-                            make.top.equalTo(predLine!.snp_bottom)
-                        } else {
-                            make.top.equalTo(self.hatBackground.snp_bottom)
-                        }
-                    })
-                    
-                    let rebLabel = UILabel()
-                    rebLabel.font = UIFont.systemFontOfSize(self.fontSize)
-                    rebLabel.textAlignment = .Center
-                    rebLabel.text = nil
-                    if offs + defs > 0 {
-                        rebLabel.text = String(format: "%g", offs + defs)
-                    }
-                    self.scrollContentView.addSubview(rebLabel)
-                    self.addedSubviews.append(rebLabel)
-                    rebLabel.snp_makeConstraints(closure: { (make) in
-                        make.left.equalTo(defLabel.snp_right)
-                        make.width.equalTo(defLabel.snp_width)
-                        make.height.equalTo(defLabel.snp_height)
-                        make.top.equalTo(defLabel.snp_top)
-                    })
-                    
-                    // Статистика Проценты бросков
+                    // Когда рассматривается статистика команды, интересны только
+                    // проценты бросков. Средние значения обрабатываются
+                    // аналогично статистике игрока
                     let twoPercentLabel = UILabel()
                     twoPercentLabel.font = UIFont.systemFontOfSize(self.fontSize)
                     twoPercentLabel.textAlignment = .Center
@@ -220,63 +123,65 @@ class TeamStatsCell: UITableViewCell {
                         make.height.equalTo(self.oneLabel.snp_height)
                         make.top.equalTo(self.percentBackground!.snp_top)
                     })
-                }
-                
-                let backgroundLine = UIView()
-                backgroundLine.backgroundColor = (idx % 2 == 0) ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
-                self.background.insertSubview(backgroundLine, atIndex: 0)
-                self.addedSubviews.append(backgroundLine)
-                backgroundLine.snp_makeConstraints(closure: { (make) in
-                    make.left.right.equalTo(0)
-                    make.height.equalTo(27)
-                    if let _ = predLine {
-                        make.top.equalTo(predLine!.snp_bottom)
-                    } else {
-                        make.top.equalTo(self.hatBackground.snp_bottom)
-                    }
-                })
+                } else {
+                    // Статистика игрока
+                    let backgroundLine = UIView()
+                    backgroundLine.backgroundColor = (idx % 2 == 0) ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+                    self.background.insertSubview(backgroundLine, atIndex: 0)
+                    self.addedSubviews.append(backgroundLine)
+                    backgroundLine.snp_makeConstraints(closure: { (make) in
+                        make.left.right.equalTo(0)
+                        make.height.equalTo(27)
+                        if let _ = predLine {
+                            make.top.equalTo(predLine!.snp_bottom)
+                        } else {
+                            make.top.equalTo(self.hatBackground.snp_bottom)
+                        }
+                    })
 
-                predLine = backgroundLine
+                    predLine = backgroundLine
 
-                let numberLabel = UILabel()
-                numberLabel.textAlignment = .Center
-                numberLabel.font = UIFont.systemFontOfSize(self.fontSize)
-                if let playerNumber = stat.playerNumber {
-                    if playerNumber.integerValue == 1000 {
-                        numberLabel.text = NSLocalizedString("Coach acronym", comment: "")
-                    } else {
-                        numberLabel.text = "\(playerNumber)"
-                    }
-                }
-                backgroundLine.addSubview(numberLabel)
-                self.addedSubviews.append(numberLabel)
-                numberLabel.snp_makeConstraints(closure: { (make) in
-                    make.left.top.bottom.equalTo(0)
-                    make.width.equalTo(44)
-                })
-
-                let nameLabel = UILabel()
-                nameLabel.lineBreakMode = .ByClipping
-                if var playerName = isLanguageRu ? stat.player?.lastNameRu : stat.player?.lastNameEn {
-                    if let firstName = isLanguageRu ? stat.player?.firstNameRu : stat.player?.firstNameEn {
-                        if let firstLetter = firstName.characters.first {
-                            playerName += " \(firstLetter)."
+                    let numberLabel = UILabel()
+                    numberLabel.textAlignment = .Center
+                    numberLabel.font = UIFont.systemFontOfSize(self.fontSize)
+                    if let playerNumber = stat.playerNumber {
+                        if playerNumber.integerValue == 1000 {
+                            numberLabel.text = NSLocalizedString("Coach acronym", comment: "")
+                        } else {
+                            numberLabel.text = "\(playerNumber)"
                         }
                     }
+                    backgroundLine.addSubview(numberLabel)
+                    self.addedSubviews.append(numberLabel)
+                    numberLabel.snp_makeConstraints(closure: { (make) in
+                        make.left.top.bottom.equalTo(0)
+                        make.width.equalTo(44)
+                    })
 
-                    nameLabel.text = "\(playerName)"
-                } else {
-                    nameLabel.text = nil
+                    let nameLabel = UILabel()
+                    nameLabel.lineBreakMode = .ByClipping
+                    if var playerName = isLanguageRu ? stat.player?.lastNameRu : stat.player?.lastNameEn {
+                        if let firstName = isLanguageRu ? stat.player?.firstNameRu : stat.player?.firstNameEn {
+                            if let firstLetter = firstName.characters.first {
+                                playerName += " \(firstLetter)."
+                            }
+                        }
+
+                        nameLabel.text = "\(playerName)"
+                    } else {
+                        nameLabel.text = nil
+                    }
+
+                    backgroundLine.addSubview(nameLabel)
+                    self.addedSubviews.append(nameLabel)
+                    nameLabel.snp_makeConstraints(closure: { (make) in
+                        make.top.bottom.equalTo(0)
+                        make.right.equalTo(self.playerLabel.snp_right)
+                        make.left.equalTo(numberLabel.snp_right)
+                    })
                 }
-
-                backgroundLine.addSubview(nameLabel)
-                self.addedSubviews.append(nameLabel)
-                nameLabel.snp_makeConstraints(closure: { (make) in
-                    make.top.bottom.equalTo(0)
-                    make.right.equalTo(self.playerLabel.snp_right)
-                    make.left.equalTo(numberLabel.snp_right)
-                })
                 
+                // Статистика или для команды, или для игрока
                 let minutesLabel = UILabel()
                 minutesLabel.font = UIFont.systemFontOfSize(self.fontSize)
                 minutesLabel.textAlignment = .Center

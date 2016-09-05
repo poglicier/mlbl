@@ -2,7 +2,7 @@
 //  TeamStatistics+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 04.09.16.
+//  Created by Valentin Shamardin on 05.09.16.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -32,10 +32,10 @@ extension TeamStatistics {
     @NSManaged var shot2: NSNumber?
     @NSManaged var shot3: NSNumber?
     @NSManaged var steals: NSNumber?
-    @NSManaged var teamDefensiveRebounds: NSNumber?
     @NSManaged var teamNumber: NSNumber?
-    @NSManaged var teamOffensiveRebounds: NSNumber?
     @NSManaged var turnovers: NSNumber?
+    @NSManaged var teamOffensiveRebounds: NSNumber?
+    @NSManaged var teamDefensiveRebounds: NSNumber?
     @NSManaged var player: Player?
     @NSManaged var team: Team?
 

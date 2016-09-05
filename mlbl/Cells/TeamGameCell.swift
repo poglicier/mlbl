@@ -101,6 +101,21 @@ class TeamGameCell: UITableViewCell {
 //            maskLayer.path = path.CGPath
 //            self.background.layer.mask = maskLayer
 //        }
+        
+        let isLanguageRu = self.language.containsString("ru")
+        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+            if self.teamOfInterest?.shortNameRu == game.shortTeamNameAru {
+                self.opponentLabel.text = isLanguageRu ? game.shortTeamNameBru : game.shortTeamNameBen
+            } else {
+                self.opponentLabel.text = isLanguageRu ? game.shortTeamNameAru : game.shortTeamNameAen
+            }
+        } else {
+            if self.teamOfInterest?.nameRu == game.teamNameAru {
+                self.opponentLabel.text = isLanguageRu ? game.teamNameBru : game.teamNameBen
+            } else {
+                self.opponentLabel.text = isLanguageRu ? game.teamNameAru : game.teamNameAen
+            }
+        }
     }
     
     override func setSelected(selected: Bool, animated: Bool) {

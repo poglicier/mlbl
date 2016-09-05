@@ -57,6 +57,18 @@ class GameStatsRequest: NetworkRequest {
                     let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
                     context.parentContext = self.dataController?.mainContext
                     context.performBlockAndWait({
+                        // У статистики нет id, поэтому удалем все старые
+                        let fetchRequest = NSFetchRequest(entityName: GameStatistics.entityName())
+                        fetchRequest.predicate = NSPredicate(format: "game.objectId = %d", self.gameId)
+                        do {
+                            let all = try context.executeFetchRequest(fetchRequest) as! [GameStatistics]
+                            for stat in all {
+                                print("DELETE GameStatistics \(stat.game?.date)")
+                                context.deleteObject(stat)
+                            }
+                        }
+                        catch {}
+                        
                         Game.gameWithDict(dict, inContext: context)
                         self.dataController?.saveContext(context)
                     })

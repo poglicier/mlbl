@@ -125,6 +125,35 @@ class TeamPlayerCell: UITableViewCell {
 //        }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let isLanguageRu = self.language.containsString("ru")
+        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+            if var playerName = isLanguageRu ? player.lastNameRu : player.lastNameEn {
+                if let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn {
+                    if let firstLetter = firstName.characters.first {
+                        playerName += " \(firstLetter)."
+                    }
+                }
+                
+                self.playerLabel.text = "\(playerName)"
+            } else {
+                self.playerLabel.text = nil
+            }
+        } else {
+            if var playerName = isLanguageRu ? player.lastNameRu : player.lastNameEn {
+                if let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn {
+                        playerName += " \(firstName)"
+                }
+                
+                self.playerLabel.text = "\(playerName)"
+            } else {
+                self.playerLabel.text = nil
+            }
+        }
+    }
+    
     override func setSelected(selected: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setSelected(selected, animated: animated)
