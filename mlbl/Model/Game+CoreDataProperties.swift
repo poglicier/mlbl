@@ -2,7 +2,7 @@
 //  Game+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 26.08.16.
+//  Created by Valentin Shamardin on 05.09.16.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -31,7 +31,8 @@ extension Game {
     @NSManaged var teamNameBru: String?
     @NSManaged var venueEn: String?
     @NSManaged var venueRu: String?
+    @NSManaged var status: NSNumber?
+    @NSManaged var playoffSerie: PlayoffSerie?
     @NSManaged var statistics: NSSet?
-    @NSManaged var playoffSerie: NSManagedObject?
 
 }

@@ -63,6 +63,14 @@ class GameCell: UITableViewCell {
                 
                 self.titleLabel.text = titleString
             }
+            
+            if let status = game.status {
+                self.statusLabel.hidden = false
+                let statusStr = "Game Status \(status)"
+                self.statusLabel.text = NSLocalizedString(statusStr, comment: "")
+            } else {
+                self.statusLabel.hidden = true
+            }
         }
     }
     

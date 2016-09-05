@@ -11,6 +11,14 @@ import CoreData
 
 class Game: NSManagedObject {
     
+    enum GameStatus: Int {
+        case Scheduled
+        case Accomplished
+        case Online
+        case DateChanged
+        case Cancelled
+    }
+    
     static private let GameIdKey = "GameID"
     static private let GameDateKey = "GameDate"
     static private let GameTimeKey = "GameTime"
@@ -34,6 +42,7 @@ class Game: NSManagedObject {
     static let TeamBIdKey = "TeamBid"
     static private let PlayersKey = "Players"
     static private let CoachKey = "Coach"
+    static private let GameStatusKey = "GameStatus"
     
     static private var dateFormatter: NSDateFormatter = {
         let res = NSDateFormatter()
@@ -146,6 +155,9 @@ class Game: NSManagedObject {
                 }
                 if let scoreByPeriods = dict[ScoreByPeriodsKey] as? String {
                     res?.scoreByPeriods = scoreByPeriods
+                }
+                if let status = dict[GameStatusKey] as? Int {
+                    res?.status = status
                 }
             } catch {}
         }

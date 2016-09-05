@@ -40,6 +40,7 @@
 		FC74B8131C8F646F000E6CC6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC74B8121C8F646F000E6CC6 /* Extensions.swift */; };
 		FC74B8151C8F648E000E6CC6 /* AFImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC74B8141C8F648E000E6CC6 /* AFImageCache.swift */; };
 		FC74B8171C8F733A000E6CC6 /* PeriodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC74B8161C8F733A000E6CC6 /* PeriodCell.swift */; };
+		FC7546B51D7D518100F02119 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC7546B71D7D518100F02119 /* InfoPlist.strings */; };
 		FC77C0A01D64C78800A12D1E /* BestPlayersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77C09F1D64C78800A12D1E /* BestPlayersRequest.swift */; };
 		FC77C0A31D64E8CC00A12D1E /* PlayerRank+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77C0A11D64E8CC00A12D1E /* PlayerRank+CoreDataProperties.swift */; };
 		FC77C0A41D64E8CC00A12D1E /* PlayerRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77C0A21D64E8CC00A12D1E /* PlayerRank.swift */; };
@@ -124,6 +125,8 @@
 		FC74B8121C8F646F000E6CC6 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FC74B8141C8F648E000E6CC6 /* AFImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AFImageCache.swift; sourceTree = "<group>"; };
 		FC74B8161C8F733A000E6CC6 /* PeriodCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeriodCell.swift; sourceTree = "<group>"; };
+		FC7546B61D7D518100F02119 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		FC7546B81D7D518300F02119 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FC77C09F1D64C78800A12D1E /* BestPlayersRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BestPlayersRequest.swift; sourceTree = "<group>"; };
 		FC77C0A11D64E8CC00A12D1E /* PlayerRank+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlayerRank+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC77C0A21D64E8CC00A12D1E /* PlayerRank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerRank.swift; sourceTree = "<group>"; };
@@ -294,6 +297,7 @@
 				FC637E5F1C946617009EE880 /* Localizable.strings */,
 				FC705D421C80F00A00216AB8 /* LaunchScreen.storyboard */,
 				FC705D451C80F00A00216AB8 /* Info.plist */,
+				FC7546B71D7D518100F02119 /* InfoPlist.strings */,
 				FC97930E1C8B5F2A00D4D5D9 /* Model */,
 			);
 			path = mlbl;
@@ -423,6 +427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC705D441C80F00A00216AB8 /* LaunchScreen.storyboard in Resources */,
+				FC7546B51D7D518100F02119 /* InfoPlist.strings in Resources */,
 				FC3558D91D75C304004C5080 /* GameCell.xib in Resources */,
 				FC637E5D1C946617009EE880 /* Localizable.strings in Resources */,
 				FCD2D59E1D7A282B00C436E9 /* TeamGamesHeader.xib in Resources */,
@@ -596,6 +601,15 @@
 				FC705D431C80F00A00216AB8 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		FC7546B71D7D518100F02119 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC7546B61D7D518100F02119 /* ru */,
+				FC7546B81D7D518300F02119 /* en */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

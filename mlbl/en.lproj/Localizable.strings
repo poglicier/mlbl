@@ -17,6 +17,11 @@
 
 "No games stub" = "No games for selected date";
 "No players stub" = "No players loaded";
+"Game Status 0" = "Scheduled";
+"Game Status 1" = "Accomplished";
+"Game Status 2" = "Online";
+"Game Status 3" = "Date changed";
+"Game Status 4" = "Cancelled";
 
 "Date" = "Date";
 "Height" = "Height";

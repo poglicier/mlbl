@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  mlbl
+
+  Created by Valentin Shamardin on 05.09.16.
+  Copyright © 2016 Valentin Shamardin. All rights reserved.
+*/
+"CFBundleDisplayName" = "MLBL";

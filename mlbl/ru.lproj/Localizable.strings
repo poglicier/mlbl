@@ -17,6 +17,11 @@
 
 "No games stub" = "На выбранную дату игры не запланированы";
 "No players stub" = "Игроки не загружены";
+"Game Status 0" = "Запланирована";
+"Game Status 1" = "Завершена";
+"Game Status 2" = "Онлайн";
+"Game Status 3" = "Перенесена";
+"Game Status 4" = "Отменена";
 
 "Date" = "Дата";
 "Height" = "Рост";
