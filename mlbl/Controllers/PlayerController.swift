@@ -229,6 +229,22 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
+    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        var res: UIView?
+        
+        if let enumSection = Sections(rawValue: section) {
+            switch enumSection {
+            case .Teams:
+                res = UIView()
+                res?.backgroundColor = UIColor.clearColor()
+            default:
+                break
+            }
+        }
+        
+        return res
+    }
+    
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         var res: CGFloat = 0.1
         
