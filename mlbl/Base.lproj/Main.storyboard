@@ -37,18 +37,30 @@
                                     <outlet property="delegate" destination="QIn-yo-6rW" id="GC2-Sc-ONs"/>
                                 </connections>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Игроки не найдены" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y6o-Td-YPh">
+                                <rect key="frame" x="221" y="258" width="157" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="KCu-ad-vyM"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.44313725490196076" blue="0.73725490196078436" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="Y6o-Td-YPh" firstAttribute="centerY" secondItem="DbX-tX-yBE" secondAttribute="centerY" id="4By-FC-9ML"/>
                             <constraint firstAttribute="trailing" secondItem="wqk-Mi-iqK" secondAttribute="trailing" constant="20" id="58F-0a-aPz"/>
                             <constraint firstItem="wqk-Mi-iqK" firstAttribute="leading" secondItem="DbX-tX-yBE" secondAttribute="leading" constant="20" id="Yq9-ya-70J"/>
                             <constraint firstItem="Fto-yQ-y32" firstAttribute="top" secondItem="wqk-Mi-iqK" secondAttribute="bottom" constant="20" id="eBp-uY-yVR"/>
                             <constraint firstItem="wqk-Mi-iqK" firstAttribute="top" secondItem="YT1-wT-dUL" secondAttribute="bottom" constant="20" id="uEx-rI-MlF"/>
+                            <constraint firstItem="Y6o-Td-YPh" firstAttribute="centerX" secondItem="DbX-tX-yBE" secondAttribute="centerX" id="xqu-y7-2Hf"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="hvR-aY-mcT"/>
                     <connections>
+                        <outlet property="emptyLabel" destination="Y6o-Td-YPh" id="yTk-BS-wdo"/>
                         <outlet property="tableView" destination="wqk-Mi-iqK" id="Uz7-YA-Ci0"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="goToMain" id="jZP-VT-9LN"/>
                     </connections>
@@ -1438,9 +1450,9 @@
                                                                     </constraints>
                                                                     <variation key="default">
                                                                         <mask key="constraints">
+                                                                            <exclude reference="YIU-vF-XHo"/>
                                                                             <exclude reference="GmW-qa-HRf"/>
                                                                             <exclude reference="7ii-5r-T4M"/>
-                                                                            <exclude reference="YIU-vF-XHo"/>
                                                                         </mask>
                                                                     </variation>
                                                                 </view>

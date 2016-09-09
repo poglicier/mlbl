@@ -22,6 +22,8 @@ class TeamController: BaseController {
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var emptyLabel: UILabel!
     
+    private let refreshControl = UIRefreshControl()
+    private var refreshButton: UIButton?
     var teamId: Int!
     var team: Team?
     
@@ -32,7 +34,7 @@ class TeamController: BaseController {
         self.setupTeam()
         self.setupTableView()
         
-        self.getData()
+        self.getData(true)
         
         do {
             try self.playersFetchedResultsController.performFetch()
@@ -106,6 +108,11 @@ class TeamController: BaseController {
     
     private func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
+        
+        self.refreshControl.tintColor = UIColor.mlblLightOrangeColor()
+        self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), forControlEvents:.ValueChanged)
+        self.tableView.addSubview(self.refreshControl)
+        self.tableView.sendSubviewToBack(self.refreshControl)
     }
     
     private func configureCell(cell: TeamMainCell, atIndexPath indexPath: NSIndexPath) {
@@ -136,10 +143,12 @@ class TeamController: BaseController {
         cell.team = self.team
     }
 
-    private func getData() {
-        self.activityView.startAnimating()
-        self.tableView.hidden = true
-        self.emptyLabel.hidden = true
+    private func getData(showIndicator: Bool) {
+        if (showIndicator) {
+            self.activityView.startAnimating()
+            self.tableView.hidden = true
+            self.emptyLabel.hidden = true
+        }
         
         var requestError: NSError?
         
@@ -187,10 +196,13 @@ class TeamController: BaseController {
         dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), { [weak self] in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
+                strongSelf.tableView.layoutIfNeeded()
+                strongSelf.refreshControl.endRefreshing()
                 
                 if let _ = requestError {
                     strongSelf.emptyLabel.text = requestError?.localizedDescription
                     strongSelf.emptyLabel.hidden = false
+                    strongSelf.tableView.hidden = true
                     
                     let refreshButton = UIButton(type: .Custom)
                     let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
@@ -202,6 +214,8 @@ class TeamController: BaseController {
                         make.centerX.equalTo(0)
                         make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
                     })
+                    
+                    strongSelf.refreshButton = refreshButton
                 } else {
                     strongSelf.tableView.hidden = false
                     strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
@@ -211,9 +225,24 @@ class TeamController: BaseController {
             })
     }
     
+    @objc private func handleRefresh(refreshControl: UIRefreshControl) {
+        self.getData(false)
+    }
+    
     @objc private func refreshDidTap(sender: UIButton) {
-        sender.removeFromSuperview()
-        self.getData()
+        self.refreshButton?.removeFromSuperview()
+        self.refreshButton = nil
+        self.getData(true)
+    }
+    
+    override func willEnterForegroud() {
+        if let _ = self.refreshButton {
+            self.refreshButton?.removeFromSuperview()
+            self.refreshButton = nil
+            self.getData(true)
+        } else {
+            self.getData(false)
+        }
     }
     
     // MARK: - Navigation

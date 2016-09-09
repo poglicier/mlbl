@@ -18,6 +18,10 @@ class TableController: BaseController {
     @IBOutlet private var nextButton: UIButton!
     @IBOutlet private var prevButton: UIButton!
     
+    private let refreshControlRound = UIRefreshControl()
+    private let refreshControlPlayoff = UIRefreshControl()
+    private var refreshButtonRound: UIButton?
+    private var refreshButtonPlayoff: UIButton?
     private var selectedGameId: Int?
     private var selectedGameIds: [Int]?
     private var selectedTeamId: Int?
@@ -30,7 +34,7 @@ class TableController: BaseController {
             self.stageLabel.text = isLanguageRu ? selectedCompetition.compShortNameRu : selectedCompetition.compShortNameEn
             
             if selectedCompetition.compType?.integerValue ?? -1 == 0 {
-                self.getRoundRobin()
+                self.getRoundRobin(true)
                 
                 self.roundTableView.scrollsToTop = true
                 self.playoffTableView.scrollsToTop = false
@@ -41,7 +45,7 @@ class TableController: BaseController {
                 } catch {}
                 self.roundTableView.reloadData()
             } else {
-                self.getPlayoff()
+                self.getPlayoff(true)
                 
                 self.roundTableView.scrollsToTop = false
                 self.playoffTableView.scrollsToTop = true
@@ -98,6 +102,44 @@ class TableController: BaseController {
 
     private func setupTableViews() {
         self.roundTableView.contentInset = UIEdgeInsetsMake(4, 0, 4, 0)
+        
+        self.refreshControlRound.tintColor = UIColor.mlblLightOrangeColor()
+        self.refreshControlRound.addTarget(self, action: #selector(handleRefreshRound(_:)), forControlEvents:.ValueChanged)
+        self.roundTableView.addSubview(self.refreshControlRound)
+        self.roundTableView.sendSubviewToBack(self.refreshControlRound)
+        
+        self.refreshControlPlayoff.tintColor = UIColor.mlblLightOrangeColor()
+        self.refreshControlPlayoff.addTarget(self, action: #selector(handleRefreshPlayoff(_:)), forControlEvents:.ValueChanged)
+        self.playoffTableView.addSubview(self.refreshControlPlayoff)
+        self.playoffTableView.sendSubviewToBack(self.refreshControlPlayoff)
+    }
+    
+    @objc private func handleRefreshRound(refreshControl: UIRefreshControl) {
+        self.getRoundRobin(false)
+    }
+    
+    @objc private func handleRefreshPlayoff(refreshControl: UIRefreshControl) {
+        self.getPlayoff(false)
+    }
+    
+    override func willEnterForegroud() {
+        if selectedCompetition.compType?.integerValue ?? -1 == 0 {
+            if let _ = self.refreshButtonRound {
+                self.refreshButtonRound?.removeFromSuperview()
+                self.refreshButtonRound = nil
+                self.getRoundRobin(true)
+            } else {
+                self.getRoundRobin(false)
+            }
+        } else {
+            if let _ = self.refreshButtonPlayoff {
+                self.refreshButtonPlayoff?.removeFromSuperview()
+                self.refreshButtonPlayoff = nil
+                self.getPlayoff(true)
+            } else {
+                self.getPlayoff(false)
+            }
+        }
     }
     
     private func setupSubcompetitions() {
@@ -118,15 +160,20 @@ class TableController: BaseController {
         } catch {}
     }
     
-    private func getRoundRobin() {
+    private func getRoundRobin(showIndicator: Bool) {
         if let compId = self.selectedCompetition.objectId?.integerValue {
-            self.activityView.startAnimating()
-            self.roundTableView.hidden = true
-            self.playoffTableView.hidden = true
-            self.emptyLabel.hidden = true
+            if (showIndicator) {
+                self.activityView.startAnimating()
+                self.roundTableView.hidden = true
+                self.playoffTableView.hidden = true
+                self.emptyLabel.hidden = true
+            }
             
             self.dataController.getRoundRobin(compId) { [weak self] error in
                 if let strongSelf = self {
+                    strongSelf.roundTableView.layoutIfNeeded()
+                    strongSelf.refreshControlRound.endRefreshing()
+                    
                     strongSelf.activityView.stopAnimating()
                     strongSelf.prevButton.enabled = true
                     strongSelf.nextButton.enabled = true
@@ -135,6 +182,7 @@ class TableController: BaseController {
                         strongSelf.emptyLabel.text = error?.localizedDescription
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                             strongSelf.emptyLabel.hidden = false
+                            strongSelf.roundTableView.hidden = true
                         }
                         
                         let refreshButton = UIButton(type: .Custom)
@@ -147,6 +195,8 @@ class TableController: BaseController {
                             make.centerX.equalTo(0)
                             make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
                         })
+                        
+                        strongSelf.refreshButtonRound = refreshButton
                     } else {
                         strongSelf.roundTableView.reloadData()
                         strongSelf.roundTableView.hidden = false
@@ -158,15 +208,20 @@ class TableController: BaseController {
         }
     }
     
-    private func getPlayoff() {
+    private func getPlayoff(showIndicator: Bool) {
         if let compId = self.selectedCompetition.objectId?.integerValue {
-            self.activityView.startAnimating()
-            self.roundTableView.hidden = true
-            self.playoffTableView.hidden = true
-            self.emptyLabel.hidden = true
+            if showIndicator {
+                self.activityView.startAnimating()
+                self.roundTableView.hidden = true
+                self.playoffTableView.hidden = true
+                self.emptyLabel.hidden = true
+            }
             
             self.dataController.getPlayoff(compId) { [weak self] error in
                 if let strongSelf = self {
+                    strongSelf.playoffTableView.layoutIfNeeded()
+                    strongSelf.refreshControlPlayoff.endRefreshing()
+                    
                     strongSelf.activityView.stopAnimating()
                     strongSelf.prevButton.enabled = true
                     strongSelf.nextButton.enabled = true
@@ -175,6 +230,7 @@ class TableController: BaseController {
                         strongSelf.emptyLabel.text = error?.localizedDescription
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                             strongSelf.emptyLabel.hidden = false
+                            strongSelf.playoffTableView.hidden = true
                         }
                         
                         let refreshButton = UIButton(type: .Custom)
@@ -187,6 +243,8 @@ class TableController: BaseController {
                             make.centerX.equalTo(0)
                             make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
                         })
+                        
+                        strongSelf.refreshButtonPlayoff = refreshButton
                     } else {
                         strongSelf.playoffTableView.reloadData()
                         strongSelf.playoffTableView.hidden = false
@@ -199,13 +257,15 @@ class TableController: BaseController {
     }
     
     @objc private func refreshRoundRobin(sender: UIButton) {
-        sender.removeFromSuperview()
-        self.getRoundRobin()
+        self.refreshButtonRound?.removeFromSuperview()
+        self.refreshButtonRound = nil
+        self.getRoundRobin(true)
     }
     
     @objc private func refreshPlayoff(sender: UIButton) {
-        sender.removeFromSuperview()
-        self.getPlayoff()
+        self.refreshButtonPlayoff?.removeFromSuperview()
+        self.refreshButtonPlayoff = nil
+        self.getPlayoff(true)
     }
     
     private func configureCell(cell: RobinTeamCell, atIndexPath indexPath: NSIndexPath) {

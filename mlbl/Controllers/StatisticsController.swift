@@ -21,6 +21,8 @@ class StatisticsController: BaseController {
     private let rowHeight: CGFloat = 97
     private var parameters: [StatParameter]! = []
     private var selectedParameterId = 1
+    private let refreshControl = UIRefreshControl()
+    private var refreshButton: UIButton?
 
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: PlayerRank.entityName())
@@ -47,7 +49,7 @@ class StatisticsController: BaseController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.getParametersAndPlayers()
+        self.getParametersAndPlayers(true)
         self.setupTableView()
         self.setupFiltersCollectionView()
         self.setupParameterLabel()
@@ -65,9 +67,18 @@ class StatisticsController: BaseController {
 
     // MARK: - Private
     
+    @objc private func handleRefresh(refreshControl: UIRefreshControl) {
+        self.getParametersAndPlayers(false)
+    }
+    
     private func setupTableView() {
         self.tableView.contentInset = UIEdgeInsetsMake(4, 0, 4, 0)
         self.tableView.scrollsToTop = true
+        
+        self.refreshControl.tintColor = UIColor.mlblLightOrangeColor()
+        self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), forControlEvents:.ValueChanged)
+        self.tableView.addSubview(self.refreshControl)
+        self.tableView.sendSubviewToBack(self.refreshControl)
     }
     
     private func setupFiltersCollectionView() {
@@ -104,11 +115,13 @@ class StatisticsController: BaseController {
         self.parameterLabel.text = text
     }
     
-    private func getParametersAndPlayers() {
-        self.activityView.startAnimating()
-        self.tableView.hidden = true
-        self.emptyLabel.hidden = true
-        self.parameterLabelBackground.hidden = true
+    private func getParametersAndPlayers(showIndicator: Bool) {
+        if showIndicator {
+            self.activityView.startAnimating()
+            self.tableView.hidden = true
+            self.emptyLabel.hidden = true
+            self.parameterLabelBackground.hidden = true
+        }
         
         var requestError: NSError?
         
@@ -130,9 +143,14 @@ class StatisticsController: BaseController {
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
                 
+                strongSelf.tableView.layoutIfNeeded()
+                strongSelf.refreshControl.endRefreshing()
+                
                 if let _ = requestError {
                     strongSelf.emptyLabel.text = requestError?.localizedDescription
                     strongSelf.emptyLabel.hidden = false
+                    strongSelf.tableView.hidden = true
+                    strongSelf.parameterLabelBackground.hidden = true
                     
                     let refreshButton = UIButton(type: .Custom)
                     let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
@@ -144,6 +162,9 @@ class StatisticsController: BaseController {
                         make.centerX.equalTo(0)
                         make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
                     })
+                    
+                    strongSelf.refreshButton?.removeFromSuperview()
+                    strongSelf.refreshButton = refreshButton
                     
                     strongSelf.parameterLabel.text = nil
                 } else {
@@ -170,15 +191,18 @@ class StatisticsController: BaseController {
             })
     }
     
-    private func getPlayers() {
+    private func getPlayers(showIndicator: Bool) {
         var requestReady = false
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-            if !requestReady {
-                self.activityView.startAnimating()
+        
+        if showIndicator {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                if !requestReady {
+                    self.activityView.startAnimating()
+                }
             }
+            self.tableView.hidden = true
+            self.emptyLabel.hidden = true
         }
-        self.tableView.hidden = true
-        self.emptyLabel.hidden = true
         
         self.dataController.getBestPlayers(self.selectedParameterId,
                                            completion: { [weak self] (error, responseCount) in
@@ -186,9 +210,13 @@ class StatisticsController: BaseController {
                                             if let strongSelf = self {
                                                 strongSelf.activityView.stopAnimating()
                                                 
+                                                strongSelf.tableView.layoutIfNeeded()
+                                                strongSelf.refreshControl.endRefreshing()
+                                                
                                                 if let _ = error {
                                                     strongSelf.emptyLabel.text = error?.localizedDescription
                                                     strongSelf.emptyLabel.hidden = false
+                                                    strongSelf.tableView.hidden = true
                                                     
                                                     let refreshButton = UIButton(type: .Custom)
                                                     let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
@@ -200,6 +228,9 @@ class StatisticsController: BaseController {
                                                         make.centerX.equalTo(0)
                                                         make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
                                                     })
+                                                    
+                                                    strongSelf.refreshButton?.removeFromSuperview()
+                                                    strongSelf.refreshButton = refreshButton
                                                 } else {
                                                     strongSelf.tableView.contentOffset = CGPointZero
                                                     
@@ -217,14 +248,26 @@ class StatisticsController: BaseController {
             })
     }
     
+    override func willEnterForegroud() {
+        if let _ = self.refreshButton {
+            self.refreshButton?.removeFromSuperview()
+            self.refreshButton = nil
+            self.getParametersAndPlayers(true)
+        } else {
+            self.getParametersAndPlayers(false)
+        }
+    }
+    
     @objc private func refreshDidTap(sender: UIButton) {
-        sender.removeFromSuperview()
-        self.getParametersAndPlayers()
+        self.refreshButton?.removeFromSuperview()
+        self.refreshButton = nil
+        self.getParametersAndPlayers(true)
     }
     
     @objc private func refreshPlayersDidTap(sender: UIButton) {
-        sender.removeFromSuperview()
-        self.getPlayers()
+        self.refreshButton?.removeFromSuperview()
+        self.refreshButton = nil
+        self.getPlayers(true)
     }
     
     private func configureCell(cell: PlayerStatCell, atIndexPath indexPath: NSIndexPath) {
@@ -342,7 +385,7 @@ extension StatisticsController: UICollectionViewDelegate, UICollectionViewDataSo
                     self.setParamaterLabelText(parameter.name)
                 }
                 
-                self.getPlayers()
+                self.getPlayers(true)
             }
 
             collectionView.reloadData()

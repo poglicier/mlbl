@@ -18,6 +18,8 @@ class GamesController: BaseController {
     @IBOutlet private var nextButton: UIButton!
     @IBOutlet private var tableViewCenterX: NSLayoutConstraint!
     
+    private let refreshControl = UIRefreshControl()
+    private var refreshButton: UIButton?
     private var selectedGameId: Int?
     private var prevDate: NSDate?
     private var currentDate: NSDate? {
@@ -60,7 +62,7 @@ class GamesController: BaseController {
         self.setupDate()
         self.setupButtons()
         self.setupEmptyLabel()
-        self.getData()
+        self.getData(true)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -91,11 +93,13 @@ class GamesController: BaseController {
         self.emptyLabel.hidden = true
     }
     
-    private func getData() {
+    private func getData(showIndicator: Bool) {
         if let date = self.currentDate {
-            self.activityView.startAnimating()
-            self.tableView.hidden = true
-            self.emptyLabel.hidden = true
+            if (showIndicator) {
+                self.activityView.startAnimating()
+                self.tableView.hidden = true
+                self.emptyLabel.hidden = true
+            }
 
             let dates = self.datesIntervalForDate(date)
             self.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "date > %@ AND date < %@", dates.0, dates.1)
@@ -107,12 +111,16 @@ class GamesController: BaseController {
             
             self.dataController.getGamesForDate(date) { [weak self] (error, newPrevDate, newNextDate) in
                 if let strongSelf = self {
+                    strongSelf.tableView.layoutIfNeeded()
+                    strongSelf.refreshControl.endRefreshing()
+                    
                     strongSelf.activityView.stopAnimating()
 
                     if let _ = error {
                         strongSelf.prevButton.enabled = strongSelf.prevDate != nil
                         strongSelf.nextButton.enabled = strongSelf.nextDate != nil
                         strongSelf.emptyLabel.text = error?.localizedDescription
+                        strongSelf.tableView.hidden = true
                         strongSelf.emptyLabel.hidden = false
                         
                         let refreshButton = UIButton(type: .Custom)
@@ -125,6 +133,8 @@ class GamesController: BaseController {
                             make.centerX.equalTo(0)
                             make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
                         })
+                        
+                        strongSelf.refreshButton = refreshButton
                     } else {
                         strongSelf.tableView.hidden = false
                         strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
@@ -143,6 +153,11 @@ class GamesController: BaseController {
     private func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
         self.tableView.registerNib(UINib(nibName: "GameCell", bundle: nil), forCellReuseIdentifier: "gameCell");
+        
+        self.refreshControl.tintColor = UIColor.mlblLightOrangeColor()
+        self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), forControlEvents:.ValueChanged)
+        self.tableView.addSubview(self.refreshControl)
+        self.tableView.sendSubviewToBack(self.refreshControl)
     }
     
     private func configureCell(cell: GameCell, atIndexPath indexPath: NSIndexPath) {
@@ -150,9 +165,24 @@ class GamesController: BaseController {
         cell.game = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Game
     }
     
+    @objc private func handleRefresh(refreshControl: UIRefreshControl) {
+        self.getData(false)
+    }
+    
     @objc private func refreshDidTap(sender: UIButton) {
-        sender.removeFromSuperview()
-        self.getData()
+        self.refreshButton?.removeFromSuperview()
+        self.refreshButton = nil
+        self.getData(true)
+    }
+    
+    override func willEnterForegroud() {
+        if let _ = self.refreshButton {
+            self.refreshButton?.removeFromSuperview()
+            self.refreshButton = nil
+            self.getData(true)
+        } else {
+            self.getData(false)
+        }
     }
     
     @IBAction private func goToPrevDate() {
@@ -168,7 +198,7 @@ class GamesController: BaseController {
                 self.tableViewCenterX.constant = 0
                 self.view.layoutIfNeeded()
                 
-                self.getData()
+                self.getData(true)
             }
     }
     
@@ -185,7 +215,7 @@ class GamesController: BaseController {
             self.tableViewCenterX.constant = 0
             self.view.layoutIfNeeded()
             
-            self.getData()
+            self.getData(true)
         }
     }
     

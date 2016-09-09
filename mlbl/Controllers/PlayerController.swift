@@ -22,6 +22,7 @@ class PlayerController: BaseController {
     
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var emptyLabel: UILabel!
+    private var refreshButton: UIButton?
     
     private func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
@@ -58,10 +59,12 @@ class PlayerController: BaseController {
         return frc
     }()
     
-    private func getData() {
-        self.activityView.startAnimating()
-        self.tableView.hidden = true
-        self.emptyLabel.hidden = true
+    private func getData(showIndicator: Bool) {
+        if (showIndicator) {
+            self.activityView.startAnimating()
+            self.tableView.hidden = true
+            self.emptyLabel.hidden = true
+        }
         
         var requestError: NSError?
         
@@ -112,6 +115,7 @@ class PlayerController: BaseController {
                 if let _ = requestError {
                     strongSelf.emptyLabel.text = requestError?.localizedDescription
                     strongSelf.emptyLabel.hidden = false
+                    strongSelf.tableView.hidden = true
                     
                     let refreshButton = UIButton(type: .Custom)
                     let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
@@ -123,6 +127,8 @@ class PlayerController: BaseController {
                         make.centerX.equalTo(0)
                         make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
                     })
+                    
+                    strongSelf.refreshButton = refreshButton
                 } else {
                     strongSelf.tableView.hidden = false
                     strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
@@ -133,8 +139,19 @@ class PlayerController: BaseController {
     }
     
     @objc private func refreshDidTap(sender: UIButton) {
-        sender.removeFromSuperview()
-        self.getData()
+        self.refreshButton?.removeFromSuperview()
+        self.refreshButton = nil
+        self.getData(true)
+    }
+    
+    override func willEnterForegroud() {
+        if let _ = self.refreshButton {
+            self.refreshButton?.removeFromSuperview()
+            self.refreshButton = nil
+            self.getData(true)
+        } else {
+            self.getData(false)
+        }
     }
     
     private func configureCell(cell: PlayerCell, atIndexPath indexPath: NSIndexPath) {
@@ -163,7 +180,7 @@ class PlayerController: BaseController {
         self.setupTableView()
         self.setupPlayer()
         
-        self.getData()
+        self.getData(true)
         
         do {
             try self.teamsFetchedResultsController.performFetch()

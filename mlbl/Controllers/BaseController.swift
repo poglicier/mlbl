@@ -17,6 +17,12 @@ class BaseController: UIViewController {
         super.viewDidLoad()
         
         self.setupActivityView()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.willEnterForegroud), name: UIApplicationWillEnterForegroundNotification, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -41,6 +47,12 @@ class BaseController: UIViewController {
         av.hidden = true
         
         self.activityView = av
+    }
+    
+    // MARK: - Public
+    
+    func willEnterForegroud() {
+        
     }
 }
 

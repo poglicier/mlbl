@@ -48,7 +48,7 @@ class PlayersController: BaseController {
             try self.fetchedResultsController.performFetch()
         } catch {}
         
-        self.getData()
+        self.getData(true)
     }    
 
     override func viewWillAppear(animated: Bool) {
@@ -72,6 +72,7 @@ class PlayersController: BaseController {
         spinner.frame = CGRectMake(0, 0, 0, 64)
         self.tableView.tableFooterView = spinner
         self.tableView.registerNib(UINib(nibName: "PlayerCell", bundle: nil), forCellReuseIdentifier: "playerCell")
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)
     }
     
     private func setupSearchBar() {
@@ -91,9 +92,10 @@ class PlayersController: BaseController {
         cell.player = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Player
     }
     
-    private func getData() {
+    private func getData(showIndicator: Bool) {
         // Если это - запрос первых игроков
-        if self.numberOfLoadedPlayers == 0 {
+        if self.numberOfLoadedPlayers == 0 ||
+            showIndicator {
             self.activityView.startAnimating()
             self.tableView.hidden = true
             self.emptyLabel.hidden = true
@@ -130,6 +132,10 @@ class PlayersController: BaseController {
                 }
             }
         }
+    }
+    
+    override func willEnterForegroud() {
+        self.getData(false)
     }
     
     private func filterContentForSearchText(searchText: String) {
@@ -210,7 +216,7 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
         } else {
             if !self.allDataLoaded &&
                 indexPath.row >= self.numberOfLoadedPlayers - 1 {
-                self.getData()
+                self.getData(false)
             }
         }
     }

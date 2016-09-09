@@ -20,6 +20,7 @@ class GameController: BaseController {
     var gameId: Int!
     private var game: Game?
     @IBOutlet private var tableView: UITableView!
+    private var refreshButton: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,7 @@ class GameController: BaseController {
         self.automaticallyAdjustsScrollViewInsets = false
         self.setupTableView()
         
-        self.getData()
+        self.getData(true)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(contextDidChange(_:)), name: NSManagedObjectContextObjectsDidChangeNotification, object: nil)
     }
@@ -48,9 +49,11 @@ class GameController: BaseController {
         // в которой прячется navigationBar
     }
     
-    private func getData() {
-        self.activityView.hidden = false
-        self.activityView.startAnimating()
+    private func getData(showIndicator: Bool) {
+        if (showIndicator) {
+            self.activityView.hidden = false
+            self.activityView.startAnimating()
+        }
         
         self.dataController.getGameStats(self.gameId) { [weak self] (error) in
                 if let strongSelf = self {
@@ -71,6 +74,16 @@ class GameController: BaseController {
                     }
                 }
             }
+    }
+    
+    override func willEnterForegroud() {
+        if let _ = self.refreshButton {
+            self.refreshButton?.removeFromSuperview()
+            self.refreshButton = nil
+            self.getData(true)
+        } else {
+            self.getData(false)
+        }
     }
     
     private func configureCell(cell: GameScoreCell, atIndexPath indexPath: NSIndexPath) {

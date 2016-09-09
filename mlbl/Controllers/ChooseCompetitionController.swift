@@ -11,6 +11,8 @@ import CoreData
 
 class ChooseCompetitionController: BaseController {
     @IBOutlet private var tableView: UITableView!
+    @IBOutlet private var emptyLabel: UILabel!
+    private var refreshButton: UIButton?
     
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
@@ -39,7 +41,7 @@ class ChooseCompetitionController: BaseController {
             try self.fetchedResultsController.performFetch()
         } catch {}
         
-        self.getData()
+        self.getData(true)
     }
     
     // MARK: - Private
@@ -49,22 +51,35 @@ class ChooseCompetitionController: BaseController {
         self.tableView.layer.masksToBounds = true
     }
     
-    private func getData() {
-        self.activityView.startAnimating()
-        self.tableView.hidden = true
+    private func getData(showIndicator: Bool) {
+        if (showIndicator) {
+            self.activityView.startAnimating()
+            self.tableView.hidden = true
+            self.emptyLabel.hidden = true
+        }
         
         self.dataController.getCompetitions() { [weak self] (error) in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
                 if let _ = error {
-                    let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: "Failed to connect", preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "Retry", style: .Default, handler: { (_) -> Void in
-                        strongSelf.getData()
-                    }))
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+                    strongSelf.emptyLabel.text = error?.localizedDescription
+                    strongSelf.tableView.hidden = true
+                    strongSelf.emptyLabel.hidden = false
                     
-                    strongSelf.presentViewController(alert, animated: true, completion: nil)
+                    let refreshButton = UIButton(type: .Custom)
+                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
+                    refreshButton.setAttributedTitle(attrString, forState: .Normal)
+                    refreshButton.addTarget(strongSelf, action: #selector(strongSelf.refreshPlayersDidTap), forControlEvents: .TouchUpInside)
+                    strongSelf.view.addSubview(refreshButton)
+                    
+                    refreshButton.snp_makeConstraints(closure: { (make) in
+                        make.centerX.equalTo(0)
+                        make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
+                    })
+                    
+                    strongSelf.refreshButton = refreshButton
                 } else {
+                    strongSelf.emptyLabel.hidden = true
                     strongSelf.tableView.hidden = false
                     strongSelf.title = NSLocalizedString("Choose competition", comment: "")
                 }
@@ -123,6 +138,22 @@ class ChooseCompetitionController: BaseController {
             
             self.dataController.saveContext(self.dataController.mainContext)
             self.performSegueWithIdentifier("goToMain", sender: nil)
+        }
+    }
+    
+    @objc private func refreshPlayersDidTap(sender: UIButton) {
+        self.refreshButton?.removeFromSuperview()
+        self.refreshButton = nil
+        self.getData(true)
+    }
+    
+    override func willEnterForegroud() {
+        if let _ = self.refreshButton {
+            self.refreshButton?.removeFromSuperview()
+            self.refreshButton = nil
+            self.getData(true)
+        } else {
+            self.getData(false)
         }
     }
 
