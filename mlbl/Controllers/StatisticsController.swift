@@ -23,6 +23,7 @@ class StatisticsController: BaseController {
     private var selectedParameterId = 1
     private let refreshControl = UIRefreshControl()
     private var refreshButton: UIButton?
+    private var selectedPlayerId: Int?
 
     lazy private var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: PlayerRank.entityName())
@@ -315,15 +316,15 @@ class StatisticsController: BaseController {
         }
     }
     
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "goToPlayer" {
+            let playerController = segue.destinationViewController as! PlayerController
+            playerController.dataController = self.dataController
+            playerController.playerId = self.selectedPlayerId!
+        }
     }
-    */
 }
 
 extension StatisticsController: UITableViewDelegate, UITableViewDataSource {
@@ -356,6 +357,16 @@ extension StatisticsController: UITableViewDelegate, UITableViewDataSource {
         cell.contentView.backgroundColor = UIColor.clearColor()
         
         self.configureCell(cell as! PlayerStatCell, atIndexPath:indexPath)
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        self.selectedPlayerId = (self.fetchedResultsController.objectAtIndexPath(indexPath) as! PlayerRank).player?.objectId as? Int
+        
+        if let _ = self.selectedPlayerId {
+            self.performSegueWithIdentifier("goToPlayer", sender: nil)
+        }
     }
 }
 

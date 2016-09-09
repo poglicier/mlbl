@@ -2931,6 +2931,7 @@
                         <outlet property="parameterLabelBackground" destination="6p4-9b-fRJ" id="fWR-0O-7CR"/>
                         <outlet property="parameterLabelTrailing" destination="gYi-sQ-WJh" id="Sej-mm-FHJ"/>
                         <outlet property="tableView" destination="iN3-dA-XuJ" id="GZg-No-3dI"/>
+                        <segue destination="M0Z-ID-aCQ" kind="show" identifier="goToPlayer" id="s3r-by-vqU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PGp-Qx-e0a" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2969,7 +2970,7 @@
         <image name="teamStub" width="65" height="65"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="n5E-FS-R7n"/>
+        <segue reference="s3r-by-vqU"/>
         <segue reference="Ase-fW-JAS"/>
     </inferredMetricsTieBreakers>
 </document>

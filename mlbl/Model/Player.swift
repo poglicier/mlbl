@@ -95,6 +95,9 @@ class Player: NSManagedObject {
                 res?.team = Team.teamWithDict(teamDict, inContext: context)
             }
         }
+        if res?.lastNameRu == nil {
+            print(dict)
+        }
         return res
     }
 }
