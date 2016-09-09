@@ -24,6 +24,9 @@ class TeamController: BaseController {
     
     private let refreshControl = UIRefreshControl()
     private var refreshButton: UIButton?
+    private var statisticCellOffset = CGPointZero
+    private var teamStatisticsHeader: TeamStatisticsHeader?
+    
     var teamId: Int!
     var team: Team?
     
@@ -42,6 +45,10 @@ class TeamController: BaseController {
         
         do {
             try self.gamesFetchedResultsController.performFetch()
+        } catch {}
+        
+        do {
+            try self.statisticsFetchedResultsController.performFetch()
         } catch {}
     }
     
@@ -86,6 +93,22 @@ class TeamController: BaseController {
         return frc
     }()
     
+    lazy private var statisticsFetchedResultsController: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: TeamStatistics.entityName())
+        fetchRequest.predicate = NSPredicate(format: "team.objectId = \(self.teamId)")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "playerNumber", ascending: true)]
+        
+        let frc = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: self.dataController.mainContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        
+        frc.delegate = self
+        
+        return frc
+    }()
+    
     lazy private var dateFormatter: NSDateFormatter = {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "YYYY-dd-MM"
@@ -113,6 +136,8 @@ class TeamController: BaseController {
         self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), forControlEvents:.ValueChanged)
         self.tableView.addSubview(self.refreshControl)
         self.tableView.sendSubviewToBack(self.refreshControl)
+        
+        self.tableView.registerNib(UINib(nibName: "StatisticCell", bundle: nil), forCellReuseIdentifier: "statisticCell")
     }
     
     private func configureCell(cell: TeamMainCell, atIndexPath indexPath: NSIndexPath) {
@@ -138,9 +163,14 @@ class TeamController: BaseController {
         cell.isLast = indexPath.row == (self.gamesFetchedResultsController.fetchedObjects?.count ?? 0) - 1
     }
     
-    private func configureCell(cell: TeamStatsCell, atIndexPath indexPath: NSIndexPath) {
+    private func configureCell(cell: StatisticCell, atIndexPath indexPath: NSIndexPath) {
         cell.language = self.dataController.language
-        cell.team = self.team
+        cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+        cell.statistics = self.statisticsFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! TeamStatistics
+        cell.selectionStyle = cell.statistics.player == nil ? .None : .Default
+        cell.contentOffset = self.statisticCellOffset
+        cell.delegate = self
     }
 
     private func getData(showIndicator: Bool) {
@@ -275,6 +305,8 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
                 res = 62
             case .Games:
                 res = 62
+            case .Statistics:
+                res = 62
             default:
                 break
             }
@@ -292,6 +324,10 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
                 res = TeamPlayersHeader()
             case .Games:
                 res = TeamGamesHeader()
+            case .Statistics:
+                self.teamStatisticsHeader = TeamStatisticsHeader()
+                self.teamStatisticsHeader?.delegate = self
+                res = self.teamStatisticsHeader
             default:
                 break
             }
@@ -311,6 +347,8 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
             case .Players:
                 res = 4
             case .Games:
+                res = 4
+            case .Statistics:
                 res = 4
             default:
                 break
@@ -342,7 +380,12 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
                     }
                 }
             case .Statistics:
-                res = 1
+                if let sections = self.statisticsFetchedResultsController.sections {
+                    if let currentSection = sections.first {
+                        // 2 это - Среднее и проценты
+                        res = currentSection.numberOfObjects
+                    }
+                }
             default:
                 break
             }
@@ -359,8 +402,13 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
             case .Title:
                 res = 180
             case .Statistics:
-                res = 96
-                res += CGFloat((self.team?.teamStatistics?.count ?? 0)*27)
+                let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+                let teamStatistics = self.statisticsFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! TeamStatistics
+                if teamStatistics.player == nil {
+                    res = 54
+                } else {
+                    res = 27
+                }
             default:
                 res = 27
             }
@@ -380,7 +428,7 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
             case .Games:
                 cellIdentifier = "teamGameCell"
             case .Statistics:
-                cellIdentifier = "teamStatsCell"
+                cellIdentifier = "statisticCell"
             default:
                 return UITableViewCell()
             }
@@ -404,7 +452,7 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
             case .Games:
                 self.configureCell(cell as! TeamGameCell, atIndexPath: indexPath)
             case .Statistics:
-                self.configureCell(cell as! TeamStatsCell, atIndexPath: indexPath)
+                self.configureCell(cell as! StatisticCell, atIndexPath: indexPath)
             default:
                 break
             }
@@ -415,18 +463,24 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
         if let enumSection = Sections(rawValue: indexPath.section) {
+            let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
             switch enumSection {
             case .Players:
-                let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
                 self.selectedPlayerId = (self.playersFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! Player).objectId as? Int
                 if let _ = self.selectedPlayerId {
                     self.performSegueWithIdentifier("goToPlayer", sender: nil)
                 }
             case .Games:
-                let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
                 self.selectedGameId = (self.gamesFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! Game).objectId as? Int
                 if let _ = self.selectedGameId {
                     self.performSegueWithIdentifier("goToGame", sender: nil)
+                }
+            case .Statistics:
+                if indexPath.row < self.statisticsFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
+                    self.selectedPlayerId = (self.statisticsFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! TeamStatistics).player?.objectId as? Int
+                    if let _ = self.selectedPlayerId {
+                        self.performSegueWithIdentifier("goToPlayer", sender: nil)
+                    }
                 }
             default:
                 break
@@ -458,6 +512,13 @@ extension TeamController: NSFetchedResultsControllerDelegate {
             if let _ = newIndexPath {
                 fixedNewIndexPath = NSIndexPath(forRow: newIndexPath!.row, inSection: Sections.Games.rawValue)
             }
+        } else if controller == self.statisticsFetchedResultsController {
+            if let _ = indexPath {
+                fixedIndexPath = NSIndexPath(forRow: indexPath!.row, inSection: Sections.Statistics.rawValue)
+            }
+            if let _ = newIndexPath {
+                fixedNewIndexPath = NSIndexPath(forRow: newIndexPath!.row, inSection: Sections.Statistics.rawValue)
+            }
         } else {
             return
         }
@@ -479,5 +540,28 @@ extension TeamController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_: NSFetchedResultsController) {
         self.tableView.endUpdates()
+    }
+}
+
+extension TeamController: StatisticCellDelegate {
+    func cell(cell: StatisticCell, didScrollTo contentOffset: CGPoint) {
+        self.statisticCellOffset = contentOffset
+        self.tableView.visibleCells.forEach { cell in
+            if let statisticCell = cell as? StatisticCell {
+                statisticCell.contentOffset = contentOffset
+            }
+        }
+        self.teamStatisticsHeader?.contentOffset = contentOffset
+    }
+}
+
+extension TeamController: TeamStatisticsHeaderDelegate {
+    func header(header: TeamStatisticsHeader, didScrollTo contentOffset: CGPoint) {
+        self.statisticCellOffset = contentOffset
+        self.tableView.visibleCells.forEach { cell in
+            if let statisticCell = cell as? StatisticCell {
+                statisticCell.contentOffset = contentOffset
+            }
+        }
     }
 }

@@ -19,6 +19,10 @@
 		FC3939541D2ED2BD00F8361E /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3939531D2ED2BC00F8361E /* NetworkRequest.swift */; };
 		FC3939581D2ED52800F8361E /* GameStatsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3939571D2ED52800F8361E /* GameStatsRequest.swift */; };
 		FC39395A1D2EDFEF00F8361E /* GamesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3939591D2EDFEF00F8361E /* GamesRequest.swift */; };
+		FC4624001D82A836003E9E30 /* StatisticCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC4623FF1D82A836003E9E30 /* StatisticCell.xib */; };
+		FC4624021D82A852003E9E30 /* StatisticCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4624011D82A852003E9E30 /* StatisticCell.swift */; };
+		FC46240E1D834778003E9E30 /* TeamStatisticsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46240D1D834778003E9E30 /* TeamStatisticsHeader.swift */; };
+		FC4624101D83478E003E9E30 /* TeamStatisticsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC46240F1D83478E003E9E30 /* TeamStatisticsHeader.xib */; };
 		FC57AC031D786C16009E67C6 /* TeamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC57AC021D786C16009E67C6 /* TeamController.swift */; };
 		FC57AC051D787093009E67C6 /* TeamMainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC57AC041D787093009E67C6 /* TeamMainCell.swift */; };
 		FC57AC071D79661D009E67C6 /* TeamInfoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC57AC061D79661D009E67C6 /* TeamInfoRequest.swift */; };
@@ -54,7 +58,6 @@
 		FC77C0A31D64E8CC00A12D1E /* PlayerRank+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77C0A11D64E8CC00A12D1E /* PlayerRank+CoreDataProperties.swift */; };
 		FC77C0A41D64E8CC00A12D1E /* PlayerRank.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC77C0A21D64E8CC00A12D1E /* PlayerRank.swift */; };
 		FC78EDCA1D7C0F900008ED6E /* TeamStatsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC78EDC91D7C0F900008ED6E /* TeamStatsRequest.swift */; };
-		FC78EDCC1D7C4AEB0008ED6E /* TeamStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC78EDCB1D7C4AEB0008ED6E /* TeamStatsCell.swift */; };
 		FC78EDD61D7C56C10008ED6E /* GameStatistics+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC78EDD31D7C56C10008ED6E /* GameStatistics+CoreDataProperties.swift */; };
 		FC78EDD71D7C56C10008ED6E /* TeamStatistics+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC78EDD41D7C56C10008ED6E /* TeamStatistics+CoreDataProperties.swift */; };
 		FC78EDD81D7C56C10008ED6E /* TeamStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC78EDD51D7C56C10008ED6E /* TeamStatistics.swift */; };
@@ -110,6 +113,10 @@
 		FC3939531D2ED2BC00F8361E /* NetworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		FC3939571D2ED52800F8361E /* GameStatsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameStatsRequest.swift; sourceTree = "<group>"; };
 		FC3939591D2EDFEF00F8361E /* GamesRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamesRequest.swift; sourceTree = "<group>"; };
+		FC4623FF1D82A836003E9E30 /* StatisticCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StatisticCell.xib; sourceTree = "<group>"; };
+		FC4624011D82A852003E9E30 /* StatisticCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
+		FC46240D1D834778003E9E30 /* TeamStatisticsHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamStatisticsHeader.swift; sourceTree = "<group>"; };
+		FC46240F1D83478E003E9E30 /* TeamStatisticsHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamStatisticsHeader.xib; sourceTree = "<group>"; };
 		FC57AC021D786C16009E67C6 /* TeamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamController.swift; sourceTree = "<group>"; };
 		FC57AC041D787093009E67C6 /* TeamMainCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamMainCell.swift; sourceTree = "<group>"; };
 		FC57AC061D79661D009E67C6 /* TeamInfoRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamInfoRequest.swift; sourceTree = "<group>"; };
@@ -149,7 +156,6 @@
 		FC77C0A11D64E8CC00A12D1E /* PlayerRank+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlayerRank+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC77C0A21D64E8CC00A12D1E /* PlayerRank.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerRank.swift; sourceTree = "<group>"; };
 		FC78EDC91D7C0F900008ED6E /* TeamStatsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamStatsRequest.swift; sourceTree = "<group>"; };
-		FC78EDCB1D7C4AEB0008ED6E /* TeamStatsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamStatsCell.swift; sourceTree = "<group>"; };
 		FC78EDD31D7C56C10008ED6E /* GameStatistics+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GameStatistics+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC78EDD41D7C56C10008ED6E /* TeamStatistics+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TeamStatistics+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC78EDD51D7C56C10008ED6E /* TeamStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamStatistics.swift; sourceTree = "<group>"; };
@@ -238,9 +244,10 @@
 				FC57AC041D787093009E67C6 /* TeamMainCell.swift */,
 				FC57AC0F1D79B063009E67C6 /* TeamPlayerCell.swift */,
 				FCD2D5991D7A223B00C436E9 /* TeamGameCell.swift */,
-				FC78EDCB1D7C4AEB0008ED6E /* TeamStatsCell.swift */,
 				FC7546C71D7D9B6900F02119 /* PlayerTeamCell.swift */,
 				FC7546C91D7DA4D600F02119 /* PlayerGamesCell.swift */,
+				FC4623FF1D82A836003E9E30 /* StatisticCell.xib */,
+				FC4624011D82A852003E9E30 /* StatisticCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -283,6 +290,8 @@
 				FCD2D59B1D7A281D00C436E9 /* TeamGamesHeader.swift */,
 				FC7546C31D7D943700F02119 /* PlayerTeamsHeader.xib */,
 				FC7546C51D7D945100F02119 /* PlayerTeamsHeader.swift */,
+				FC46240F1D83478E003E9E30 /* TeamStatisticsHeader.xib */,
+				FC46240D1D834778003E9E30 /* TeamStatisticsHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -454,6 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC7546C41D7D943700F02119 /* PlayerTeamsHeader.xib in Resources */,
+				FC4624101D83478E003E9E30 /* TeamStatisticsHeader.xib in Resources */,
 				FC705D441C80F00A00216AB8 /* LaunchScreen.storyboard in Resources */,
 				FC7546B51D7D518100F02119 /* InfoPlist.strings in Resources */,
 				FC3558D91D75C304004C5080 /* GameCell.xib in Resources */,
@@ -462,6 +472,7 @@
 				FCD2D59E1D7A282B00C436E9 /* TeamGamesHeader.xib in Resources */,
 				FC705D411C80F00A00216AB8 /* Assets.xcassets in Resources */,
 				FC57AC0C1D7980BD009E67C6 /* TeamPlayersHeader.xib in Resources */,
+				FC4624001D82A836003E9E30 /* StatisticCell.xib in Resources */,
 				FC705D3C1C80F00A00216AB8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -538,12 +549,14 @@
 				FC57AC051D787093009E67C6 /* TeamMainCell.swift in Sources */,
 				FC0645451D6C73FA0047FE1D /* RoundRobinRequest.swift in Sources */,
 				FC3939581D2ED52800F8361E /* GameStatsRequest.swift in Sources */,
+				FC4624021D82A852003E9E30 /* StatisticCell.swift in Sources */,
 				FC9793261C8D8AEA00D4D5D9 /* GameController.swift in Sources */,
 				FCD76E121D3F3EC5002BB24A /* CompetitionsRequest.swift in Sources */,
 				FC39395A1D2EDFEF00F8361E /* GamesRequest.swift in Sources */,
 				FCDB3E8E1D54975D00FE3D62 /* UIBarButtonItem+UIViewAppearance_Swift.m in Sources */,
 				FC9837B91D701E3900534AB1 /* TeamRoundRank+CoreDataProperties.swift in Sources */,
 				FC321FAE1C82F9A200674271 /* PlayerCell.swift in Sources */,
+				FC46240E1D834778003E9E30 /* TeamStatisticsHeader.swift in Sources */,
 				FC9837C21D7089AA00534AB1 /* PlayoffSerie.swift in Sources */,
 				FC9837BE1D7079E300534AB1 /* PlayoffCell.swift in Sources */,
 				FC705D4D1C80F8D400216AB8 /* MainController.swift in Sources */,
@@ -601,7 +614,6 @@
 				FC3558DB1D75C4D2004C5080 /* PlayoffGamesController.swift in Sources */,
 				FC9793231C8B729100D4D5D9 /* DataController.swift in Sources */,
 				FC57AC0E1D7980D7009E67C6 /* TeamPlayersHeader.swift in Sources */,
-				FC78EDCC1D7C4AEB0008ED6E /* TeamStatsCell.swift in Sources */,
 				FC9837BC1D7069FD00534AB1 /* PlayoffRequest.swift in Sources */,
 				FCD76E161D3F4172002BB24A /* Competition.swift in Sources */,
 				FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */,

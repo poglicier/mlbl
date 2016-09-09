@@ -36,7 +36,7 @@ class NetworkRequest: NSOperation {
         }
     }
     
-    override func  cancel() {
+    override func cancel() {
         super.cancel()
         self.sessionTask?.cancel()
     }

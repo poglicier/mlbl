@@ -55,6 +55,12 @@ class Player: NSManagedObject {
                 res?.lastNameRu = personInfo[PersonLastNameRuKey] as? String
                 res?.firstNameEn = personInfo[PersonFirstNameEnKey] as? String
                 res?.lastNameEn = personInfo[PersonLastNameEnKey] as? String
+                
+                if res?.lastNameRu == nil &&
+                    res?.lastNameEn == nil {
+                    return nil
+                }
+                
                 if let gender = personInfo[PersonGenderKey] as? Int {
                     res?.gender = gender
                 }
@@ -95,9 +101,7 @@ class Player: NSManagedObject {
                 res?.team = Team.teamWithDict(teamDict, inContext: context)
             }
         }
-        if res?.lastNameRu == nil {
-            print(dict)
-        }
+        
         return res
     }
 }

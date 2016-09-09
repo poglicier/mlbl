@@ -160,6 +160,9 @@ class TeamStatistics: NSManagedObject {
                     res?.seconds = comps[0].integer()*60 + comps[1].integer()
                 }
             }
+            
+            // Чтобы в fetchedResultsController статистика команды была в самом конце
+            res?.playerNumber = 9999
         } else {
             // Статистика игрока
             if let personId = dict[PersonIdKey] as? Int {
