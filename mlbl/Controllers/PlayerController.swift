@@ -311,7 +311,7 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
                 res = 148
             case .Games:
                 res = 123
-                res += CGFloat((self.player?.gameStatistics?.count ?? 0)*27)
+//                res += CGFloat((self.player?.gameStatistics?.count ?? 0)*27)
             default:
                 res = 27
             }

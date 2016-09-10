@@ -63,7 +63,7 @@ class GameStatsRequest: NetworkRequest {
                         do {
                             let all = try context.executeFetchRequest(fetchRequest) as! [GameStatistics]
                             for stat in all {
-                                print("DELETE GameStatistics \(stat.game?.date)")
+                                print("DELETE GameStatistics \(stat.player?.lastNameRu)")
                                 context.deleteObject(stat)
                             }
                         }

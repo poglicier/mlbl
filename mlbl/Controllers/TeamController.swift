@@ -171,6 +171,7 @@ class TeamController: BaseController {
         cell.selectionStyle = cell.statistics.player == nil ? .None : .Default
         cell.contentOffset = self.statisticCellOffset
         cell.delegate = self
+        cell.total = NSLocalizedString("Average", comment: "").uppercaseString
     }
 
     private func getData(showIndicator: Bool) {
@@ -326,6 +327,8 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
                 res = TeamGamesHeader()
             case .Statistics:
                 self.teamStatisticsHeader = TeamStatisticsHeader()
+                self.teamStatisticsHeader?.contentOffset = self.statisticCellOffset
+                self.teamStatisticsHeader?.title = NSLocalizedString("Team statistics", comment: "").uppercaseString
                 self.teamStatisticsHeader?.delegate = self
                 res = self.teamStatisticsHeader
             default:
@@ -382,7 +385,6 @@ extension TeamController: UITableViewDataSource, UITableViewDelegate {
             case .Statistics:
                 if let sections = self.statisticsFetchedResultsController.sections {
                     if let currentSection = sections.first {
-                        // 2 это - Среднее и проценты
                         res = currentSection.numberOfObjects
                     }
                 }
@@ -544,7 +546,7 @@ extension TeamController: NSFetchedResultsControllerDelegate {
 }
 
 extension TeamController: StatisticCellDelegate {
-    func cell(cell: StatisticCell, didScrollTo contentOffset: CGPoint) {
+    func cell(cell: StatisticCell, didScrollTo contentOffset: CGPoint, tag: Int) {
         self.statisticCellOffset = contentOffset
         self.tableView.visibleCells.forEach { cell in
             if let statisticCell = cell as? StatisticCell {

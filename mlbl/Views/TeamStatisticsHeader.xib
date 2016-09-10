@@ -72,7 +72,7 @@
                                     <rect key="frame" x="144" y="0.0" width="178" height="37"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="15k-T4-Tfh" userLabel="scrollContent">
-                                            <rect key="frame" x="0.0" y="0.0" width="960" height="37"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="990" height="37"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Мин" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ycy-zM-IcJ">
                                                     <rect key="frame" x="0.0" y="0.0" width="64" height="37"/>
@@ -96,79 +96,82 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2-х" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x5Y-Rf-1Z1">
-                                                    <rect key="frame" x="128" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="128" y="0.0" width="74" height="37"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="74" id="nmh-Sf-tk0"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3-х" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cbe-mk-FbC">
-                                                    <rect key="frame" x="192" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="202" y="0.0" width="74" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1-х" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tFH-GV-YCG">
-                                                    <rect key="frame" x="256" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="276" y="0.0" width="74" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пн" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1b-le-1YQ">
-                                                    <rect key="frame" x="320" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="350" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пз" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MdQ-Ui-GuZ">
-                                                    <rect key="frame" x="384" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="414" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Под" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TMf-Bk-0Wy">
-                                                    <rect key="frame" x="448" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="478" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ап" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IDI-hM-GlU">
-                                                    <rect key="frame" x="512" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="542" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пх" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="inj-gk-jfn">
-                                                    <rect key="frame" x="576" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="606" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пт" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xmb-ch-xig">
-                                                    <rect key="frame" x="640" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="670" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Бш" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bNZ-m1-I4L">
-                                                    <rect key="frame" x="704" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="734" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ф" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RsI-qH-jYm">
-                                                    <rect key="frame" x="768" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="798" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Фс" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wOl-S1-1gE">
-                                                    <rect key="frame" x="832" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="862" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+/-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xet-gD-n0I">
-                                                    <rect key="frame" x="896" y="0.0" width="64" height="37"/>
+                                                    <rect key="frame" x="926" y="0.0" width="64" height="37"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -189,6 +192,7 @@
                                                 <constraint firstItem="IDI-hM-GlU" firstAttribute="leading" secondItem="TMf-Bk-0Wy" secondAttribute="trailing" id="DNh-8H-oIK"/>
                                                 <constraint firstItem="nIe-O2-Ld9" firstAttribute="top" secondItem="15k-T4-Tfh" secondAttribute="top" id="EN0-JH-yrX"/>
                                                 <constraint firstItem="TMf-Bk-0Wy" firstAttribute="width" secondItem="Ycy-zM-IcJ" secondAttribute="width" id="F8C-7Z-pJa"/>
+                                                <constraint firstItem="tFH-GV-YCG" firstAttribute="width" secondItem="x5Y-Rf-1Z1" secondAttribute="width" id="FJP-vw-FU5"/>
                                                 <constraint firstItem="inj-gk-jfn" firstAttribute="top" secondItem="15k-T4-Tfh" secondAttribute="top" id="GBW-p9-1UJ"/>
                                                 <constraint firstItem="RsI-qH-jYm" firstAttribute="height" secondItem="Ycy-zM-IcJ" secondAttribute="height" id="HP4-ck-zbw"/>
                                                 <constraint firstItem="tFH-GV-YCG" firstAttribute="leading" secondItem="Cbe-mk-FbC" secondAttribute="trailing" id="Hbl-GH-Kbp"/>
@@ -224,6 +228,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="xet-gD-n0I" secondAttribute="trailing" id="i96-Jg-hUL"/>
                                                 <constraint firstAttribute="trailing" secondItem="xet-gD-n0I" secondAttribute="trailing" id="jbS-Ys-SY4"/>
                                                 <constraint firstItem="Cbe-mk-FbC" firstAttribute="leading" secondItem="x5Y-Rf-1Z1" secondAttribute="trailing" id="ktx-eQ-VyH"/>
+                                                <constraint firstItem="Cbe-mk-FbC" firstAttribute="width" secondItem="x5Y-Rf-1Z1" secondAttribute="width" id="lFy-ni-d9I"/>
                                                 <constraint firstItem="xmb-ch-xig" firstAttribute="height" secondItem="Ycy-zM-IcJ" secondAttribute="height" id="lYU-Md-6mE"/>
                                                 <constraint firstItem="inj-gk-jfn" firstAttribute="width" secondItem="Ycy-zM-IcJ" secondAttribute="width" id="n6p-I2-YmO"/>
                                                 <constraint firstItem="a1b-le-1YQ" firstAttribute="width" secondItem="Ycy-zM-IcJ" secondAttribute="width" id="ngD-9i-HS7"/>
@@ -242,6 +247,9 @@
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="sRL-TI-ZRy"/>
+                                                    <exclude reference="dUf-yW-KH9"/>
+                                                    <exclude reference="24B-K3-5jF"/>
+                                                    <exclude reference="5Tt-CR-1DS"/>
                                                     <exclude reference="i96-Jg-hUL"/>
                                                 </mask>
                                             </variation>

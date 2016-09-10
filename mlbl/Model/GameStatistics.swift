@@ -71,6 +71,9 @@ class GameStatistics: NSManagedObject {
                     }
                 }
             } catch {}
+            
+            // Чтобы в fetchedResultsController статистика команды была в самом конце
+            res?.playerNumber = 9999
         } else if let personId = dict[Player.PlayerIdKey] as? NSNumber {
             // Статистика игрока
             let fetchRequest = NSFetchRequest(entityName: GameStatistics.entityName())
@@ -95,10 +98,11 @@ class GameStatistics: NSManagedObject {
                     res?.player = Player.playerWithDict(playerDict, inContext: context)
                 }
             } catch {}
+            
+            res?.playerNumber = dict[PlayerNumberKey] as? Int
         }
         
         res?.teamNumber = dict[TeamNumberKey] as? Int
-        res?.playerNumber = dict[PlayerNumberKey] as? Int
         res?.fouls = dict[FoulsKey] as? Int
         res?.opponentFouls = dict[OpponentFoulsKey] as? Int
         res?.isStart = dict[IsStartKey] as? Bool

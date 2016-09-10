@@ -64,6 +64,12 @@ class TeamStatisticsHeader: UIView {
         }
     }
     
+    var title: String? = "" {
+        didSet {
+            self.titleLabel.text = title
+        }
+    }
+    
     // MARK: - Private
     
     private func initialize() {
@@ -73,7 +79,6 @@ class TeamStatisticsHeader: UIView {
             make.left.top.right.bottom.equalTo(0)
         }
         
-        self.titleLabel.text = NSLocalizedString("Team statistics", comment: "").uppercaseString
         self.scrollView.scrollsToTop = false
         self.scrollView.delegate = self
         self.numberLabel.text = NSLocalizedString("Number", comment: "")
