@@ -30,7 +30,6 @@
 		FC57AC0C1D7980BD009E67C6 /* TeamPlayersHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC57AC0B1D7980BD009E67C6 /* TeamPlayersHeader.xib */; };
 		FC57AC0E1D7980D7009E67C6 /* TeamPlayersHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC57AC0D1D7980D7009E67C6 /* TeamPlayersHeader.swift */; };
 		FC57AC101D79B063009E67C6 /* TeamPlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC57AC0F1D79B063009E67C6 /* TeamPlayerCell.swift */; };
-		FC637E541C94568A009EE880 /* GameStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E531C94568A009EE880 /* GameStatsCell.swift */; };
 		FC637E561C945819009EE880 /* ChooseCompetitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E551C945819009EE880 /* ChooseCompetitionController.swift */; };
 		FC637E5D1C946617009EE880 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC637E5F1C946617009EE880 /* Localizable.strings */; };
 		FC637E641C94AB0B009EE880 /* FadeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC637E631C94AB0B009EE880 /* FadeAnimator.swift */; };
@@ -124,7 +123,6 @@
 		FC57AC0B1D7980BD009E67C6 /* TeamPlayersHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamPlayersHeader.xib; sourceTree = "<group>"; };
 		FC57AC0D1D7980D7009E67C6 /* TeamPlayersHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamPlayersHeader.swift; sourceTree = "<group>"; };
 		FC57AC0F1D79B063009E67C6 /* TeamPlayerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamPlayerCell.swift; sourceTree = "<group>"; };
-		FC637E531C94568A009EE880 /* GameStatsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameStatsCell.swift; sourceTree = "<group>"; };
 		FC637E551C945819009EE880 /* ChooseCompetitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseCompetitionController.swift; sourceTree = "<group>"; };
 		FC637E5E1C946617009EE880 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FC637E601C946626009EE880 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -237,7 +235,6 @@
 				FC97931E1C8B6AFB00D4D5D9 /* GameCell.swift */,
 				FCE18BAD1C8DF8120077A51A /* GameScoreCell.swift */,
 				FC74B8161C8F733A000E6CC6 /* PeriodCell.swift */,
-				FC637E531C94568A009EE880 /* GameStatsCell.swift */,
 				FCEEA9261D5BBCB800686DD6 /* ParameterCell.swift */,
 				FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */,
 				FC9837BD1D7079E300534AB1 /* PlayoffCell.swift */,
@@ -600,7 +597,6 @@
 				FC97930D1C8B5D9C00D4D5D9 /* GamesController.swift in Sources */,
 				FC74B8131C8F646F000E6CC6 /* Extensions.swift in Sources */,
 				FC8F7A151D3CF2A50056C4D4 /* TableController.swift in Sources */,
-				FC637E541C94568A009EE880 /* GameStatsCell.swift in Sources */,
 				FCEEA9271D5BBCB800686DD6 /* ParameterCell.swift in Sources */,
 				FC77C0A01D64C78800A12D1E /* BestPlayersRequest.swift in Sources */,
 				FC78EDD71D7C56C10008ED6E /* TeamStatistics+CoreDataProperties.swift in Sources */,

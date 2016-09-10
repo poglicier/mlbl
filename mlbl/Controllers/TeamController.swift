@@ -167,11 +167,11 @@ class TeamController: BaseController {
         cell.language = self.dataController.language
         cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
         let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+        cell.total = NSLocalizedString("Average", comment: "").uppercaseString
         cell.statistics = self.statisticsFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! TeamStatistics
         cell.selectionStyle = cell.statistics.player == nil ? .None : .Default
         cell.contentOffset = self.statisticCellOffset
         cell.delegate = self
-        cell.total = NSLocalizedString("Average", comment: "").uppercaseString
     }
 
     private func getData(showIndicator: Bool) {

@@ -150,16 +150,16 @@ class GameController: BaseController {
         let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
         
         if indexPath.section == Sections.TeamA.rawValue {
+            cell.total = NSLocalizedString("Total", comment: "").uppercaseString
             cell.gameStatistics = self.statisticsAFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics
             cell.selectionStyle = cell.gameStatistics.player == nil ? .None : .Default
             cell.contentOffset = self.statisticACellOffset
-            cell.total = NSLocalizedString("Total", comment: "").uppercaseString
             cell.tag = self.teamATag
         } else if indexPath.section == Sections.TeamB.rawValue {
+            cell.total = NSLocalizedString("Total", comment: "").uppercaseString
             cell.gameStatistics = self.statisticsBFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics
             cell.selectionStyle = cell.gameStatistics.player == nil ? .None : .Default
             cell.contentOffset = self.statisticBCellOffset
-            cell.total = NSLocalizedString("Total", comment: "").uppercaseString
             cell.tag = self.teamBTag
         }
         cell.delegate = self
@@ -305,7 +305,7 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
                 let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
                 let gameStatistics = self.statisticsAFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics
                 if gameStatistics.player == nil {
-                    res = 54
+                    res = 81
                 } else {
                     res = 27
                 }
@@ -313,7 +313,7 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
                 let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
                 let gameStatistics = self.statisticsBFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics
                 if gameStatistics.player == nil {
-                    res = 54
+                    res = 81
                 } else {
                     res = 27
                 }

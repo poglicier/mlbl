@@ -37,6 +37,12 @@ class StatisticCell: UITableViewCell {
     @IBOutlet private var twoPercentLabel: UILabel!
     @IBOutlet private var threePercentLabel: UILabel!
     @IBOutlet private var onePercentLabel: UILabel!
+    @IBOutlet private var teamReboundsOLabel: UILabel!
+    @IBOutlet private var teamReboundsDLabel: UILabel!
+    @IBOutlet private var teamReboundsLabel: UILabel!
+    @IBOutlet private var teamReboundsHeight: NSLayoutConstraint!
+    @IBOutlet private var teamLabel: UILabel!
+    @IBOutlet private var totalBackground: UIView!
 
     var delegate: StatisticCellDelegate?
     var language: String!
@@ -53,6 +59,8 @@ class StatisticCell: UITableViewCell {
     }
     var statistics: TeamStatistics! {
         didSet {
+            self.teamReboundsHeight.constant = 0
+            
             if statistics.player == nil {
                 if #available(iOS 8.2, *) {
                     self.playerLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightSemibold)
@@ -66,6 +74,8 @@ class StatisticCell: UITableViewCell {
                         }
                     }
                 }
+                
+                self.totalBackground.hidden = false
                 // Когда рассматривается статистика команды, интересны только
                 // проценты бросков. Средние значения обрабатываются
                 // аналогично статистике игрока
@@ -105,6 +115,8 @@ class StatisticCell: UITableViewCell {
                         label.font = UIFont.systemFontOfSize(15)
                     }
                 }
+                
+                self.totalBackground.hidden = true
                 
                 if let playerNumber = statistics.playerNumber {
                     if playerNumber.integerValue == 1000 {
@@ -253,18 +265,25 @@ class StatisticCell: UITableViewCell {
     var gameStatistics: GameStatistics! {
         didSet {
             if gameStatistics.player == nil {
+                self.teamReboundsHeight.constant = 27
+                
                 if #available(iOS 8.2, *) {
                     self.playerLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightSemibold)
                     for subview in self.scrollContentView.subviews {
                         if let label = subview as? UILabel {
                             if label != self.onePercentLabel &&
                                 label != self.twoPercentLabel &&
-                                label != self.threePercentLabel {
+                                label != self.threePercentLabel &&
+                                label != self.teamReboundsLabel &&
+                                label != self.teamReboundsOLabel &&
+                                label != self.teamReboundsDLabel {
                                 label.font = UIFont.systemFontOfSize(15, weight: UIFontWeightSemibold)
                             }
                         }
                     }
                 }
+                
+                self.totalBackground.hidden = false
                 // Когда рассматривается статистика команды, интересны только
                 // проценты бросков. Средние значения обрабатываются
                 // аналогично статистике игрока
@@ -297,13 +316,34 @@ class StatisticCell: UITableViewCell {
                         }
                     }
                 }
+                
+                self.teamReboundsOLabel.text = nil
+                let offs = gameStatistics.teamOffensiveRebounds as? Float ?? 0
+                if offs > 0 {
+                    self.teamReboundsOLabel.text = String(format: "%g", offs)
+                }
+                
+                self.teamReboundsDLabel.text = nil
+                let defs = gameStatistics.teamDefensiveRebounds as? Float ?? 0
+                if defs > 0 {
+                    self.teamReboundsDLabel.text = String(format: "%g", defs)
+                }
+                
+                self.teamReboundsLabel.text = nil
+                if offs + defs > 0 {
+                    self.teamReboundsLabel.text = String(format: "%g", offs + defs)
+                }
             } else {
+                self.teamReboundsHeight.constant = 0
+                
                 self.playerLabel.font = UIFont.systemFontOfSize(15)
                 for subview in self.scrollContentView.subviews {
                     if let label = subview as? UILabel {
                         label.font = UIFont.systemFontOfSize(15)
                     }
                 }
+                
+                self.totalBackground.hidden = true
                 
                 if gameStatistics.isStart?.boolValue ?? false {
                     if #available(iOS 8.2, *) {
@@ -471,6 +511,8 @@ class StatisticCell: UITableViewCell {
                 label.highlightedTextColor = UIColor.mlblLightOrangeColor()
             }
         }
+        
+        self.teamLabel.text = NSLocalizedString("Team", comment: "")
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
