@@ -9,40 +9,40 @@
 import UIKit
 
 protocol StatisticCellDelegate {
-    func cell(cell: StatisticCell, didScrollTo contentOffset: CGPoint, tag: Int)
+    func cell(_ cell: StatisticCell, didScrollTo contentOffset: CGPoint, tag: Int)
 }
 
 class StatisticCell: UITableViewCell {
     
-    @IBOutlet private var numberLabel: UILabel!
-    @IBOutlet private var playerLabel: UILabel!
-    @IBOutlet private var timeLabel: UILabel!
-    @IBOutlet private var pointsLabel: UILabel!
-    @IBOutlet private var twoLabel: UILabel!
-    @IBOutlet private var threeLabel: UILabel!
-    @IBOutlet private var oneLabel: UILabel!
-    @IBOutlet private var reboundsOLabel: UILabel!
-    @IBOutlet private var reboundsDLabel: UILabel!
-    @IBOutlet private var reboundsLabel: UILabel!
-    @IBOutlet private var assistsLabel: UILabel!
-    @IBOutlet private var stealsLabel: UILabel!
-    @IBOutlet private var turnoversLabel: UILabel!
-    @IBOutlet private var blocksLabel: UILabel!
-    @IBOutlet private var foulsLabel: UILabel!
-    @IBOutlet private var earnedFoulsLabel: UILabel!
-    @IBOutlet private var plusMinusLabel: UILabel!
-    @IBOutlet private var scrollContentView: UIView!
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var scrollView: UIScrollView!
-    @IBOutlet private var twoPercentLabel: UILabel!
-    @IBOutlet private var threePercentLabel: UILabel!
-    @IBOutlet private var onePercentLabel: UILabel!
-    @IBOutlet private var teamReboundsOLabel: UILabel!
-    @IBOutlet private var teamReboundsDLabel: UILabel!
-    @IBOutlet private var teamReboundsLabel: UILabel!
-    @IBOutlet private var teamReboundsHeight: NSLayoutConstraint!
-    @IBOutlet private var teamLabel: UILabel!
-    @IBOutlet private var totalBackground: UIView!
+    @IBOutlet fileprivate var numberLabel: UILabel!
+    @IBOutlet fileprivate var playerLabel: UILabel!
+    @IBOutlet fileprivate var timeLabel: UILabel!
+    @IBOutlet fileprivate var pointsLabel: UILabel!
+    @IBOutlet fileprivate var twoLabel: UILabel!
+    @IBOutlet fileprivate var threeLabel: UILabel!
+    @IBOutlet fileprivate var oneLabel: UILabel!
+    @IBOutlet fileprivate var reboundsOLabel: UILabel!
+    @IBOutlet fileprivate var reboundsDLabel: UILabel!
+    @IBOutlet fileprivate var reboundsLabel: UILabel!
+    @IBOutlet fileprivate var assistsLabel: UILabel!
+    @IBOutlet fileprivate var stealsLabel: UILabel!
+    @IBOutlet fileprivate var turnoversLabel: UILabel!
+    @IBOutlet fileprivate var blocksLabel: UILabel!
+    @IBOutlet fileprivate var foulsLabel: UILabel!
+    @IBOutlet fileprivate var earnedFoulsLabel: UILabel!
+    @IBOutlet fileprivate var plusMinusLabel: UILabel!
+    @IBOutlet fileprivate var scrollContentView: UIView!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var scrollView: UIScrollView!
+    @IBOutlet fileprivate var twoPercentLabel: UILabel!
+    @IBOutlet fileprivate var threePercentLabel: UILabel!
+    @IBOutlet fileprivate var onePercentLabel: UILabel!
+    @IBOutlet fileprivate var teamReboundsOLabel: UILabel!
+    @IBOutlet fileprivate var teamReboundsDLabel: UILabel!
+    @IBOutlet fileprivate var teamReboundsLabel: UILabel!
+    @IBOutlet fileprivate var teamReboundsHeight: NSLayoutConstraint!
+    @IBOutlet fileprivate var teamLabel: UILabel!
+    @IBOutlet fileprivate var totalBackground: UIView!
 
     var delegate: StatisticCellDelegate?
     var language: String!
@@ -63,19 +63,19 @@ class StatisticCell: UITableViewCell {
             
             if statistics.player == nil {
                 if #available(iOS 8.2, *) {
-                    self.playerLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightSemibold)
+                    self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
                     for subview in self.scrollContentView.subviews {
                         if let label = subview as? UILabel {
                             if label != self.onePercentLabel &&
                                 label != self.twoPercentLabel &&
                                 label != self.threePercentLabel {
-                                label.font = UIFont.systemFontOfSize(15, weight: UIFontWeightSemibold)
+                                label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
                             }
                         }
                     }
                 }
                 
-                self.totalBackground.hidden = false
+                self.totalBackground.isHidden = false
                 // Когда рассматривается статистика команды, интересны только
                 // проценты бросков. Средние значения обрабатываются
                 // аналогично статистике игрока
@@ -109,26 +109,26 @@ class StatisticCell: UITableViewCell {
                     }
                 }
             } else {
-                self.playerLabel.font = UIFont.systemFontOfSize(15)
+                self.playerLabel.font = UIFont.systemFont(ofSize: 15)
                 for subview in self.scrollContentView.subviews {
                     if let label = subview as? UILabel {
-                        label.font = UIFont.systemFontOfSize(15)
+                        label.font = UIFont.systemFont(ofSize: 15)
                     }
                 }
                 
-                self.totalBackground.hidden = true
+                self.totalBackground.isHidden = true
                 
                 if let playerNumber = statistics.playerNumber {
-                    if playerNumber.integerValue == 1000 {
+                    if playerNumber.intValue == 1000 {
                         self.numberLabel.text = NSLocalizedString("Coach acronym", comment: "")
                     } else {
                         self.numberLabel.text = "\(playerNumber)"
                     }
                 }
                 
-                let isLanguageRu = self.language.containsString("ru")
+                let isLanguageRu = self.language.contains("ru")
                 
-                self.playerLabel.lineBreakMode = .ByClipping
+                self.playerLabel.lineBreakMode = .byClipping
                 if var playerName = isLanguageRu ? statistics.player?.lastNameRu : statistics.player?.lastNameEn {
                     if let firstName = isLanguageRu ? statistics.player?.firstNameRu : statistics.player?.firstNameEn {
                         if let firstLetter = firstName.characters.first {
@@ -253,7 +253,7 @@ class StatisticCell: UITableViewCell {
             
             self.plusMinusLabel.text = nil
             // У тренеров не показываем нули
-            if statistics.playerNumber?.integerValue != 1000 {
+            if statistics.playerNumber?.intValue != 1000 {
                 self.plusMinusLabel.text = "0"
                 if let plusMinus = statistics.plusMinus as? Float {
                     self.plusMinusLabel.text = String(format: "%g", plusMinus)
@@ -268,7 +268,7 @@ class StatisticCell: UITableViewCell {
                 self.teamReboundsHeight.constant = 27
                 
                 if #available(iOS 8.2, *) {
-                    self.playerLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightSemibold)
+                    self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
                     for subview in self.scrollContentView.subviews {
                         if let label = subview as? UILabel {
                             if label != self.onePercentLabel &&
@@ -277,13 +277,13 @@ class StatisticCell: UITableViewCell {
                                 label != self.teamReboundsLabel &&
                                 label != self.teamReboundsOLabel &&
                                 label != self.teamReboundsDLabel {
-                                label.font = UIFont.systemFontOfSize(15, weight: UIFontWeightSemibold)
+                                label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
                             }
                         }
                     }
                 }
                 
-                self.totalBackground.hidden = false
+                self.totalBackground.isHidden = false
                 // Когда рассматривается статистика команды, интересны только
                 // проценты бросков. Средние значения обрабатываются
                 // аналогично статистике игрока
@@ -336,36 +336,36 @@ class StatisticCell: UITableViewCell {
             } else {
                 self.teamReboundsHeight.constant = 0
                 
-                self.playerLabel.font = UIFont.systemFontOfSize(15)
+                self.playerLabel.font = UIFont.systemFont(ofSize: 15)
                 for subview in self.scrollContentView.subviews {
                     if let label = subview as? UILabel {
-                        label.font = UIFont.systemFontOfSize(15)
+                        label.font = UIFont.systemFont(ofSize: 15)
                     }
                 }
                 
-                self.totalBackground.hidden = true
+                self.totalBackground.isHidden = true
                 
                 if gameStatistics.isStart?.boolValue ?? false {
                     if #available(iOS 8.2, *) {
-                        self.playerLabel.font = UIFont.systemFontOfSize(15, weight: UIFontWeightSemibold)
+                        self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
                     } else {
-                        self.playerLabel.font = UIFont.boldSystemFontOfSize(15)
+                        self.playerLabel.font = UIFont.boldSystemFont(ofSize: 15)
                     }
                 } else {
-                    self.playerLabel.font = UIFont.systemFontOfSize(15)
+                    self.playerLabel.font = UIFont.systemFont(ofSize: 15)
                 }
                 
                 if let playerNumber = gameStatistics.playerNumber {
-                    if playerNumber.integerValue == 1000 {
+                    if playerNumber.intValue == 1000 {
                         self.numberLabel.text = NSLocalizedString("Coach acronym", comment: "")
                     } else {
                         self.numberLabel.text = "\(playerNumber)"
                     }
                 }
                 
-                let isLanguageRu = self.language.containsString("ru")
+                let isLanguageRu = self.language.contains("ru")
                 
-                self.playerLabel.lineBreakMode = .ByClipping
+                self.playerLabel.lineBreakMode = .byClipping
                 if var playerName = isLanguageRu ? gameStatistics.player?.lastNameRu : gameStatistics.player?.lastNameEn {
                     if let firstName = isLanguageRu ? gameStatistics.player?.firstNameRu : gameStatistics.player?.firstNameEn {
                         if let firstLetter = firstName.characters.first {
@@ -490,7 +490,7 @@ class StatisticCell: UITableViewCell {
             
             self.plusMinusLabel.text = nil
             // У тренеров не показываем нули
-            if gameStatistics.playerNumber?.integerValue != 1000 {
+            if gameStatistics.playerNumber?.intValue != 1000 {
                 self.plusMinusLabel.text = "0"
                 if let plusMinus = gameStatistics.plusMinus as? Float {
                     self.plusMinusLabel.text = String(format: "%g", plusMinus)
@@ -515,7 +515,7 @@ class StatisticCell: UITableViewCell {
         self.teamLabel.text = NSLocalizedString("Team", comment: "")
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setSelected(selected, animated: animated)
         
@@ -524,7 +524,7 @@ class StatisticCell: UITableViewCell {
         }
     }
     
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setHighlighted(highlighted, animated: animated)
         
@@ -535,7 +535,7 @@ class StatisticCell: UITableViewCell {
 }
 
 extension StatisticCell: UIScrollViewDelegate {
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.delegate?.cell(self, didScrollTo: scrollView.contentOffset, tag: self.tag)
     }
 }

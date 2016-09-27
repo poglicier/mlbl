@@ -11,14 +11,14 @@ import CoreData
 
 class PlayoffGamesController: BaseController {
 
-    @IBOutlet private var emptyLabel: UILabel!
-    @IBOutlet private var tableView: UITableView!
-    private var selectedGameId: Int?
+    @IBOutlet fileprivate var emptyLabel: UILabel!
+    @IBOutlet fileprivate var tableView: UITableView!
+    fileprivate var selectedGameId: Int?
 
     var gamesIds: [Int]!
     
-    lazy private var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: Game.entityName())
+    lazy fileprivate var fetchedResultsController: NSFetchedResultsController<Game> = {
+        let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
         fetchRequest.predicate = NSPredicate(format: "objectId IN %@", self.gamesIds)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
         
@@ -47,9 +47,9 @@ class PlayoffGamesController: BaseController {
 
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToGame" {
-            let gameController = segue.destinationViewController as! GameController
+            let gameController = segue.destination as! GameController
             gameController.dataController = self.dataController
             gameController.gameId = self.selectedGameId!
         }
@@ -57,105 +57,105 @@ class PlayoffGamesController: BaseController {
     
     // MARK: - Private
     
-    private func setupEmptyLabel() {
+    fileprivate func setupEmptyLabel() {
         self.emptyLabel.text = NSLocalizedString("No games stub", comment: "")
-        self.emptyLabel.hidden = true
+        self.emptyLabel.isHidden = true
     }
     
-    override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         // Пустая реализация нужна для того, чтобы затереть реализацию BaseController,
         // в которой прячется navigationBar
     }
     
-    private func setupTableView() {
+    fileprivate func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
-        self.tableView.registerNib(UINib(nibName: "GameCell", bundle: nil), forCellReuseIdentifier: "gameCell");
+        self.tableView.register(UINib(nibName: "GameCell", bundle: nil), forCellReuseIdentifier: "gameCell");
     }
     
-    private func configureCell(cell: GameCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: GameCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        cell.game = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Game
+        cell.game = self.fetchedResultsController.object(at: indexPath)
     }
 }
 
 extension PlayoffGamesController: UITableViewDataSource, UITableViewDelegate {
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var res = 0
         if let sections = self.fetchedResultsController.sections {
             let currentSection = sections[section]
             res = currentSection.numberOfObjects
         }
         
-        self.emptyLabel.hidden = res > 0 ||
-            tableView.hidden
+        self.emptyLabel.isHidden = res > 0 ||
+            tableView.isHidden
         
         return res
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 172
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
         let cellIdentifier = "gameCell"
-        cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
+        cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor.clearColor()
-        cell.contentView.backgroundColor = UIColor.clearColor()
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+        cell.contentView.backgroundColor = UIColor.clear
         
         self.configureCell(cell as! GameCell, atIndexPath:indexPath)
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        self.selectedGameId = (self.fetchedResultsController.objectAtIndexPath(indexPath) as! Game).objectId as? Int
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        self.selectedGameId = self.fetchedResultsController.object(at: indexPath).objectId as? Int
         if let _ = self.selectedGameId {
-            self.performSegueWithIdentifier("goToGame", sender: nil)
+            self.performSegue(withIdentifier: "goToGame", sender: nil)
         }
     }
 }
 
 extension PlayoffGamesController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(frc: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ frc: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-        case .Move:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation:.Fade)
-        case .Insert:
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation:.Fade)
+        case .move:
+            self.tableView.deleteRows(at: [indexPath!], with:.fade)
+            self.tableView.insertRows(at: [newIndexPath!], with:.fade)
+        case .insert:
+            self.tableView.insertRows(at: [newIndexPath!], with:.fade)
             
-        case .Delete:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
+        case .delete:
+            self.tableView.deleteRows(at: [indexPath!], with:.fade)
             
-        case .Update:
-            self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+        case .update:
+            self.tableView.reloadRows(at: [indexPath!], with: .fade)
         }
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch(type) {
-        case .Insert:
-            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
+        case .insert:
+            self.tableView.insertSections(IndexSet(integer: sectionIndex), with:.fade)
             
-        case .Delete:
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
+        case .delete:
+            self.tableView.deleteSections(IndexSet(integer: sectionIndex), with:.fade)
             
         default:
             break
         }
     }
     
-    func controllerDidChangeContent(_: NSFetchedResultsController) {
+    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }
 }

@@ -8,25 +8,45 @@
 
 import UIKit
 import CoreData
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class GameController: BaseController {
-    private enum Sections: NSInteger {
-        case Hat
-        case TeamA
-        case TeamB
-        case Count
+    fileprivate enum Sections: NSInteger {
+        case hat
+        case teamA
+        case teamB
+        case count
     }
     
     var gameId: Int!
-    private var game: Game?
-    @IBOutlet private var tableView: UITableView!
-    private var refreshButton: UIButton?
-    private var statisticACellOffset = CGPointZero
-    private var teamStatisticsAHeader: TeamStatisticsHeader?
-    private var statisticBCellOffset = CGPointZero
-    private var teamStatisticsBHeader: TeamStatisticsHeader?
-    private let teamATag = 1
-    private let teamBTag = 2
+    fileprivate var game: Game?
+    @IBOutlet fileprivate var tableView: UITableView!
+    fileprivate var refreshButton: UIButton?
+    fileprivate var statisticACellOffset = CGPoint.zero
+    fileprivate var teamStatisticsAHeader: TeamStatisticsHeader?
+    fileprivate var statisticBCellOffset = CGPoint.zero
+    fileprivate var teamStatisticsBHeader: TeamStatisticsHeader?
+    fileprivate let teamATag = 1
+    fileprivate let teamBTag = 2
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,18 +64,18 @@ class GameController: BaseController {
             try self.statisticsBFetchedResultsController.performFetch()
         } catch {}
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(contextDidChange(_:)), name: NSManagedObjectContextObjectsDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Private
     
-    lazy private var statisticsAFetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: GameStatistics.entityName())
-        fetchRequest.predicate = NSPredicate(format: "game.objectId = \(self.gameId) AND teamNumber = 1")
+    lazy fileprivate var statisticsAFetchedResultsController: NSFetchedResultsController<GameStatistics> = {
+        let fetchRequest = NSFetchRequest<GameStatistics>(entityName: GameStatistics.entityName())
+        fetchRequest.predicate = NSPredicate(format: "game.objectId = \(self.gameId!) AND teamNumber = 1 AND (team != nil OR player != nil)")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "playerNumber", ascending: true)]
         
         let frc = NSFetchedResultsController(
@@ -69,9 +89,9 @@ class GameController: BaseController {
         return frc
     }()
     
-    lazy private var statisticsBFetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: GameStatistics.entityName())
-        fetchRequest.predicate = NSPredicate(format: "game.objectId = \(self.gameId) AND teamNumber = 2")
+    lazy fileprivate var statisticsBFetchedResultsController: NSFetchedResultsController<GameStatistics> = {
+        let fetchRequest = NSFetchRequest<GameStatistics>(entityName: GameStatistics.entityName())
+        fetchRequest.predicate = NSPredicate(format: "game.objectId = \(self.gameId!) AND teamNumber = 2 AND (team != nil OR player != nil)")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "playerNumber", ascending: true)]
         
         let frc = NSFetchedResultsController(
@@ -85,23 +105,23 @@ class GameController: BaseController {
         return frc
     }()
     
-    private var selectedPlayerId: Int?
+    fileprivate var selectedPlayerId: Int?
     
-    private func setupTableView() {
+    fileprivate func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
         
-        self.tableView.registerNib(UINib(nibName: "StatisticCell", bundle: nil), forCellReuseIdentifier: "statisticCell")
+        self.tableView.register(UINib(nibName: "StatisticCell", bundle: nil), forCellReuseIdentifier: "statisticCell")
     }
     
-    override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         // Пустая реализация нужна для того, чтобы затереть реализацию BaseController,
         // в которой прячется navigationBar
     }
     
-    private func getData(showIndicator: Bool) {
+    fileprivate func getData(_ showIndicator: Bool) {
         if (showIndicator) {
             self.activityView.startAnimating()
-            self.tableView.hidden = true
+            self.tableView.isHidden = true
         }
         
         self.dataController.getGameStats(self.gameId) { [weak self] (error) in
@@ -109,19 +129,19 @@ class GameController: BaseController {
                 strongSelf.activityView.stopAnimating()
                 
                 if let _ = error {
-                    strongSelf.tableView.hidden = true
+                    strongSelf.tableView.isHidden = true
                     
-                    let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: error!.userInfo[NSLocalizedDescriptionKey] as? String, preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .Cancel, handler: nil))
+                    let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: error!.userInfo[NSLocalizedDescriptionKey] as? String, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
                     
-                    self?.presentViewController(alert, animated: true, completion: nil)
+                    self?.present(alert, animated: true, completion: nil)
                 } else {
-                    strongSelf.tableView.hidden = false
+                    strongSelf.tableView.isHidden = false
                     
-                    let fetchRequest = NSFetchRequest(entityName: Game.entityName())
-                    fetchRequest.predicate = NSPredicate(format: "objectId = \(strongSelf.gameId)")
+                    let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
+                    fetchRequest.predicate = NSPredicate(format: "objectId = \(strongSelf.gameId!)")
                     do {
-                        strongSelf.game = try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Game
+                        strongSelf.game = try strongSelf.dataController.mainContext.fetch(fetchRequest).first
                     } catch {}
                     strongSelf.tableView.reloadData()
                 }
@@ -139,42 +159,42 @@ class GameController: BaseController {
         }
     }
     
-    private func configureCell(cell: GameScoreCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: GameScoreCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
         cell.game = self.game
     }
     
-    private func configureCell(cell: StatisticCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: StatisticCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
-        let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+        cell.color = (indexPath as NSIndexPath).row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
         
-        if indexPath.section == Sections.TeamA.rawValue {
-            cell.total = NSLocalizedString("Total", comment: "").uppercaseString
-            cell.gameStatistics = self.statisticsAFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics
-            cell.selectionStyle = cell.gameStatistics.player == nil ? .None : .Default
+        if (indexPath as NSIndexPath).section == Sections.teamA.rawValue {
+            cell.total = NSLocalizedString("Total", comment: "").uppercased()
+            cell.gameStatistics = self.statisticsAFetchedResultsController.object(at: fixedIndexPath)
+            cell.selectionStyle = cell.gameStatistics.player == nil ? .none : .default
             cell.contentOffset = self.statisticACellOffset
             cell.tag = self.teamATag
-        } else if indexPath.section == Sections.TeamB.rawValue {
-            cell.total = NSLocalizedString("Total", comment: "").uppercaseString
-            cell.gameStatistics = self.statisticsBFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics
-            cell.selectionStyle = cell.gameStatistics.player == nil ? .None : .Default
+        } else if (indexPath as NSIndexPath).section == Sections.teamB.rawValue {
+            cell.total = NSLocalizedString("Total", comment: "").uppercased()
+            cell.gameStatistics = self.statisticsBFetchedResultsController.object(at: fixedIndexPath)
+            cell.selectionStyle = cell.gameStatistics.player == nil ? .none : .default
             cell.contentOffset = self.statisticBCellOffset
             cell.tag = self.teamBTag
         }
         cell.delegate = self
     }
     
-    @objc private func contextDidChange(notification: NSNotification) {
+    @objc fileprivate func contextDidChange(_ notification: Notification) {
         if (notification.object as? NSManagedObjectContext) == self.dataController.mainContext {
-            let inserted = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>
-            let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
+            let inserted = (notification as NSNotification).userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>
+            let updated = (notification as NSNotification).userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
             if (inserted?.filter{ $0 is GameStatistics })?.count > 0 ||
                 (updated?.filter{ $0 is GameStatistics })?.count > 0 {
-                let fetchRequest = NSFetchRequest(entityName: Game.entityName())
-                fetchRequest.predicate = NSPredicate(format: "objectId = \(self.gameId)")
+                let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
+                fetchRequest.predicate = NSPredicate(format: "objectId = \(self.gameId!)")
                 do {
-                    self.game = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Game
+                    self.game = try self.dataController.mainContext.fetch(fetchRequest).first
                 } catch {}
                 self.tableView.reloadData()
             }
@@ -183,9 +203,9 @@ class GameController: BaseController {
     
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToPlayer" {
-            let gameController = segue.destinationViewController as! PlayerController
+            let gameController = segue.destination as! PlayerController
             gameController.dataController = self.dataController
             gameController.playerId = self.selectedPlayerId!
         }
@@ -193,18 +213,18 @@ class GameController: BaseController {
 }
 
 extension GameController: UITableViewDataSource, UITableViewDelegate {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Sections.Count.rawValue
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return Sections.count.rawValue
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         var res: CGFloat = 0.1
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .TeamA:
+            case .teamA:
                 res = 62
-            case .TeamB:
+            case .teamB:
                 res = 62
             default:
                 break
@@ -214,21 +234,21 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var res: UIView?
         
         if let enumSection = Sections(rawValue: section) {
-            let isLanguageRu = self.dataController.language.containsString("ru")
+            let isLanguageRu = self.dataController.language.contains("ru")
             
             switch enumSection {
-            case .TeamA:
+            case .teamA:
                 self.teamStatisticsAHeader = TeamStatisticsHeader()
                 self.teamStatisticsAHeader?.contentOffset = self.statisticACellOffset
                 self.teamStatisticsAHeader?.backgroundColor = self.tableView.backgroundColor
                 self.teamStatisticsAHeader?.title = isLanguageRu ? self.game?.teamNameAru : self.game?.teamNameAen
                 self.teamStatisticsAHeader?.delegate = self
                 res = self.teamStatisticsAHeader
-            case .TeamB:
+            case .teamB:
                 self.teamStatisticsBHeader = TeamStatisticsHeader()
                 self.teamStatisticsBHeader?.contentOffset = self.statisticBCellOffset
                 self.teamStatisticsBHeader?.backgroundColor = self.tableView.backgroundColor
@@ -246,14 +266,14 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         var res: CGFloat = 0.1
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .TeamA:
+            case .teamA:
                 res = 4
-            case .TeamB:
+            case .teamB:
                 res = 4
             default:
                 break
@@ -263,7 +283,7 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var res = 0
         
         if self.game == nil {
@@ -271,15 +291,15 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         } else {
             if let gameSection = Sections(rawValue: section) {
                 switch gameSection {
-                case .Hat:
+                case .hat:
                     res = 1
-                case .TeamA:
+                case .teamA:
                     if let sections = self.statisticsAFetchedResultsController.sections {
                         if let currentSection = sections.first {
                             res = currentSection.numberOfObjects
                         }
                     }
-                case .TeamB:
+                case .teamB:
                     if let sections = self.statisticsBFetchedResultsController.sections {
                         if let currentSection = sections.first {
                             res = currentSection.numberOfObjects
@@ -294,24 +314,24 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var res: CGFloat = 0
         
-        if let gameSection = Sections(rawValue: indexPath.section) {
+        if let gameSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
             switch gameSection {
-            case .Hat:
+            case .hat:
                 res = 252
-            case .TeamA:
-                let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-                let gameStatistics = self.statisticsAFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics
+            case .teamA:
+                let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+                let gameStatistics = self.statisticsAFetchedResultsController.object(at: fixedIndexPath)
                 if gameStatistics.player == nil {
                     res = 81
                 } else {
                     res = 27
                 }
-            case .TeamB:
-                let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-                let gameStatistics = self.statisticsBFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics
+            case .teamB:
+                let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+                let gameStatistics = self.statisticsBFetchedResultsController.object(at: fixedIndexPath)
                 if gameStatistics.player == nil {
                     res = 81
                 } else {
@@ -332,16 +352,16 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
-        if let gameSection = Sections(rawValue: indexPath.section) {
+        if let gameSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
             switch gameSection {
-            case .Hat:
+            case .hat:
                 let cellIdentifier = "gameScoreCell"
-                cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
+                cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             default:
                 let cellIdentifier = "statisticCell"
-                cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
+                cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
             }
         } else {
             cell = UITableViewCell()
@@ -350,13 +370,13 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor.clearColor()
-        cell.contentView.backgroundColor = UIColor.clearColor()
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+        cell.contentView.backgroundColor = UIColor.clear
         
-        if let gameSection = Sections(rawValue: indexPath.section) {
+        if let gameSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
             switch gameSection {
-            case .Hat:
+            case .hat:
                 self.configureCell(cell as! GameScoreCell, atIndexPath:indexPath)
             default:
                 self.configureCell(cell as! StatisticCell, atIndexPath:indexPath)
@@ -364,24 +384,24 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        if let gameSection = Sections(rawValue: indexPath.section) {
-            let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
+        if let gameSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
+            let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
             switch gameSection {
-            case .TeamA:
-                if indexPath.row < self.statisticsAFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
-                    self.selectedPlayerId = (self.statisticsAFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics).player?.objectId as? Int
+            case .teamA:
+                if (indexPath as NSIndexPath).row < self.statisticsAFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
+                    self.selectedPlayerId = self.statisticsAFetchedResultsController.object(at: fixedIndexPath).player?.objectId as? Int
                     if let _ = self.selectedPlayerId {
-                        self.performSegueWithIdentifier("goToPlayer", sender: nil)
+                        self.performSegue(withIdentifier: "goToPlayer", sender: nil)
                     }
                 }
-            case .TeamB:
-                if indexPath.row < self.statisticsBFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
-                    self.selectedPlayerId = (self.statisticsBFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! GameStatistics).player?.objectId as? Int
+            case .teamB:
+                if (indexPath as NSIndexPath).row < self.statisticsBFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
+                    self.selectedPlayerId = self.statisticsBFetchedResultsController.object(at: fixedIndexPath).player?.objectId as? Int
                     if let _ = self.selectedPlayerId {
-                        self.performSegueWithIdentifier("goToPlayer", sender: nil)
+                        self.performSegue(withIdentifier: "goToPlayer", sender: nil)
                     }
                 }
             default:
@@ -392,54 +412,54 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension GameController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(frc: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ frc: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        var fixedIndexPath: NSIndexPath?
-        var fixedNewIndexPath: NSIndexPath?
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        var fixedIndexPath: IndexPath?
+        var fixedNewIndexPath: IndexPath?
         
         if controller == self.statisticsAFetchedResultsController {
             if let _ = indexPath {
-                fixedIndexPath = NSIndexPath(forRow: indexPath!.row, inSection: Sections.TeamA.rawValue)
+                fixedIndexPath = IndexPath(row: (indexPath! as NSIndexPath).row, section: Sections.teamA.rawValue)
             }
             if let _ = newIndexPath {
-                fixedNewIndexPath = NSIndexPath(forRow: newIndexPath!.row, inSection: Sections.TeamA.rawValue)
+                fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.teamA.rawValue)
             }
         } else if controller == self.statisticsBFetchedResultsController {
             if let _ = indexPath {
-                fixedIndexPath = NSIndexPath(forRow: indexPath!.row, inSection: Sections.TeamB.rawValue)
+                fixedIndexPath = IndexPath(row: (indexPath! as NSIndexPath).row, section: Sections.teamB.rawValue)
             }
             if let _ = newIndexPath {
-                fixedNewIndexPath = NSIndexPath(forRow: newIndexPath!.row, inSection: Sections.TeamB.rawValue)
+                fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.teamB.rawValue)
             }
         } else {
             return
         }
         
         switch type {
-        case .Move:
-            self.tableView.deleteRowsAtIndexPaths([fixedIndexPath!], withRowAnimation:.Fade)
-            self.tableView.insertRowsAtIndexPaths([fixedNewIndexPath!], withRowAnimation:.Fade)
-        case .Insert:
-            self.tableView.insertRowsAtIndexPaths([fixedNewIndexPath!], withRowAnimation:.Fade)
+        case .move:
+            self.tableView.deleteRows(at: [fixedIndexPath!], with:.fade)
+            self.tableView.insertRows(at: [fixedNewIndexPath!], with:.fade)
+        case .insert:
+            self.tableView.insertRows(at: [fixedNewIndexPath!], with:.fade)
             
-        case .Delete:
-            self.tableView.deleteRowsAtIndexPaths([fixedIndexPath!], withRowAnimation:.Fade)
+        case .delete:
+            self.tableView.deleteRows(at: [fixedIndexPath!], with:.fade)
             
-        case .Update:
-            self.tableView.reloadRowsAtIndexPaths([fixedIndexPath!], withRowAnimation: .Fade)
+        case .update:
+            self.tableView.reloadRows(at: [fixedIndexPath!], with: .fade)
         }
     }
     
-    func controllerDidChangeContent(_: NSFetchedResultsController) {
+    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }
 }
 
 extension GameController: StatisticCellDelegate {
-    func cell(cell: StatisticCell, didScrollTo contentOffset: CGPoint, tag: Int) {
+    func cell(_ cell: StatisticCell, didScrollTo contentOffset: CGPoint, tag: Int) {
         if tag == self.teamATag {
             self.statisticACellOffset = contentOffset
             self.tableView.visibleCells.forEach { cell in
@@ -465,19 +485,19 @@ extension GameController: StatisticCellDelegate {
 }
 
 extension GameController: TeamStatisticsHeaderDelegate {
-    func header(header: TeamStatisticsHeader, didScrollTo contentOffset: CGPoint) {
+    func header(_ header: TeamStatisticsHeader, didScrollTo contentOffset: CGPoint) {
         if header == self.teamStatisticsAHeader {
             self.statisticACellOffset = contentOffset
             self.tableView.indexPathsForVisibleRows?.forEach { indexPath in
-                if indexPath.section == Sections.TeamA.rawValue {
-                    (self.tableView.cellForRowAtIndexPath(indexPath) as? StatisticCell)?.contentOffset = contentOffset
+                if (indexPath as NSIndexPath).section == Sections.teamA.rawValue {
+                    (self.tableView.cellForRow(at: indexPath) as? StatisticCell)?.contentOffset = contentOffset
                 }
             }
         } else if header == self.teamStatisticsBHeader {
             self.statisticBCellOffset = contentOffset
             self.tableView.indexPathsForVisibleRows?.forEach { indexPath in
-                if indexPath.section == Sections.TeamB.rawValue {
-                    (self.tableView.cellForRowAtIndexPath(indexPath) as? StatisticCell)?.contentOffset = contentOffset
+                if (indexPath as NSIndexPath).section == Sections.teamB.rawValue {
+                    (self.tableView.cellForRow(at: indexPath) as? StatisticCell)?.contentOffset = contentOffset
                 }
             }
         }

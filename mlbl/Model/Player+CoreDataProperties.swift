@@ -14,7 +14,7 @@ import CoreData
 
 extension Player {
 
-    @NSManaged var birth: NSDate?
+    @NSManaged var birth: Date?
     @NSManaged var firstNameEn: String?
     @NSManaged var firstNameRu: String?
     @NSManaged var gender: NSNumber?

@@ -8,31 +8,31 @@
 
 import CoreData
 
-class NetworkRequest: NSOperation {
-    let baseUrl = NSURL(string: "http://reg.infobasket.ru/Widget/")
+class NetworkRequest: Operation {
+    let baseUrl = URL(string: "http://reg.infobasket.ru/Widget/")
     var dataController: DataController?
-    var sessionTask: NSURLSessionTask?
+    var sessionTask: URLSessionTask?
     let incomingData = NSMutableData()
     var error: NSError?
     var params: [String:AnyObject]?
     
-    var localURLSession: NSURLSession {
-        return NSURLSession(configuration: localConfig, delegate: self, delegateQueue: nil)
+    var localURLSession: Foundation.URLSession {
+        return Foundation.URLSession(configuration: localConfig, delegate: self, delegateQueue: nil)
     }
-    var localConfig: NSURLSessionConfiguration {
-        return NSURLSessionConfiguration.defaultSessionConfiguration()
+    var localConfig: URLSessionConfiguration {
+        return URLSessionConfiguration.default
     }
     
     var internalFinished: Bool = false
     
-    override var finished: Bool {
+    override var isFinished: Bool {
         get {
             return internalFinished
         }
         set {
-            willChangeValueForKey("isFinished")
+            willChangeValue(forKey: "isFinished")
             internalFinished = newValue
-            didChangeValueForKey("isFinished")
+            didChangeValue(forKey: "isFinished")
         }
     }
     
@@ -48,49 +48,49 @@ class NetworkRequest: NSOperation {
     }
 }
 
-extension NetworkRequest: NSURLSessionDataDelegate {
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
-        if cancelled {
-            finished = true
+extension NetworkRequest: URLSessionDataDelegate {
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
+        if isCancelled {
+            isFinished = true
             sessionTask?.cancel()
             return
         }
         
-        if let httpResponse = response as? NSHTTPURLResponse {
+        if let httpResponse = response as? HTTPURLResponse {
             if httpResponse.statusCode == 200 {
                 
             }
         }
         
-        completionHandler(.Allow)
+        completionHandler(.allow)
     }
 
-    func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData data: NSData) {
-        if cancelled {
-            finished = true
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        if isCancelled {
+            isFinished = true
             sessionTask?.cancel()
             return
         }
-        incomingData.appendData(data)
+        incomingData.append(data)
     }
 }
 
-extension NetworkRequest: NSURLSessionTaskDelegate {
-    func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
-        if cancelled {
-            finished = true
+extension NetworkRequest: URLSessionTaskDelegate {
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        if isCancelled {
+            isFinished = true
             sessionTask?.cancel()
             return
         }
         if error != nil {
-            self.error = error
+            self.error = error as NSError?
             print("Failed to receive response: \(error)")
-            finished = true
+            isFinished = true
             return
         }
         
         self.processData()
         
-        finished = true
+        isFinished = true
     }
 }

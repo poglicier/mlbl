@@ -10,21 +10,21 @@ import UIKit
 import CoreData
 
 class PlayersController: BaseController {
-    @IBOutlet private var tableView: UITableView!
-    @IBOutlet private var emptyLabel: UILabel!
-    @IBOutlet private var searchBar: UISearchBar!
+    @IBOutlet fileprivate var tableView: UITableView!
+    @IBOutlet fileprivate var emptyLabel: UILabel!
+    @IBOutlet fileprivate var searchBar: UISearchBar!
     
-    private var numberOfLoadedPlayers = 0
-    private let playersRequestBunchCount = 10
-    private let rowHeight: CGFloat = 148
-    private var allDataLoaded = false
-    private var filteredPlayers: [Player]!
-    private var searchInAction = false
-    private var selectedPlayerId: Int?
+    fileprivate var numberOfLoadedPlayers = 0
+    fileprivate let playersRequestBunchCount = 10
+    fileprivate let rowHeight: CGFloat = 148
+    fileprivate var allDataLoaded = false
+    fileprivate var filteredPlayers: [Player]!
+    fileprivate var searchInAction = false
+    fileprivate var selectedPlayerId: Int?
     
-    lazy private var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: Player.entityName())
-        let isLanguageRu = self.dataController.language.containsString("ru")
+    lazy fileprivate var fetchedResultsController: NSFetchedResultsController<Player> = {
+        let fetchRequest = NSFetchRequest<Player>(entityName: Player.entityName())
+        let isLanguageRu = self.dataController.language.contains("ru")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: isLanguageRu ? "lastNameRu" : "lastNameEn", ascending: true), NSSortDescriptor(key: isLanguageRu ? "firstNameRu" : "firstNameEn", ascending: true), NSSortDescriptor(key: isLanguageRu ? "lastNameEn" : "lastNameRu", ascending: true), NSSortDescriptor(key: isLanguageRu ? "firstNameEn" : "firstNameRu", ascending: true)]
         
         let frc = NSFetchedResultsController(
@@ -51,13 +51,13 @@ class PlayersController: BaseController {
         self.getData(true)
     }    
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.tableView.scrollsToTop = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         self.tableView.scrollsToTop = false
@@ -65,40 +65,40 @@ class PlayersController: BaseController {
     
     // MARK: - Private
     
-    private func setupTableView() {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .White)
+    fileprivate func setupTableView() {
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
         spinner.startAnimating()
         spinner.color = UIColor.mlblLightOrangeColor()
-        spinner.frame = CGRectMake(0, 0, 0, 64)
+        spinner.frame = CGRect(x: 0, y: 0, width: 0, height: 64)
         self.tableView.tableFooterView = spinner
-        self.tableView.registerNib(UINib(nibName: "PlayerCell", bundle: nil), forCellReuseIdentifier: "playerCell")
+        self.tableView.register(UINib(nibName: "PlayerCell", bundle: nil), forCellReuseIdentifier: "playerCell")
         self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)
     }
     
-    private func setupSearchBar() {
+    fileprivate func setupSearchBar() {
         self.searchBar.barTintColor = UIColor.mlblLightOrangeColor()
         self.searchBar.tintColor = UIColor.mlblLightOrangeColor()
         self.searchBar.placeholder = NSLocalizedString("Search", comment: "")
         
         if #available(iOS 9.0, *) {
-            (UIBarButtonItem.appearanceWhenContainedInInstancesOfClasses([UISearchBar.self])).tintColor = UIColor.whiteColor()
+            (UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self])).tintColor = UIColor.white
         } else {
-            UIBarButtonItem.my_appearanceWhenContainedIn(UISearchBar.self).tintColor = UIColor.whiteColor()
+            UIBarButtonItem.my_appearanceWhenContained(in: UISearchBar.self).tintColor = UIColor.white
         }
     }
     
-    private func configureCell(cell: PlayerCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: PlayerCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        cell.player = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Player
+        cell.player = self.fetchedResultsController.object(at: indexPath)
     }
     
-    private func getData(showIndicator: Bool) {
+    fileprivate func getData(_ showIndicator: Bool) {
         // Если это - запрос первых игроков
         if self.numberOfLoadedPlayers == 0 ||
             showIndicator {
             self.activityView.startAnimating()
-            self.tableView.hidden = true
-            self.emptyLabel.hidden = true
+            self.tableView.isHidden = true
+            self.emptyLabel.isHidden = true
         }
         
         self.dataController.getPlayers(self.numberOfLoadedPlayers, count: self.playersRequestBunchCount) { [weak self] (error, responseCount) in
@@ -108,18 +108,18 @@ class PlayersController: BaseController {
                 if let _ = error {
                     strongSelf.emptyLabel.text = error?.localizedDescription
                     
-                    if strongSelf.tableView.numberOfRowsInSection(0) == 0 {
-                        strongSelf.tableView.hidden = true
-                        strongSelf.emptyLabel.hidden = false
+                    if strongSelf.tableView.numberOfRows(inSection: 0) == 0 {
+                        strongSelf.tableView.isHidden = true
+                        strongSelf.emptyLabel.isHidden = false
                     } else {
-                        strongSelf.tableView.hidden = false
-                        strongSelf.emptyLabel.hidden = true
+                        strongSelf.tableView.isHidden = false
+                        strongSelf.emptyLabel.isHidden = true
                         // Сообщить о потере интернета
                     }
                 } else {
-                    strongSelf.tableView.hidden = false
+                    strongSelf.tableView.isHidden = false
                     strongSelf.emptyLabel.text = NSLocalizedString("No players stub", comment: "")
-                    strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
+                    strongSelf.emptyLabel.isHidden = strongSelf.tableView.numberOfRows(inSection: 0) > 0
                     strongSelf.allDataLoaded = responseCount < strongSelf.playersRequestBunchCount
                     
                     if strongSelf.allDataLoaded {
@@ -138,9 +138,9 @@ class PlayersController: BaseController {
         self.getData(false)
     }
     
-    private func filterContentForSearchText(searchText: String) {
+    fileprivate func filterContentForSearchText(_ searchText: String) {
         if searchText.characters.count > 2 {
-            func predicateForSearchText(text: String) -> NSPredicate {
+            func predicateForSearchText(_ text: String) -> NSPredicate {
                 let p1 = NSPredicate(format: "lastNameRu CONTAINS[cd] %@", text)
                 let p2 = NSPredicate(format: "lastNameEn CONTAINS[cd] %@", text)
                 let p3 = NSPredicate(format: "firstNameRu CONTAINS[cd] %@", text)
@@ -160,10 +160,10 @@ class PlayersController: BaseController {
                                               completion: { [weak self] (error, emptyAnswer) in
                                                 if let strongSelf = self {
                                                     if let _ = error {
-                                                        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: error!.userInfo[NSLocalizedDescriptionKey] as? String, preferredStyle: .Alert)
-                                                        alert.addAction(UIAlertAction(title: "Ok", style: .Cancel, handler: nil))
+                                                        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: error!.userInfo[NSLocalizedDescriptionKey] as? String, preferredStyle: .alert)
+                                                        alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
                                                         
-                                                        strongSelf.presentViewController(alert, animated: true, completion: nil)
+                                                        strongSelf.present(alert, animated: true, completion: nil)
                                                     }
                                                 }
             })
@@ -172,9 +172,9 @@ class PlayersController: BaseController {
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToPlayer" {
-            let playerController = segue.destinationViewController as! PlayerController
+            let playerController = segue.destination as! PlayerController
             playerController.dataController = self.dataController
             playerController.playerId = self.selectedPlayerId!
         }
@@ -182,7 +182,7 @@ class PlayersController: BaseController {
 }
 
 extension PlayersController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var res = 0
         
         if let sections = self.fetchedResultsController.sections {
@@ -190,24 +190,24 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
             res = currentSection.numberOfObjects
         }
         
-        self.emptyLabel.hidden = res > 0 ||
-            tableView.hidden
+        self.emptyLabel.isHidden = res > 0 ||
+            tableView.isHidden
         
         return res
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.rowHeight
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("playerCell", forIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "playerCell", for: indexPath)
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor.clearColor()
-        cell.contentView.backgroundColor = UIColor.clearColor()
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+        cell.contentView.backgroundColor = UIColor.clear
         
         self.configureCell(cell as! PlayerCell, atIndexPath:indexPath)
         
@@ -215,68 +215,68 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
             self.searchBar.text != "" {
         } else {
             if !self.allDataLoaded &&
-                indexPath.row >= self.numberOfLoadedPlayers - 1 {
+                (indexPath as NSIndexPath).row >= self.numberOfLoadedPlayers - 1 {
                 self.getData(false)
             }
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        self.selectedPlayerId = (self.fetchedResultsController.objectAtIndexPath(indexPath) as! Player).objectId as? Int
+        self.selectedPlayerId = self.fetchedResultsController.object(at: indexPath).objectId as? Int
         
         if let _ = self.selectedPlayerId {
-            self.performSegueWithIdentifier("goToPlayer", sender: nil)
+            self.performSegue(withIdentifier: "goToPlayer", sender: nil)
         }
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.searchBar.resignFirstResponder()
     }
 }
 
 extension PlayersController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(frc: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ frc: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-        case .Move:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation:.Fade)
-        case .Insert:
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation:.Fade)
+        case .move:
+            self.tableView.deleteRows(at: [indexPath!], with:.fade)
+            self.tableView.insertRows(at: [newIndexPath!], with:.fade)
+        case .insert:
+            self.tableView.insertRows(at: [newIndexPath!], with:.fade)
             
-        case .Delete:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
+        case .delete:
+            self.tableView.deleteRows(at: [indexPath!], with:.fade)
             
-        case .Update:
-            self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+        case .update:
+            self.tableView.reloadRows(at: [indexPath!], with: .fade)
         }
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch(type) {
-        case .Insert:
-            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
+        case .insert:
+            self.tableView.insertSections(IndexSet(integer: sectionIndex), with:.fade)
             
-        case .Delete:
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
+        case .delete:
+            self.tableView.deleteSections(IndexSet(integer: sectionIndex), with:.fade)
             
         default:
             break
         }
     }
     
-    func controllerDidChangeContent(_: NSFetchedResultsController) {
+    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }
 }
 
 extension PlayersController: UISearchBarDelegate {
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
         self.searchInAction = false
@@ -287,18 +287,18 @@ extension PlayersController: UISearchBarDelegate {
         self.tableView.reloadData()
     }
     
-    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         self.searchInAction = true
         self.tableView.tableFooterView = nil
         
         return true
     }
     
-    func searchBar(searchBar: UISearchBar, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             searchBar.resignFirstResponder()
         } else if let searchText = searchBar.text {
-            searchBar.text = (searchText as NSString).stringByReplacingCharactersInRange(range, withString: text)
+            searchBar.text = (searchText as NSString).replacingCharacters(in: range, with: text)
             
             self.filterContentForSearchText(searchBar.text!)
         }

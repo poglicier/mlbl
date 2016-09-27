@@ -9,9 +9,9 @@
 import CoreData
 
 class BestPlayersRequest: NetworkRequest {
-    private var compId: Int!
-    private var paramId: Int!
-    private(set) var responseCount = 0
+    fileprivate var compId: Int!
+    fileprivate var paramId: Int!
+    fileprivate(set) var responseCount = 0
     
     init(paramId: Int, compId: Int, searchText: String? = nil) {
         super.init()
@@ -21,44 +21,44 @@ class BestPlayersRequest: NetworkRequest {
     }
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        let urlString = "BestPlayers/\(self.compId)?param=\(self.paramId)&format=json"
-        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        let urlString = "BestPlayers/\(self.compId!)?param=\(self.paramId!)&format=json"
+        guard let url = URL(string: urlString, relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let ranksDicts = json as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlockAndWait({
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.performAndWait({
                     // Удаляем старую статистику по этому параметру
-                    let fetchRequest = NSFetchRequest(entityName: PlayerRank.entityName())
+                    let fetchRequest = NSFetchRequest<PlayerRank>(entityName: PlayerRank.entityName())
                     fetchRequest.predicate = NSPredicate(format: "parameter.objectId = %d", self.paramId)
                     do {
-                        let all = try context.executeFetchRequest(fetchRequest) as! [PlayerRank]
+                        let all = try context.fetch(fetchRequest)
                         for rank in all {
                             print("DELETE PlayerRank \(rank.player?.lastNameRu)")
-                            context.deleteObject(rank)
+                            context.delete(rank)
                         }
                     }
                     catch {}

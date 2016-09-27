@@ -10,33 +10,33 @@ import UIKit
 
 class PlayoffCell: UITableViewCell {
 
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var scoresBackground: UIView!
-    @IBOutlet private var avatarA: UIImageView!
-    @IBOutlet private var avatarB: UIImageView!
-    @IBOutlet private var teamAScoreLabel: UILabel!
-    @IBOutlet private var teamBScoreLabel: UILabel!
-    @IBOutlet private var teamANameLabel: UILabel!
-    @IBOutlet private var teamBNameLabel: UILabel!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var scoresBackground: UIView!
+    @IBOutlet fileprivate var avatarA: UIImageView!
+    @IBOutlet fileprivate var avatarB: UIImageView!
+    @IBOutlet fileprivate var teamAScoreLabel: UILabel!
+    @IBOutlet fileprivate var teamBScoreLabel: UILabel!
+    @IBOutlet fileprivate var teamANameLabel: UILabel!
+    @IBOutlet fileprivate var teamBNameLabel: UILabel!
     
     var language: String!
     
     var playoffSerie: PlayoffSerie! {
         didSet {
-            let isLanguageRu = self.language.containsString("ru")
+            let isLanguageRu = self.language.contains("ru")
             
             self.avatarA.image = UIImage(named: "teamStub")
             self.avatarB.image = UIImage(named: "teamStub")
             
             if let teamAId = playoffSerie.team1?.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
+                if let url = URL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
                     self.avatarA.setImageWithUrl(url)
                 }
             }
             self.teamANameLabel.text = isLanguageRu ? playoffSerie.team1?.nameRu : playoffSerie.team1?.nameEn
             
             if let teamBId = playoffSerie.team2?.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
+                if let url = URL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
                     self.avatarB.setImageWithUrl(url)
                 }
             }
@@ -47,24 +47,24 @@ class PlayoffCell: UITableViewCell {
             
             if playoffSerie.games?.count ?? 0 > 1 {
                 // Добавляем счета по партиям
-                let games = (playoffSerie.games as! Set<Game>).sort { ($0.date?.timeIntervalSince1970 ?? -1) < ($1.date?.timeIntervalSince1970 ?? -1) }
+                let games = (playoffSerie.games as! Set<Game>).sorted { ($0.date?.timeIntervalSince1970 ?? -1) < ($1.date?.timeIntervalSince1970 ?? -1) }
                 var predLabel: UILabel?
-                for (idx, game) in games.enumerate() {
+                for (idx, game) in games.enumerated() {
                     let scoreLabel = UILabel()
-                    scoreLabel.textAlignment = .Center
-                    scoreLabel.font = UIFont.systemFontOfSize(12)
-                    scoreLabel.textColor = UIColor.whiteColor()
+                    scoreLabel.textAlignment = .center
+                    scoreLabel.font = UIFont.systemFont(ofSize: 12)
+                    scoreLabel.textColor = UIColor.white
                     scoreLabel.backgroundColor = UIColor.mlblLightOrangeColor()
                     scoreLabel.text = (game.scoreA?.stringValue ?? "-") + ":" + (game.scoreB?.stringValue ?? "-")
                     scoreLabel.layer.cornerRadius = self.scoresBackground.frame.size.height/2 - 1
                     scoreLabel.layer.masksToBounds = true
                     self.scoresBackground.addSubview(scoreLabel)
                     
-                    scoreLabel.snp_makeConstraints(closure: { (make) in
+                    scoreLabel.snp.makeConstraints({ (make) in
                         make.top.bottom.equalTo(0)
                         make.width.equalTo(64)
                         if let _ = predLabel {
-                            make.left.equalTo(predLabel!.snp_right).offset(4)
+                            make.left.equalTo(predLabel!.snp.right).offset(4)
                         } else {
                             make.left.equalTo(0)
                         }
@@ -102,13 +102,13 @@ class PlayoffCell: UITableViewCell {
         self.background.layer.cornerRadius = 5
         self.background.layer.shadowRadius = 1
         self.background.layer.masksToBounds = true
-        self.background.layer.shadowOffset = CGSizeMake(1, 1)
+        self.background.layer.shadowOffset = CGSize(width: 1, height: 1)
         self.background.layer.shadowOpacity = 0.5
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         let backColor = self.background.backgroundColor
         let scoresBackColor = self.scoresBackground.backgroundColor
         
@@ -120,7 +120,7 @@ class PlayoffCell: UITableViewCell {
         }
     }
     
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         let backColor = self.background.backgroundColor
         let scoresBackColor = self.scoresBackground.backgroundColor
         

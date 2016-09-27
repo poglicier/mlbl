@@ -11,36 +11,36 @@ import CoreData
 class StatParametersRequest: NetworkRequest {
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
         let urlString = "GetBestPlayerParameters"
-        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        guard let url = URL(string: urlString, relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let statParametersDicts = json as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlock({
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.perform({
                     var statParameterIdsToSave = [NSNumber]()
                     for statParameterDict in statParametersDicts {
                         let statParameter = StatParameter.parameterWithDict(statParameterDict, inContext: context)
@@ -51,15 +51,15 @@ class StatParametersRequest: NetworkRequest {
                     }
                     
                     // Удаляем из Core Data параметры
-                    let fetchRequest = NSFetchRequest(entityName: StatParameter.entityName())
+                    let fetchRequest = NSFetchRequest<StatParameter>(entityName: StatParameter.entityName())
                     
                     do {
-                        let all = try context.executeFetchRequest(fetchRequest) as! [StatParameter]
+                        let all = try context.fetch(fetchRequest)
                         for parameter in all {
                             if let parameterId = parameter.objectId {
                                 if statParameterIdsToSave.contains(parameterId) == false {
                                     print("DELETE StatParameter \(parameter.name)")
-                                    context.deleteObject(parameter)
+                                    context.delete(parameter)
                                 }
                             }
                         }

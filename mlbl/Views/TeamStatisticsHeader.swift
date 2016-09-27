@@ -9,33 +9,33 @@
 import UIKit
 
 protocol TeamStatisticsHeaderDelegate {
-    func header(header: TeamStatisticsHeader, didScrollTo contentOffset: CGPoint)
+    func header(_ header: TeamStatisticsHeader, didScrollTo contentOffset: CGPoint)
 }
 
 class TeamStatisticsHeader: UIView {
 
-    @IBOutlet private var titleLabel: UILabel!
-    @IBOutlet private var numberLabel: UILabel!
-    @IBOutlet private var playerLabel: UILabel!
-    @IBOutlet private var timeLabel: UILabel!
-    @IBOutlet private var pointsLabel: UILabel!
-    @IBOutlet private var twoLabel: UILabel!
-    @IBOutlet private var threeLabel: UILabel!
-    @IBOutlet private var oneLabel: UILabel!
-    @IBOutlet private var reboundsOLabel: UILabel!
-    @IBOutlet private var reboundsDLabel: UILabel!
-    @IBOutlet private var reboundsLabel: UILabel!
-    @IBOutlet private var assistsLabel: UILabel!
-    @IBOutlet private var stealsLabel: UILabel!
-    @IBOutlet private var turnoversLabel: UILabel!
-    @IBOutlet private var blocksLabel: UILabel!
-    @IBOutlet private var foulsLabel: UILabel!
-    @IBOutlet private var earnedFoulsLabel: UILabel!
-    @IBOutlet private var plusMinusLabel: UILabel!
-    @IBOutlet private var scrollContentView: UIView!
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var view: UIView!
-    @IBOutlet private var scrollView: UIScrollView!
+    @IBOutlet fileprivate var titleLabel: UILabel!
+    @IBOutlet fileprivate var numberLabel: UILabel!
+    @IBOutlet fileprivate var playerLabel: UILabel!
+    @IBOutlet fileprivate var timeLabel: UILabel!
+    @IBOutlet fileprivate var pointsLabel: UILabel!
+    @IBOutlet fileprivate var twoLabel: UILabel!
+    @IBOutlet fileprivate var threeLabel: UILabel!
+    @IBOutlet fileprivate var oneLabel: UILabel!
+    @IBOutlet fileprivate var reboundsOLabel: UILabel!
+    @IBOutlet fileprivate var reboundsDLabel: UILabel!
+    @IBOutlet fileprivate var reboundsLabel: UILabel!
+    @IBOutlet fileprivate var assistsLabel: UILabel!
+    @IBOutlet fileprivate var stealsLabel: UILabel!
+    @IBOutlet fileprivate var turnoversLabel: UILabel!
+    @IBOutlet fileprivate var blocksLabel: UILabel!
+    @IBOutlet fileprivate var foulsLabel: UILabel!
+    @IBOutlet fileprivate var earnedFoulsLabel: UILabel!
+    @IBOutlet fileprivate var plusMinusLabel: UILabel!
+    @IBOutlet fileprivate var scrollContentView: UIView!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var view: UIView!
+    @IBOutlet fileprivate var scrollView: UIScrollView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -47,8 +47,8 @@ class TeamStatisticsHeader: UIView {
         self.initialize()
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         
         if let _ = self.background {
             self.background.layer.cornerRadius = 5
@@ -58,7 +58,7 @@ class TeamStatisticsHeader: UIView {
     // MARK: - Public
     
     var delegate: TeamStatisticsHeaderDelegate?
-    var contentOffset = CGPointZero {
+    var contentOffset = CGPoint.zero {
         didSet {
             self.scrollView.contentOffset = contentOffset
         }
@@ -72,10 +72,10 @@ class TeamStatisticsHeader: UIView {
     
     // MARK: - Private
     
-    private func initialize() {
-        NSBundle.mainBundle().loadNibNamed(String(self.classForCoder), owner: self, options: [:])
+    fileprivate func initialize() {
+        Bundle.main.loadNibNamed(String(describing: self.classForCoder), owner: self, options: [:])
         self.addSubview(self.view)
-        self.view.snp_makeConstraints { (make) in
+        self.view.snp.makeConstraints { (make) in
             make.left.top.right.bottom.equalTo(0)
         }
         
@@ -102,7 +102,7 @@ class TeamStatisticsHeader: UIView {
 }
 
 extension TeamStatisticsHeader: UIScrollViewDelegate {
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.delegate?.header(self, didScrollTo: scrollView.contentOffset)
     }
 }

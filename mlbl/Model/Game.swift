@@ -12,24 +12,24 @@ import CoreData
 class Game: NSManagedObject {
     
     enum GameStatus: Int {
-        case Scheduled
-        case Accomplished
-        case Online
-        case DateChanged
-        case Cancelled
+        case scheduled
+        case accomplished
+        case online
+        case dateChanged
+        case cancelled
     }
     
-    static private let GameIdKey = "GameID"
-    static private let GameDateKey = "GameDate"
-    static private let GameTimeKey = "GameTime"
+    static fileprivate let GameIdKey = "GameID"
+    static fileprivate let GameDateKey = "GameDate"
+    static fileprivate let GameTimeKey = "GameTime"
     static let ScoreAKey = "ScoreA"
     static let ScoreBKey = "ScoreB"
-    static private let GameNumberKey = "GameNumber"
-    static private let VenueRuKey = "VenueRu"
-    static private let VenueEnKey = "VenueEn"
-    static private let ScoreByPeriodsKey = "ScoreByPeriods"
-    static private let TeamAKey = "TeamA"
-    static private let TeamBKey = "TeamB"
+    static fileprivate let GameNumberKey = "GameNumber"
+    static fileprivate let VenueRuKey = "VenueRu"
+    static fileprivate let VenueEnKey = "VenueEn"
+    static fileprivate let ScoreByPeriodsKey = "ScoreByPeriods"
+    static fileprivate let TeamAKey = "TeamA"
+    static fileprivate let TeamBKey = "TeamB"
     static let ShortTeamNameAruKey = "ShortTeamNameAru"
     static let ShortTeamNameBruKey = "ShortTeamNameBru"
     static let TeamNameAruKey = "TeamNameAru"
@@ -40,41 +40,42 @@ class Game: NSManagedObject {
     static let TeamNameBenKey = "TeamNameBen"
     static let TeamAIdKey = "TeamAid"
     static let TeamBIdKey = "TeamBid"
-    static private let PlayersKey = "Players"
-    static private let CoachKey = "Coach"
-    static private let GameStatusKey = "GameStatus"
+    static fileprivate let PlayersKey = "Players"
+    static fileprivate let CoachKey = "Coach"
+    static fileprivate let GameStatusKey = "GameStatus"
     
-    static private var dateFormatter: NSDateFormatter = {
-        let res = NSDateFormatter()
+    static fileprivate var dateFormatter: DateFormatter = {
+        let res = DateFormatter()
         res.dateFormat = "dd.MM.yyyy HH.mm"
         return res
     }()
     
-    static func gameWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Game? {
+    @discardableResult
+    static func gameWithDict(_ dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Game? {
         var res: Game?
         
         if let objectId = dict[GameIdKey] as? NSNumber {
-            let fetchRequest = NSFetchRequest(entityName: Game.entityName())
+            let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
             fetchRequest.predicate = NSPredicate(format: "objectId = %@", objectId)
             do {
-                res = try context.executeFetchRequest(fetchRequest).first as? Game
+                res = try context.fetch(fetchRequest).first
                 
                 if res == nil {
-                    res = Game(entity: NSEntityDescription.entityForName(Game.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                    res = Game(entity: NSEntityDescription.entity(forEntityName: Game.entityName(), in: context)!, insertInto: context)
                     res?.objectId = objectId
                 }
                 
                 if let dateString = dict[GameDateKey] as? String {
                     if let timeString = dict[GameTimeKey] as? String {
-                        res?.date = self.dateFormatter.dateFromString("\(dateString) \(timeString)")
+                        res?.date = self.dateFormatter.date(from: "\(dateString) \(timeString)")
                     }
                 }
                 
                 if let scoreA = dict[ScoreAKey] as? Int {
-                    res?.scoreA = scoreA
+                    res?.scoreA = scoreA as NSNumber?
                 }
                 if let scoreB = dict[ScoreBKey] as? Int {
-                    res?.scoreB = scoreB
+                    res?.scoreB = scoreB as NSNumber?
                 }
 
                 if let statisticsADict = dict[TeamAKey] as? [String:AnyObject] {
@@ -142,10 +143,10 @@ class Game: NSManagedObject {
                     res?.shortTeamNameBen = shortNameBEn
                 }
                 if let teamAId = dict[TeamAIdKey] as? Int {
-                    res?.teamAId = teamAId
+                    res?.teamAId = teamAId as NSNumber?
                 }
                 if let teamBId = dict[TeamBIdKey] as? Int {
-                    res?.teamBId = teamBId
+                    res?.teamBId = teamBId as NSNumber?
                 }
                 if let venueEn = dict[VenueEnKey] as? String {
                     res?.venueEn = venueEn
@@ -157,7 +158,7 @@ class Game: NSManagedObject {
                     res?.scoreByPeriods = scoreByPeriods
                 }
                 if let status = dict[GameStatusKey] as? Int {
-                    res?.status = status
+                    res?.status = status as NSNumber?
                 }
             } catch {}
         }
@@ -165,7 +166,7 @@ class Game: NSManagedObject {
         return res
     }
     
-    func addStatisticsObject(value: GameStatistics) {
+    func addStatisticsObject(_ value: GameStatistics) {
         var newItems: Set<GameStatistics>
         if let statistics = self.statistics {
             newItems = statistics as! Set<GameStatistics>
@@ -173,10 +174,10 @@ class Game: NSManagedObject {
             newItems = Set<GameStatistics>()
         }
         newItems.insert(value)
-        self.statistics = newItems
+        self.statistics = newItems as NSSet?
     }
     
-    func removeStatisticsObject(value: GameStatistics) {
+    func removeStatisticsObject(_ value: GameStatistics) {
         var newItems: Set<GameStatistics>
         if let statistics = self.statistics {
             newItems = statistics as! Set<GameStatistics>
@@ -184,6 +185,6 @@ class Game: NSManagedObject {
             newItems = Set<GameStatistics>()
         }
         newItems.remove(value)
-        self.statistics = newItems
+        self.statistics = newItems as NSSet?
     }
 }

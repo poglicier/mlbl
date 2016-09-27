@@ -25,7 +25,7 @@ class TeamPlayerCell: UITableViewCell {
                 self.numberLabel.text = nil
             }
             
-            let isLanguageRu = self.language.containsString("ru")
+            let isLanguageRu = self.language.contains("ru")
             
             if var playerName = isLanguageRu ? player.lastNameRu : player.lastNameEn {
                 if let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn {
@@ -58,13 +58,15 @@ class TeamPlayerCell: UITableViewCell {
                 self.weightLabel.text = nil
             }
             if let birth = player.birth {
-                let ageComponents = NSCalendar.currentCalendar().components(.Year,
-                                                                            fromDate:birth,
-                                                                            toDate:NSDate(),
+                let ageComponents = (Calendar.current as NSCalendar).components(.year,
+                                                                            from:birth as Date,
+                                                                            to:Date(),
                                                                             options:[])
-                let age = ageComponents.year
-                
-                self.ageLabel.text = "\(age)"
+                if let age = ageComponents.year {
+                    self.ageLabel.text = "\(age)"
+                } else {
+                    self.ageLabel.text = nil
+                }
             } else {
                 self.ageLabel.text = nil
             }
@@ -81,13 +83,13 @@ class TeamPlayerCell: UITableViewCell {
 //        }
 //    }
     
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var numberLabel: UILabel!
-    @IBOutlet private var playerLabel: UILabel!
-    @IBOutlet private var positionLabel: UILabel!
-    @IBOutlet private var heightLabel: UILabel!
-    @IBOutlet private var weightLabel: UILabel!
-    @IBOutlet private var ageLabel: UILabel!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var numberLabel: UILabel!
+    @IBOutlet fileprivate var playerLabel: UILabel!
+    @IBOutlet fileprivate var positionLabel: UILabel!
+    @IBOutlet fileprivate var heightLabel: UILabel!
+    @IBOutlet fileprivate var weightLabel: UILabel!
+    @IBOutlet fileprivate var ageLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -97,8 +99,8 @@ class TeamPlayerCell: UITableViewCell {
         }
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         
 //        self.background.layer.shadowRadius = 1
 ////        self.background.layer.masksToBounds = true
@@ -128,8 +130,8 @@ class TeamPlayerCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let isLanguageRu = self.language.containsString("ru")
-        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+        let isLanguageRu = self.language.contains("ru")
+        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
             if var playerName = isLanguageRu ? player.lastNameRu : player.lastNameEn {
                 if let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn {
                     if let firstLetter = firstName.characters.first {
@@ -154,7 +156,7 @@ class TeamPlayerCell: UITableViewCell {
         }
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setSelected(selected, animated: animated)
         
@@ -163,7 +165,7 @@ class TeamPlayerCell: UITableViewCell {
         }
     }
     
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setHighlighted(highlighted, animated: animated)
         

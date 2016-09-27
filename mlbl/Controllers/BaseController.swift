@@ -11,40 +11,40 @@ import UIKit
 class BaseController: UIViewController {
 
     var dataController: DataController!
-    private(set) var activityView: UIActivityIndicatorView!
+    fileprivate(set) var activityView: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupActivityView()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.willEnterForegroud), name: UIApplicationWillEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForegroud), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
     // MARK: - Private
     
-    private func hideTopBar(hide: Bool) {
+    fileprivate func hideTopBar(_ hide: Bool) {
         self.navigationController?.setNavigationBarHidden(hide, animated: true)
     }
     
-    private func setupActivityView() {
-        let av = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    fileprivate func setupActivityView() {
+        let av = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
         av.hidesWhenStopped = true
         av.color = UIColor.mlblLightOrangeColor()
         self.view.addSubview(av)
-        av.snp_makeConstraints { (make) in
+        av.snp.makeConstraints { (make) in
             make.centerX.equalTo(0)
             make.centerY.equalTo(0)
         }
-        av.hidden = true
+        av.isHidden = true
         
         self.activityView = av
     }
@@ -57,7 +57,7 @@ class BaseController: UIViewController {
 }
 
 extension BaseController: UIScrollViewDelegate {
-    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if fabs(velocity.y) > 1 {
             self.hideTopBar(velocity.y > 0)
         }

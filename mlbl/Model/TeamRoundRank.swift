@@ -11,21 +11,22 @@ import CoreData
 
 class TeamRoundRank: NSManagedObject {
 
-    static private let CompTeamIDKey = "TeamID"
-    static private let CompTeamNameKey = "CompTeamName"
-    static private let CompTeamShortNameRuKey = "CompTeamShortNameRu"
-    static private let CompTeamShortNameEnKey = "CompTeamShortNameEn"
-    static private let CompTeamNameRuKey = "CompTeamNameRu"
-    static private let CompTeamNameEnKey = "CompTeamNameEn"
-    static private let CompTeamStandingsKey = "CompTeamStandings"
-    static private let StandingGoalPlusKey = "StandingGoalPlus"
-    static private let StandingGoalMinusKey = "StandingGoalMinus"
-    static private let StandingPointsKey = "StandingPoints"
-    static private let StandingWinKey = "StandingWin"
-    static private let StandingLoseKey = "StandingLose"
-    static private let CompTeamPlaceKey = "CompTeamPlace"
+    static fileprivate let CompTeamIDKey = "TeamID"
+    static fileprivate let CompTeamNameKey = "CompTeamName"
+    static fileprivate let CompTeamShortNameRuKey = "CompTeamShortNameRu"
+    static fileprivate let CompTeamShortNameEnKey = "CompTeamShortNameEn"
+    static fileprivate let CompTeamNameRuKey = "CompTeamNameRu"
+    static fileprivate let CompTeamNameEnKey = "CompTeamNameEn"
+    static fileprivate let CompTeamStandingsKey = "CompTeamStandings"
+    static fileprivate let StandingGoalPlusKey = "StandingGoalPlus"
+    static fileprivate let StandingGoalMinusKey = "StandingGoalMinus"
+    static fileprivate let StandingPointsKey = "StandingPoints"
+    static fileprivate let StandingWinKey = "StandingWin"
+    static fileprivate let StandingLoseKey = "StandingLose"
+    static fileprivate let CompTeamPlaceKey = "CompTeamPlace"
     
-    static func rankWithDict(dict: [String:AnyObject], compId: Int, inContext context: NSManagedObjectContext) -> TeamRoundRank? {
+    @discardableResult
+    static func rankWithDict(_ dict: [String:AnyObject], compId: Int, inContext context: NSManagedObjectContext) -> TeamRoundRank? {
         var res: TeamRoundRank?
         
         if let compTeamDict = dict[CompTeamNameKey] as? [String:AnyObject] {
@@ -37,33 +38,33 @@ class TeamRoundRank: NSManagedObject {
             teamDict[Team.TeamNameRuKey] = compTeamDict[CompTeamNameRuKey]
             
             if let team = Team.teamWithDict(teamDict, inContext: context) {
-                let fetchRequest = NSFetchRequest(entityName: TeamRoundRank.entityName())
+                let fetchRequest = NSFetchRequest<TeamRoundRank>(entityName: TeamRoundRank.entityName())
                 fetchRequest.predicate = NSPredicate(format: "competition.objectId = %d AND team = %@", compId, team)
                 do {
-                    res = try context.executeFetchRequest(fetchRequest).first as? TeamRoundRank
+                    res = try context.fetch(fetchRequest).first
                     
                     if res == nil {
-                        res = TeamRoundRank(entity: NSEntityDescription.entityForName(TeamRoundRank.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                        res = TeamRoundRank(entity: NSEntityDescription.entity(forEntityName: TeamRoundRank.entityName(), in: context)!, insertInto: context)
                         res?.team = team
                         
-                        let parameterRequest = NSFetchRequest(entityName: Competition.entityName())
+                        let parameterRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
                         parameterRequest.predicate = NSPredicate(format: "objectId = %d", compId)
                         do {
-                            res?.competition = (try context.executeFetchRequest(parameterRequest) as! [Competition]).first
+                            res?.competition = try context.fetch(parameterRequest).first
                         } catch {
                             res = nil
                         }
                     }
                     
                     if let standings = (dict[CompTeamStandingsKey] as? [[String:AnyObject]])?.first {
-                        res?.standingWin = standings[StandingWinKey] as? Int
-                        res?.standingLose = standings[StandingLoseKey] as? Int
-                        res?.standingPoints = standings[StandingPointsKey] as? Int
-                        res?.standingsGoalPlus = standings[StandingGoalPlusKey] as? Int
-                        res?.standingsGoalMinus = standings[StandingGoalMinusKey] as? Int
+                        res?.standingWin = standings[StandingWinKey] as? Int as NSNumber?
+                        res?.standingLose = standings[StandingLoseKey] as? Int as NSNumber?
+                        res?.standingPoints = standings[StandingPointsKey] as? Int as NSNumber?
+                        res?.standingsGoalPlus = standings[StandingGoalPlusKey] as? Int as NSNumber?
+                        res?.standingsGoalMinus = standings[StandingGoalMinusKey] as? Int as NSNumber?
                     }
                     
-                    res?.place = dict[CompTeamPlaceKey] as? Int
+                    res?.place = dict[CompTeamPlaceKey] as? Int as NSNumber?
                 } catch {}
             }
         }

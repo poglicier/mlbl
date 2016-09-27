@@ -9,32 +9,32 @@
 import UIKit
 
 class GameScoreCell: UITableViewCell {
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var bottomGrayView: UIView!
-    @IBOutlet private var titleLabel: UILabel!
-    @IBOutlet private var avatarA: UIImageView!
-    @IBOutlet private var titleA: UILabel!
-    @IBOutlet private var scoreA: UILabel!
-    @IBOutlet private var regionA: UILabel!
-    @IBOutlet private var avatarB: UIImageView!
-    @IBOutlet private var titleB: UILabel!
-    @IBOutlet private var scoreB: UILabel!
-    @IBOutlet private var regionB: UILabel!
-    @IBOutlet private var collectionView: UICollectionView!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var bottomGrayView: UIView!
+    @IBOutlet fileprivate var titleLabel: UILabel!
+    @IBOutlet fileprivate var avatarA: UIImageView!
+    @IBOutlet fileprivate var titleA: UILabel!
+    @IBOutlet fileprivate var scoreA: UILabel!
+    @IBOutlet fileprivate var regionA: UILabel!
+    @IBOutlet fileprivate var avatarB: UIImageView!
+    @IBOutlet fileprivate var titleB: UILabel!
+    @IBOutlet fileprivate var scoreB: UILabel!
+    @IBOutlet fileprivate var regionB: UILabel!
+    @IBOutlet fileprivate var collectionView: UICollectionView!
     
-    private var scoreByPeriods: [(Int, Int)]!
+    fileprivate var scoreByPeriods: [(Int, Int)]!
     
     var language: String!
     
     var game: Game! {
         didSet {
-            let isLanguageRu = self.language.containsString("ru")
+            let isLanguageRu = self.language.contains("ru")
             
             self.titleLabel.text = nil
-            let dateFormatter = NSDateFormatter()
+            let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd MMMM yyyy, hh:mm"
             if let date = game.date {
-                var titleString = dateFormatter.stringFromDate(date)
+                var titleString = dateFormatter.string(from: date as Date)
                 
                 if let venue = isLanguageRu ? game.venueRu : game.venueEn {
                     titleString += " \(venue)"
@@ -48,10 +48,10 @@ class GameScoreCell: UITableViewCell {
             self.regionB.text = nil
             
             if let statistics = game.statistics as? Set<GameStatistics> {
-                if let statisticsA = (statistics.filter {$0.teamNumber?.integerValue == 1 && $0.player == nil}).first {
+                if let statisticsA = (statistics.filter {$0.teamNumber?.intValue == 1 && $0.player == nil}).first {
                     if let teamA = statisticsA.team {
                         if let teamAId = teamA.objectId {
-                            if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
+                            if let url = URL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamAId)") {
                                 self.avatarA.setImageWithUrl(url)
                             }
                         }
@@ -60,10 +60,10 @@ class GameScoreCell: UITableViewCell {
                     }
                 }
                 
-                if let statisticsB = (statistics.filter {$0.teamNumber?.integerValue == 2 && $0.player == nil}).first {
+                if let statisticsB = (statistics.filter {$0.teamNumber?.intValue == 2 && $0.player == nil}).first {
                     if let teamB = statisticsB.team {
                         if let teamBId = teamB.objectId {
-                            if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
+                            if let url = URL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamBId)") {
                                 self.avatarB.setImageWithUrl(url)
                             }
                         }
@@ -76,9 +76,9 @@ class GameScoreCell: UITableViewCell {
             self.scoreB.text = game.scoreB?.stringValue ?? "-"
             
             self.scoreByPeriods = [(Int, Int)]()
-            if let periodScores = game.scoreByPeriods?.componentsSeparatedByString(", ") {
+            if let periodScores = game.scoreByPeriods?.components(separatedBy: ", ") {
                 for periodScore in periodScores {
-                    let scores = periodScore.componentsSeparatedByString(":")
+                    let scores = periodScore.components(separatedBy: ":")
                     if let score1 = scores.first {
                         if let score2 = scores.last {
                             self.scoreByPeriods.append((score1.integer(), score2.integer()))
@@ -98,12 +98,12 @@ class GameScoreCell: UITableViewCell {
         self.collectionView.scrollsToTop = false
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         
-        let path = UIBezierPath(roundedRect:self.bottomGrayView.bounds, byRoundingCorners:[.BottomRight, .BottomLeft], cornerRadii: CGSizeMake(5, 5))
+        let path = UIBezierPath(roundedRect:self.bottomGrayView.bounds, byRoundingCorners:[.bottomRight, .bottomLeft], cornerRadii: CGSize(width: 5, height: 5))
         let maskLayer = CAShapeLayer()
-        maskLayer.path = path.CGPath
+        maskLayer.path = path.cgPath
         self.bottomGrayView.layer.mask = maskLayer
     }
     
@@ -113,17 +113,17 @@ class GameScoreCell: UITableViewCell {
         self.background.layer.cornerRadius = 5
         self.background.layer.shadowRadius = 1
         self.background.layer.masksToBounds = true
-        self.background.layer.shadowOffset = CGSizeMake(1, 1)
+        self.background.layer.shadowOffset = CGSize(width: 1, height: 1)
         self.background.layer.shadowOpacity = 0.5
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false
         
         if let statistics = game.statistics as? Set<GameStatistics> {
-            let isLanguageRu = self.language.containsString("ru")
+            let isLanguageRu = self.language.contains("ru")
             
-            if let statisticsA = (statistics.filter {$0.teamNumber?.integerValue == 1}).first {
+            if let statisticsA = (statistics.filter {$0.teamNumber?.intValue == 1}).first {
                 if let teamA = statisticsA.team {
-                    if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+                    if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
                       self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
                     } else {
                         self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
@@ -131,9 +131,9 @@ class GameScoreCell: UITableViewCell {
                 }
             }
             
-            if let statisticsB = (statistics.filter {$0.teamNumber?.integerValue == 2}).first {
+            if let statisticsB = (statistics.filter {$0.teamNumber?.intValue == 2}).first {
                 if let teamB = statisticsB.team {
-                    if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+                    if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
                         self.titleB.text = isLanguageRu ? teamB.shortNameRu : teamB.shortNameEn
                     } else {
                         self.titleB.text = isLanguageRu ? teamB.nameRu : teamB.nameEn
@@ -145,26 +145,26 @@ class GameScoreCell: UITableViewCell {
 }
 
 extension GameScoreCell: UICollectionViewDataSource, UICollectionViewDelegate {
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return (self.scoreByPeriods.count ?? 0) + 1
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.scoreByPeriods.count + 1
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("periodCell", forIndexPath: indexPath) as! PeriodCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "periodCell", for: indexPath) as! PeriodCell
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor.clearColor()
-        cell.contentView.backgroundColor = UIColor.clearColor()
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+        cell.contentView.backgroundColor = UIColor.clear
         
         let periodCell = cell as! PeriodCell
-        let count = self.collectionView.numberOfItemsInSection(0)
+        let count = self.collectionView.numberOfItems(inSection: 0)
         
-        if indexPath.row == count - 1 {
+        if (indexPath as NSIndexPath).row == count - 1 {
             periodCell.periodLabel.text = NSLocalizedString("Total", comment: "")
-            periodCell.teamALabel.font = UIFont.boldSystemFontOfSize(16)
-            periodCell.teamBLabel.font = UIFont.boldSystemFontOfSize(16)
+            periodCell.teamALabel.font = UIFont.boldSystemFont(ofSize: 16)
+            periodCell.teamBLabel.font = UIFont.boldSystemFont(ofSize: 16)
             
             var teamAResult: Int = 0
             var teamBResult: Int = 0
@@ -175,13 +175,13 @@ extension GameScoreCell: UICollectionViewDataSource, UICollectionViewDelegate {
             periodCell.teamALabel.text = "\(teamAResult)"
             periodCell.teamBLabel.text = "\(teamBResult)"
         } else {
-            periodCell.teamALabel.font = UIFont.systemFontOfSize(16)
-            periodCell.teamBLabel.font = UIFont.systemFontOfSize(16)
+            periodCell.teamALabel.font = UIFont.systemFont(ofSize: 16)
+            periodCell.teamBLabel.font = UIFont.systemFont(ofSize: 16)
             
-            periodCell.teamALabel.text = "\(self.scoreByPeriods[indexPath.row].0)"
-            periodCell.teamBLabel.text = "\(self.scoreByPeriods[indexPath.row].1)"
+            periodCell.teamALabel.text = "\(self.scoreByPeriods[(indexPath as NSIndexPath).row].0)"
+            periodCell.teamBLabel.text = "\(self.scoreByPeriods[(indexPath as NSIndexPath).row].1)"
             
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 periodCell.periodLabel.text = "I"
             case 1:
@@ -193,7 +193,7 @@ extension GameScoreCell: UICollectionViewDataSource, UICollectionViewDelegate {
             case 4:
                 periodCell.periodLabel.text = "OT"
             default:
-                periodCell.periodLabel.text = "OT\(indexPath.row - 3)"
+                periodCell.periodLabel.text = "OT\((indexPath as NSIndexPath).row - 3)"
             }
         }
     }

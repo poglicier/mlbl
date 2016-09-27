@@ -10,11 +10,11 @@ import UIKit
 
 class PlayerTeamsHeader: UIView {
 
-    @IBOutlet private var view: UIView!
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var titleLabel: UILabel!
-    @IBOutlet private var seasonLabel: UILabel!
-    @IBOutlet private var teamLabel: UILabel!
+    @IBOutlet fileprivate var view: UIView!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var titleLabel: UILabel!
+    @IBOutlet fileprivate var seasonLabel: UILabel!
+    @IBOutlet fileprivate var teamLabel: UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,8 +26,8 @@ class PlayerTeamsHeader: UIView {
         self.initialize()
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         
         if let _ = self.background {
             if let _ = self.background {
@@ -38,14 +38,14 @@ class PlayerTeamsHeader: UIView {
     
     // MARK: - Private
     
-    private func initialize() {
-        NSBundle.mainBundle().loadNibNamed(String(self.classForCoder), owner: self, options: [:])
+    fileprivate func initialize() {
+        Bundle.main.loadNibNamed(String(describing: self.classForCoder), owner: self, options: [:])
         self.addSubview(self.view)
-        self.view.snp_makeConstraints { (make) in
+        self.view.snp.makeConstraints { (make) in
             make.left.top.right.bottom.equalTo(0)
         }
         
-        self.titleLabel.text = NSLocalizedString("Teams", comment: "").uppercaseString
+        self.titleLabel.text = NSLocalizedString("Teams", comment: "").uppercased()
         self.seasonLabel.text = NSLocalizedString("Season", comment: "")
         self.teamLabel.text = NSLocalizedString("Team", comment: "")
     }

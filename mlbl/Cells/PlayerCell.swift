@@ -9,21 +9,21 @@
 import UIKit
 
 class PlayerCell: UITableViewCell {
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var avatarView: UIImageView!
-    @IBOutlet private var teamAvatarView: UIImageView!
-    @IBOutlet private var nameLabel: UILabel!
-    @IBOutlet private var dateTitleLabel: UILabel!
-    @IBOutlet private var dateValueLabel: UILabel!
-    @IBOutlet private var heightTitleLabel: UILabel!
-    @IBOutlet private var heightValueLabel: UILabel!
-    @IBOutlet private var weightTitleLabel: UILabel!
-    @IBOutlet private var weightValueLabel: UILabel!
-    @IBOutlet private var teamLabel: UILabel!
-    @IBOutlet private var positionLabel: UILabel!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var avatarView: UIImageView!
+    @IBOutlet fileprivate var teamAvatarView: UIImageView!
+    @IBOutlet fileprivate var nameLabel: UILabel!
+    @IBOutlet fileprivate var dateTitleLabel: UILabel!
+    @IBOutlet fileprivate var dateValueLabel: UILabel!
+    @IBOutlet fileprivate var heightTitleLabel: UILabel!
+    @IBOutlet fileprivate var heightValueLabel: UILabel!
+    @IBOutlet fileprivate var weightTitleLabel: UILabel!
+    @IBOutlet fileprivate var weightValueLabel: UILabel!
+    @IBOutlet fileprivate var teamLabel: UILabel!
+    @IBOutlet fileprivate var positionLabel: UILabel!
     
-    static private var dateFormatter: NSDateFormatter = {
-        let res = NSDateFormatter()
+    static fileprivate var dateFormatter: DateFormatter = {
+        let res = DateFormatter()
         res.dateFormat = "dd.MM.yyyy"
         return res
     }()
@@ -33,12 +33,12 @@ class PlayerCell: UITableViewCell {
         didSet {
             self.avatarView.image = UIImage(named: "avatarStub\(1 + ((player.objectId as? Int) ?? 1)%3)")
             if let personId = player.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetPersonPhoto/\(personId)") {
+                if let url = URL(string: "http://reg.infobasket.ru/Widget/GetPersonPhoto/\(personId)") {
                     self.avatarView.setImageWithUrl(url)
                 }
             }
             
-            let isLanguageRu = self.language.containsString("ru")
+            let isLanguageRu = self.language.contains("ru")
             
             let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn
             let lastName = isLanguageRu ? player.lastNameRu : player.lastNameEn
@@ -56,7 +56,7 @@ class PlayerCell: UITableViewCell {
             self.positionLabel.text = isLanguageRu ? player.positionShortRu : player.positionShortEn
             
             if let date = player.birth {
-                self.dateValueLabel.text = PlayerCell.dateFormatter.stringFromDate(date)
+                self.dateValueLabel.text = PlayerCell.dateFormatter.string(from: date as Date)
             } else {
                 self.dateValueLabel.text = "-"
             }
@@ -77,7 +77,7 @@ class PlayerCell: UITableViewCell {
             
             self.teamAvatarView.image = UIImage(named: "teamStub")
             if let teamId = player.team?.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamId)") {
+                if let url = URL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamId)") {
                     self.teamAvatarView.setImageWithUrl(url)
                 }
             }
@@ -98,13 +98,13 @@ class PlayerCell: UITableViewCell {
         self.background.layer.cornerRadius = 5
         self.background.layer.shadowRadius = 1
         self.background.layer.masksToBounds = true
-        self.background.layer.shadowOffset = CGSizeMake(1, 1)
+        self.background.layer.shadowOffset = CGSize(width: 1, height: 1)
         self.background.layer.shadowOpacity = 0.5
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false
         
-        let isLanguageRu = self.language.containsString("ru")
-        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+        let isLanguageRu = self.language.contains("ru")
+        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
             self.teamLabel.text = isLanguageRu ? self.player.team?.shortNameRu : self.player.team?.shortNameEn
             self.positionLabel.text = isLanguageRu ? self.player.positionShortRu : self.player.positionShortEn
         } else {
@@ -113,7 +113,7 @@ class PlayerCell: UITableViewCell {
         }
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setSelected(selected, animated: animated)
         
@@ -122,7 +122,7 @@ class PlayerCell: UITableViewCell {
         }
     }
     
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setHighlighted(highlighted, animated: animated)
         

@@ -18,34 +18,35 @@ class Player: NSManagedObject {
     static let PersonFirstNameRuKey = "PersonFirstNameRu"
     static let PersonLastNameEnKey = "PersonLastNameEn"
     static let PersonFirstNameEnKey = "PersonFirstNameEn"
-    static private let PlayerNumberKey = "PlayerNumber"
-    static private let PersonGenderKey = "PersonGender"
+    static fileprivate let PlayerNumberKey = "PlayerNumber"
+    static fileprivate let PersonGenderKey = "PersonGender"
     static let PersonBirthdayKey = "PersonBirthday"
     static let PersonHeightKey = "PersonHeight"
     static let PersonWeightKey = "PersonWeight"
-    static private let PersonTeamNameKey = "TeamName"
-    static private let PersonCompTeamShortNameRuKey = "CompTeamShortNameRu"
-    static private let PersonCompTeamShortNameEnKey = "CompTeamShortNameEn"
-    static private let PersonCompTeamNameRuKey = "CompTeamNameRu"
-    static private let PersonCompTeamNameEnKey = "CompTeamNameEn"
-    static private let PersonPlayersKey = "Players"
-    static private let PersonPlayerPositionKey = "Position"
-    static private let PersonPlayerPositionShortEnKey = "PosShortNameEn"
-    static private let PersonPlayerPositionEnKey = "PosNameEn"
-    static private let PersonPlayerPositionShortRuKey = "PosShortNameRu"
-    static private let PersonPlayerPositionRuKey = "PosNameRu"
+    static fileprivate let PersonTeamNameKey = "TeamName"
+    static fileprivate let PersonCompTeamShortNameRuKey = "CompTeamShortNameRu"
+    static fileprivate let PersonCompTeamShortNameEnKey = "CompTeamShortNameEn"
+    static fileprivate let PersonCompTeamNameRuKey = "CompTeamNameRu"
+    static fileprivate let PersonCompTeamNameEnKey = "CompTeamNameEn"
+    static fileprivate let PersonPlayersKey = "Players"
+    static fileprivate let PersonPlayerPositionKey = "Position"
+    static fileprivate let PersonPlayerPositionShortEnKey = "PosShortNameEn"
+    static fileprivate let PersonPlayerPositionEnKey = "PosNameEn"
+    static fileprivate let PersonPlayerPositionShortRuKey = "PosShortNameRu"
+    static fileprivate let PersonPlayerPositionRuKey = "PosNameRu"
     
-    static func playerWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Player? {
+    @discardableResult
+    static func playerWithDict(_ dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Player? {
         var res: Player?
         
         if let objectId = dict[PlayerIdKey] as? NSNumber {
-            let fetchRequest = NSFetchRequest(entityName: Player.entityName())
+            let fetchRequest = NSFetchRequest<Player>(entityName: Player.entityName())
             fetchRequest.predicate = NSPredicate(format: "objectId = %@", objectId)
             do {
-                res = try context.executeFetchRequest(fetchRequest).first as? Player
+                res = try context.fetch(fetchRequest).first
                 
                 if res == nil {
-                    res = Player(entity: NSEntityDescription.entityForName(Player.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                    res = Player(entity: NSEntityDescription.entity(forEntityName: Player.entityName(), in: context)!, insertInto: context)
                     res?.objectId = objectId
                 }
             } catch {}
@@ -62,17 +63,17 @@ class Player: NSManagedObject {
                 }
                 
                 if let gender = personInfo[PersonGenderKey] as? Int {
-                    res?.gender = gender
+                    res?.gender = gender as NSNumber?
                 }
                 if let height = personInfo[PersonHeightKey] as? Int {
-                    res?.height = height
+                    res?.height = height as NSNumber?
                 }
                 if let weight = personInfo[PersonWeightKey] as? Int {
-                    res?.weight = weight
+                    res?.weight = weight as NSNumber?
                 }
                 if let birthIntervalString = personInfo[PersonBirthdayKey] as? NSString {
-                    if let birthInterval = Double((birthIntervalString.stringByReplacingOccurrencesOfString("/Date(", withString: "") as NSString).stringByReplacingOccurrencesOfString(")/", withString: "")) {
-                        res?.birth = NSDate(timeIntervalSince1970: birthInterval/1000)
+                    if let birthInterval = Double((birthIntervalString.replacingOccurrences(of: "/Date(", with: "") as NSString).replacingOccurrences(of: ")/", with: "")) {
+                        res?.birth = Date(timeIntervalSince1970: birthInterval/1000)
                     }
                 }
                 
@@ -88,7 +89,7 @@ class Player: NSManagedObject {
                 }
             }
             
-            res?.playerNumber = dict[PlayerNumberKey] as? Int
+            res?.playerNumber = dict[PlayerNumberKey] as? Int as NSNumber?
             
             if let teamNameDict = dict[PersonTeamNameKey] as? [String:AnyObject] {
                 var teamDict = [String:AnyObject]()

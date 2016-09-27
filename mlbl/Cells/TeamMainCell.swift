@@ -9,21 +9,21 @@
 import UIKit
 
 class TeamMainCell: UITableViewCell {
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var avatar: UIImageView!
-    @IBOutlet private var nameLabel: UILabel!
-    @IBOutlet private var cityLabel: UILabel!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var avatar: UIImageView!
+    @IBOutlet fileprivate var nameLabel: UILabel!
+    @IBOutlet fileprivate var cityLabel: UILabel!
 
     var language: String!
     
     var team: Team! {
         didSet {
-            let isLanguageRu = self.language.containsString("ru")
+            let isLanguageRu = self.language.contains("ru")
             
             self.avatar.image = UIImage(named: "teamStub")
             
             if let teamId = team.objectId {
-                if let url = NSURL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamId)") {
+                if let url = URL(string: "http://reg.infobasket.ru/Widget/GetTeamLogo/\(teamId)") {
                     self.avatar.setImageWithUrl(url)
                 }
             }
@@ -44,7 +44,7 @@ class TeamMainCell: UITableViewCell {
         self.background.layer.cornerRadius = 5
         self.background.layer.shadowRadius = 1
         self.background.layer.masksToBounds = true
-        self.background.layer.shadowOffset = CGSizeMake(1, 1)
+        self.background.layer.shadowOffset = CGSize(width: 1, height: 1)
         self.background.layer.shadowOpacity = 0.5
         self.background.layer.masksToBounds = false
         self.background.clipsToBounds = false

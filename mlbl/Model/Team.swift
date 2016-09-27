@@ -15,26 +15,27 @@ class Team: NSManagedObject {
     static let ShortTeamNameEnKey = "ShortTeamNameEn"
     static let TeamNameRuKey = "TeamNameRu"
     static let TeamNameEnKey = "TeamNameEn"
-    static private let CurrentTeamNameKey = "CurrentTeamName"
-    static private let CurrentTeamIdKey = "TeamID"
-    static private let CompTeamShortNameRuKey = "CompTeamShortNameRu"
-    static private let CompTeamShortNameEnKey = "CompTeamShortNameEn"
-    static private let CompTeamNameRuKey = "CompTeamNameRu"
-    static private let CompTeamNameEnKey = "CompTeamNameEn"
-    static private let CompTeamRegionNameRuKey = "CompTeamRegionNameRu"
-    static private let CompTeamRegionNameEnKey = "CompTeamRegionNameEn"
+    static fileprivate let CurrentTeamNameKey = "CurrentTeamName"
+    static fileprivate let CurrentTeamIdKey = "TeamID"
+    static fileprivate let CompTeamShortNameRuKey = "CompTeamShortNameRu"
+    static fileprivate let CompTeamShortNameEnKey = "CompTeamShortNameEn"
+    static fileprivate let CompTeamNameRuKey = "CompTeamNameRu"
+    static fileprivate let CompTeamNameEnKey = "CompTeamNameEn"
+    static fileprivate let CompTeamRegionNameRuKey = "CompTeamRegionNameRu"
+    static fileprivate let CompTeamRegionNameEnKey = "CompTeamRegionNameEn"
     
-    static func teamWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Team? {
+    @discardableResult
+    static func teamWithDict(_ dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Team? {
         var res: Team?
         
         if let objectId = dict[TeamIdKey] as? NSNumber {
-            let fetchRequest = NSFetchRequest(entityName: Team.entityName())
+            let fetchRequest = NSFetchRequest<Team>(entityName: Team.entityName())
             fetchRequest.predicate = NSPredicate(format: "objectId = %@", objectId)
             do {
-                res = try context.executeFetchRequest(fetchRequest).first as? Team
+                res = try context.fetch(fetchRequest).first
                 
                 if res == nil {
-                    res = Team.init(entity: NSEntityDescription.entityForName(Team.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                    res = Team.init(entity: NSEntityDescription.entity(forEntityName: Team.entityName(), in: context)!, insertInto: context)
                     res?.objectId = objectId
                 }
             } catch { }
@@ -56,17 +57,18 @@ class Team: NSManagedObject {
         return res
     }
     
-    static func teamStatsWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Team? {
+    @discardableResult
+    static func teamStatsWithDict(_ dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Team? {
         var res: Team?
         
         if let objectId = dict[TeamIdKey] as? NSNumber {
-            let fetchRequest = NSFetchRequest(entityName: Team.entityName())
+            let fetchRequest = NSFetchRequest<Team>(entityName: Team.entityName())
             fetchRequest.predicate = NSPredicate(format: "objectId = %@", objectId)
             do {
-                res = try context.executeFetchRequest(fetchRequest).first as? Team
+                res = try context.fetch(fetchRequest).first
                 
                 if res == nil {
-                    res = Team.init(entity: NSEntityDescription.entityForName(Team.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                    res = Team.init(entity: NSEntityDescription.entity(forEntityName: Team.entityName(), in: context)!, insertInto: context)
                     res?.objectId = objectId
                 }
             } catch { }
@@ -75,16 +77,17 @@ class Team: NSManagedObject {
         return res
     }
     
-    static func teamWithInfoDict(dict: [String: AnyObject], inContext context: NSManagedObjectContext) -> Team? {
+    @discardableResult
+    static func teamWithInfoDict(_ dict: [String: AnyObject], inContext context: NSManagedObjectContext) -> Team? {
         var res: Team?
         
         if var currentTeamDict = dict[CurrentTeamNameKey] as? [String:AnyObject] {
             var teamDict = [String:AnyObject]()
-            teamDict[TeamIdKey] = currentTeamDict[CurrentTeamIdKey] as? Int
-            teamDict[ShortTeamNameRuKey] = currentTeamDict[CompTeamShortNameRuKey] as? String
-            teamDict[ShortTeamNameEnKey] = currentTeamDict[CompTeamShortNameEnKey] as? String
-            teamDict[TeamNameRuKey] = currentTeamDict[CompTeamNameRuKey] as? String
-            teamDict[TeamNameEnKey] = currentTeamDict[CompTeamNameEnKey] as? String
+            teamDict[TeamIdKey] = currentTeamDict[CurrentTeamIdKey] as? Int as AnyObject?
+            teamDict[ShortTeamNameRuKey] = currentTeamDict[CompTeamShortNameRuKey] as? String as AnyObject?
+            teamDict[ShortTeamNameEnKey] = currentTeamDict[CompTeamShortNameEnKey] as? String as AnyObject?
+            teamDict[TeamNameRuKey] = currentTeamDict[CompTeamNameRuKey] as? String as AnyObject?
+            teamDict[TeamNameEnKey] = currentTeamDict[CompTeamNameEnKey] as? String as AnyObject?
             
             res = teamWithDict(teamDict, inContext: context)
             res?.regionNameEn = currentTeamDict[CompTeamRegionNameEnKey] as? String

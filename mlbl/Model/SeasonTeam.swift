@@ -11,32 +11,33 @@ import CoreData
 
 class SeasonTeam: NSManagedObject {
 
-    private static let TeamKey = "Team"
-    private static let TeamIdKey = "TeamID"
-    private static let TeamShortNameRuKey = "TeamShortNameRu"
-    private static let TeamShortNameEnKey = "TeamShortNameEn"
-    private static let TeamNameRuKey = "TeamNameRu"
-    private static let TeamNameEnKey = "TeamNameEn"
-    private static let CompKey = "Comp"
-    private static let CompAbcNameRuKey = "CompAbcNameRu"
-    private static let CompAbcNameEnKey = "CompAbcNameEn"
-    private static let CompFullNameRuKey = "CompFullNameRu"
-    private static let CompFullNameEnKey = "CompFullNameEn"
+    fileprivate static let TeamKey = "Team"
+    fileprivate static let TeamIdKey = "TeamID"
+    fileprivate static let TeamShortNameRuKey = "TeamShortNameRu"
+    fileprivate static let TeamShortNameEnKey = "TeamShortNameEn"
+    fileprivate static let TeamNameRuKey = "TeamNameRu"
+    fileprivate static let TeamNameEnKey = "TeamNameEn"
+    fileprivate static let CompKey = "Comp"
+    fileprivate static let CompAbcNameRuKey = "CompAbcNameRu"
+    fileprivate static let CompAbcNameEnKey = "CompAbcNameEn"
+    fileprivate static let CompFullNameRuKey = "CompFullNameRu"
+    fileprivate static let CompFullNameEnKey = "CompFullNameEn"
     
-    static func seasonTeamWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> SeasonTeam? {
+    @discardableResult
+    static func seasonTeamWithDict(_ dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> SeasonTeam? {
         var res: SeasonTeam?
         
         if let teamDict = dict[TeamKey] as? [String:AnyObject] {
             var fixedTeamDict = [String:AnyObject]()
-            fixedTeamDict[Team.TeamIdKey] = teamDict[TeamIdKey] as? Int
-            fixedTeamDict[Team.ShortTeamNameRuKey] = teamDict[TeamShortNameRuKey] as? String
-            fixedTeamDict[Team.ShortTeamNameEnKey] = teamDict[TeamShortNameEnKey] as? String
-            fixedTeamDict[Team.TeamNameRuKey] = teamDict[TeamNameRuKey] as? String
-            fixedTeamDict[Team.TeamNameEnKey] = teamDict[TeamNameEnKey] as? String
+            fixedTeamDict[Team.TeamIdKey] = teamDict[TeamIdKey] as? Int as AnyObject?
+            fixedTeamDict[Team.ShortTeamNameRuKey] = teamDict[TeamShortNameRuKey] as? String as AnyObject?
+            fixedTeamDict[Team.ShortTeamNameEnKey] = teamDict[TeamShortNameEnKey] as? String as AnyObject?
+            fixedTeamDict[Team.TeamNameRuKey] = teamDict[TeamNameRuKey] as? String as AnyObject?
+            fixedTeamDict[Team.TeamNameEnKey] = teamDict[TeamNameEnKey] as? String as AnyObject?
             
             if let team = Team.teamWithDict(fixedTeamDict, inContext: context) {
                 if let compDict = dict[CompKey] as? [String:AnyObject] {
-                    res = SeasonTeam.init(entity: NSEntityDescription.entityForName(SeasonTeam.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                    res = SeasonTeam.init(entity: NSEntityDescription.entity(forEntityName: SeasonTeam.entityName(), in: context)!, insertInto: context)
                     res?.team = team
                     
                     res?.abcNameEn = compDict[CompAbcNameEnKey] as? String

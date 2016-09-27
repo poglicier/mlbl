@@ -10,15 +10,15 @@ import UIKit
 
 class TeamPlayersHeader: UIView {
 
-    @IBOutlet private var view: UIView!
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var titleLabel: UILabel!
-    @IBOutlet private var numberLabel: UILabel!
-    @IBOutlet private var playerLabel: UILabel!
-    @IBOutlet private var positionLabel: UILabel!
-    @IBOutlet private var heghtLabel: UILabel!
-    @IBOutlet private var weightLabel: UILabel!
-    @IBOutlet private var ageLabel: UILabel!
+    @IBOutlet fileprivate var view: UIView!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var titleLabel: UILabel!
+    @IBOutlet fileprivate var numberLabel: UILabel!
+    @IBOutlet fileprivate var playerLabel: UILabel!
+    @IBOutlet fileprivate var positionLabel: UILabel!
+    @IBOutlet fileprivate var heghtLabel: UILabel!
+    @IBOutlet fileprivate var weightLabel: UILabel!
+    @IBOutlet fileprivate var ageLabel: UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,8 +30,8 @@ class TeamPlayersHeader: UIView {
         self.initialize()
     }
     
-    override func drawRect(rect: CGRect) {
-        super.drawRect(rect)
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
         
         if let _ = self.background {
             self.background.layer.cornerRadius = 5
@@ -47,14 +47,14 @@ class TeamPlayersHeader: UIView {
     
     // MARK: - Private
     
-    private func initialize() {
-        NSBundle.mainBundle().loadNibNamed(String(self.classForCoder), owner: self, options: [:])
+    fileprivate func initialize() {
+        Bundle.main.loadNibNamed(String(describing: self.classForCoder), owner: self, options: [:])
         self.addSubview(self.view)
-        self.view.snp_makeConstraints { (make) in
+        self.view.snp.makeConstraints { (make) in
             make.left.top.right.bottom.equalTo(0)
         }
         
-        self.titleLabel.text = NSLocalizedString("Roster", comment: "").uppercaseString
+        self.titleLabel.text = NSLocalizedString("Roster", comment: "").uppercased()
         self.numberLabel.text = NSLocalizedString("Number", comment: "")
         self.playerLabel.text = NSLocalizedString("Player", comment: "")
         self.positionLabel.text = NSLocalizedString("Position acronym", comment: "")

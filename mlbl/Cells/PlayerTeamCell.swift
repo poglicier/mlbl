@@ -21,7 +21,7 @@ class PlayerTeamCell: UITableViewCell {
     
     var seasonTeam: SeasonTeam! {
         didSet {
-            let isLanguageRu = self.language.containsString("ru")
+            let isLanguageRu = self.language.contains("ru")
             
             self.seasonLabel.text = isLanguageRu ? seasonTeam.abcNameRu : seasonTeam.abcNameEn
             self.teamLabel.text = isLanguageRu ? seasonTeam.team?.shortNameRu : seasonTeam.team?.shortNameEn
@@ -30,15 +30,15 @@ class PlayerTeamCell: UITableViewCell {
     
     // MARK: - Private
     
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var seasonLabel: UILabel!
-    @IBOutlet private var teamLabel: UILabel!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var seasonLabel: UILabel!
+    @IBOutlet fileprivate var teamLabel: UILabel!
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let isLanguageRu = self.language.containsString("ru")
-        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+        let isLanguageRu = self.language.contains("ru")
+        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
             self.seasonLabel.text = isLanguageRu ? seasonTeam.abcNameRu : seasonTeam.abcNameEn
             self.teamLabel.text = isLanguageRu ? seasonTeam.team?.shortNameRu : seasonTeam.team?.shortNameEn
         } else {

@@ -11,7 +11,7 @@ import CoreData
 
 extension NSManagedObject {
     static func entityName() -> String {
-        return String(self)
+        return String(describing: self)
     }
 }
 
@@ -26,60 +26,60 @@ extension UIColor {
 }
 
 extension UIImage {
-    static func imageWithView(view: UIView) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0)
-        view.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+    static func imageWithView(_ view: UIView) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
+        view.layer.render(in: UIGraphicsGetCurrentContext()!)
         let img = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return img
+        return img!
     }
     
-    static func imageForNavigationBar(portrait portrait: Bool) -> UIImage {
+    static func imageForNavigationBar(portrait: Bool) -> UIImage {
         if portrait == true {
-            UIGraphicsBeginImageContext(CGSizeMake(1, 64))
+            UIGraphicsBeginImageContext(CGSize(width: 1, height: 64))
             let context = UIGraphicsGetCurrentContext()
 
-            let rect1 = CGRectMake(0, 0, 1, 20)
+            let rect1 = CGRect(x: 0, y: 0, width: 1, height: 20)
             let color1 = UIColor.mlblDarkOrangeColor()
-            let rect2 = CGRectMake(0, 20, 1, 44)
+            let rect2 = CGRect(x: 0, y: 20, width: 1, height: 44)
             let color2 = UIColor.mlblLightOrangeColor()
             
-            CGContextSetFillColorWithColor(context, color1.CGColor)
-            CGContextFillRect(context, rect1)
-            CGContextSetFillColorWithColor(context, color2.CGColor)
-            CGContextFillRect(context, rect2)
+            context?.setFillColor(color1.cgColor)
+            context?.fill(rect1)
+            context?.setFillColor(color2.cgColor)
+            context?.fill(rect2)
         } else {
-            let rect2 = CGRectMake(0, 0, 1, 44)
+            let rect2 = CGRect(x: 0, y: 0, width: 1, height: 44)
             UIGraphicsBeginImageContext(rect2.size)
             
             let context = UIGraphicsGetCurrentContext()
             let color2 = UIColor.mlblLightOrangeColor()
             
-            CGContextSetFillColorWithColor(context, color2.CGColor)
-            CGContextFillRect(context, rect2)
+            context?.setFillColor(color2.cgColor)
+            context?.fill(rect2)
         }
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return image
+        return image!
     }
     
-    func imageWithColor(color1: UIColor) -> UIImage {
+    func imageWithColor(_ color1: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         color1.setFill()
         
         let context = UIGraphicsGetCurrentContext()
-        CGContextTranslateCTM(context, 0, self.size.height)
-        CGContextScaleCTM(context, 1.0, -1.0);
-        CGContextSetBlendMode(context, CGBlendMode.Normal)
+        context?.translateBy(x: 0, y: self.size.height)
+        context?.scaleBy(x: 1.0, y: -1.0);
+        context?.setBlendMode(CGBlendMode.normal)
         
-        let rect = CGRectMake(0, 0, self.size.width, self.size.height) as CGRect
-        CGContextClipToMask(context, rect, self.CGImage)
-        CGContextFillRect(context, rect)
+        let rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height) as CGRect
+        context?.clip(to: rect, mask: self.cgImage!)
+        context?.fill(rect)
         
-        let newImage = UIGraphicsGetImageFromCurrentImageContext() as UIImage
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()! as UIImage
         UIGraphicsEndImageContext()
         
         return newImage
@@ -87,22 +87,22 @@ extension UIImage {
 }
 
 extension UINavigationController: UINavigationControllerDelegate {
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationBar.translucent = false
-        self.navigationBar.tintColor = UIColor.whiteColor()
-        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
-        self.navigationBar.setBackgroundImage(UIImage.imageForNavigationBar(portrait: true), forBarMetrics: .Default)
+        self.navigationBar.isTranslucent = false
+        self.navigationBar.tintColor = UIColor.white
+        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+        self.navigationBar.setBackgroundImage(UIImage.imageForNavigationBar(portrait: true), for: .default)
         self.delegate = self
     }
     
-    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator:coordinator)
+    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with:coordinator)
         
         var image: UIImage!
         if size.width > size.height {
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 image = UIImage.imageForNavigationBar(portrait: true)
             } else {
                 image = UIImage.imageForNavigationBar(portrait: false)
@@ -111,10 +111,10 @@ extension UINavigationController: UINavigationControllerDelegate {
             image = UIImage.imageForNavigationBar(portrait: true)
         }
         
-        self.navigationBar.setBackgroundImage(image, forBarMetrics: .Default)
+        self.navigationBar.setBackgroundImage(image, for: .default)
     }
     
-    public func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if toVC is ChooseCompetitionController {
             let animator = FadeAnimator()
             animator.presenting = true

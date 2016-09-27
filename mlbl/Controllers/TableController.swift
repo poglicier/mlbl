@@ -10,35 +10,40 @@ import UIKit
 import CoreData
 
 class TableController: BaseController {
-    @IBOutlet private var roundTableView: UITableView!
-    @IBOutlet private var playoffTableView: UITableView!
-    @IBOutlet private var emptyLabel: UILabel!
-    @IBOutlet private var stageSelectorView: UIView!
-    @IBOutlet private var stageLabel: UILabel!
-    @IBOutlet private var nextButton: UIButton!
-    @IBOutlet private var prevButton: UIButton!
+    @IBOutlet fileprivate var roundTableView: UITableView!
+    @IBOutlet fileprivate var playoffTableView: UITableView!
+    @IBOutlet fileprivate var emptyLabel: UILabel!
+    @IBOutlet fileprivate var stageSelectorView: UIView!
+    @IBOutlet fileprivate var stageLabel: UILabel!
+    @IBOutlet fileprivate var nextButton: UIButton!
+    @IBOutlet fileprivate var prevButton: UIButton!
     
-    private let refreshControlRound = UIRefreshControl()
-    private let refreshControlPlayoff = UIRefreshControl()
-    private var refreshButtonRound: UIButton?
-    private var refreshButtonPlayoff: UIButton?
-    private var selectedGameId: Int?
-    private var selectedGameIds: [Int]?
-    private var selectedTeamId: Int?
-    private let rowHeight: CGFloat = 112
-    private let playoffRowHeight: CGFloat = 180
-    private var childrenComptetitions = [Competition]()
-    private var selectedCompetition: Competition! {
+    fileprivate let refreshControlRound = UIRefreshControl()
+    fileprivate let refreshControlPlayoff = UIRefreshControl()
+    fileprivate var refreshButtonRound: UIButton?
+    fileprivate var refreshButtonPlayoff: UIButton?
+    fileprivate var selectedGameId: Int?
+    fileprivate var selectedGameIds: [Int]?
+    fileprivate var selectedTeamId: Int?
+    fileprivate let rowHeight: CGFloat = 112
+    fileprivate let playoffRowHeight: CGFloat = 180
+    fileprivate var childrenComptetitions = [Competition]()
+    fileprivate var selectedCompetition: Competition! {
         didSet {
-            let isLanguageRu = self.dataController.language.containsString("ru")
+            let isLanguageRu = self.dataController.language.contains("ru")
             self.stageLabel.text = isLanguageRu ? selectedCompetition.compShortNameRu : selectedCompetition.compShortNameEn
             
-            if selectedCompetition.compType?.integerValue ?? -1 == 0 {
+            self.refreshButtonPlayoff?.removeFromSuperview()
+            self.refreshButtonPlayoff = nil
+            self.refreshButtonRound?.removeFromSuperview()
+            self.refreshButtonRound = nil
+            
+            if selectedCompetition.compType?.intValue ?? -1 == 0 {
                 self.getRoundRobin(true)
                 
                 self.roundTableView.scrollsToTop = true
                 self.playoffTableView.scrollsToTop = false
-                self.roundTableView.contentOffset = CGPointMake(0, -4)
+                self.roundTableView.contentOffset = CGPoint(x: 0, y: -4)
                 self.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition)
                 do {
                     try self.fetchedResultsController.performFetch()
@@ -49,7 +54,7 @@ class TableController: BaseController {
                 
                 self.roundTableView.scrollsToTop = false
                 self.playoffTableView.scrollsToTop = true
-                self.playoffTableView.contentOffset = CGPointZero
+                self.playoffTableView.contentOffset = CGPoint.zero
                 self.playoffFetchedResultsController.fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition)
                 do {
                     try self.playoffFetchedResultsController.performFetch()
@@ -59,8 +64,8 @@ class TableController: BaseController {
         }
     }
     
-    lazy private var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: TeamRoundRank.entityName())
+    lazy fileprivate var fetchedResultsController: NSFetchedResultsController<TeamRoundRank> = {
+        let fetchRequest = NSFetchRequest<TeamRoundRank>(entityName: TeamRoundRank.entityName())
         fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "place", ascending: true)]
         
@@ -74,10 +79,10 @@ class TableController: BaseController {
         return frc
     }()
     
-    lazy private var playoffFetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: PlayoffSerie.entityName())
+    lazy fileprivate var playoffFetchedResultsController: NSFetchedResultsController<PlayoffSerie> = {
+        let fetchRequest = NSFetchRequest<PlayoffSerie>(entityName: PlayoffSerie.entityName())
         fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition)
-        let isLanguageRu = self.dataController.language.containsString("ru")
+        let isLanguageRu = self.dataController.language.contains("ru")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sectionSort", ascending: true),
                                         NSSortDescriptor(key: "sort", ascending: true)]
         
@@ -100,30 +105,30 @@ class TableController: BaseController {
     
     // MARK: - Private
 
-    private func setupTableViews() {
+    fileprivate func setupTableViews() {
         self.roundTableView.contentInset = UIEdgeInsetsMake(4, 0, 4, 0)
         
         self.refreshControlRound.tintColor = UIColor.mlblLightOrangeColor()
-        self.refreshControlRound.addTarget(self, action: #selector(handleRefreshRound(_:)), forControlEvents:.ValueChanged)
+        self.refreshControlRound.addTarget(self, action: #selector(handleRefreshRound(_:)), for:.valueChanged)
         self.roundTableView.addSubview(self.refreshControlRound)
-        self.roundTableView.sendSubviewToBack(self.refreshControlRound)
+        self.roundTableView.sendSubview(toBack: self.refreshControlRound)
         
         self.refreshControlPlayoff.tintColor = UIColor.mlblLightOrangeColor()
-        self.refreshControlPlayoff.addTarget(self, action: #selector(handleRefreshPlayoff(_:)), forControlEvents:.ValueChanged)
+        self.refreshControlPlayoff.addTarget(self, action: #selector(handleRefreshPlayoff(_:)), for:.valueChanged)
         self.playoffTableView.addSubview(self.refreshControlPlayoff)
-        self.playoffTableView.sendSubviewToBack(self.refreshControlPlayoff)
+        self.playoffTableView.sendSubview(toBack: self.refreshControlPlayoff)
     }
     
-    @objc private func handleRefreshRound(refreshControl: UIRefreshControl) {
+    @objc fileprivate func handleRefreshRound(_ refreshControl: UIRefreshControl) {
         self.getRoundRobin(false)
     }
     
-    @objc private func handleRefreshPlayoff(refreshControl: UIRefreshControl) {
+    @objc fileprivate func handleRefreshPlayoff(_ refreshControl: UIRefreshControl) {
         self.getPlayoff(false)
     }
     
     override func willEnterForegroud() {
-        if selectedCompetition.compType?.integerValue ?? -1 == 0 {
+        if selectedCompetition.compType?.intValue ?? -1 == 0 {
             if let _ = self.refreshButtonRound {
                 self.refreshButtonRound?.removeFromSuperview()
                 self.refreshButtonRound = nil
@@ -142,12 +147,12 @@ class TableController: BaseController {
         }
     }
     
-    private func setupSubcompetitions() {
-        let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+    fileprivate func setupSubcompetitions() {
+        let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
         fetchRequest.predicate = NSPredicate(format: "parent.objectId = %d AND compType >= 0", self.dataController.currentCompetitionId())
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compType", ascending: true)]
         do {
-            self.childrenComptetitions = try self.dataController.mainContext.executeFetchRequest(fetchRequest) as! [Competition]
+            self.childrenComptetitions = try self.dataController.mainContext.fetch(fetchRequest)
             
             if self.childrenComptetitions.count == 0 {
                 self.emptyLabel.text = NSLocalizedString("No round tournaments", comment: "")
@@ -160,13 +165,13 @@ class TableController: BaseController {
         } catch {}
     }
     
-    private func getRoundRobin(showIndicator: Bool) {
-        if let compId = self.selectedCompetition.objectId?.integerValue {
+    fileprivate func getRoundRobin(_ showIndicator: Bool) {
+        if let compId = self.selectedCompetition.objectId?.intValue {
             if (showIndicator) {
                 self.activityView.startAnimating()
-                self.roundTableView.hidden = true
-                self.playoffTableView.hidden = true
-                self.emptyLabel.hidden = true
+                self.roundTableView.isHidden = true
+                self.playoffTableView.isHidden = true
+                self.emptyLabel.isHidden = true
             }
             
             self.dataController.getRoundRobin(compId) { [weak self] error in
@@ -175,32 +180,32 @@ class TableController: BaseController {
                     strongSelf.refreshControlRound.endRefreshing()
                     
                     strongSelf.activityView.stopAnimating()
-                    strongSelf.prevButton.enabled = true
-                    strongSelf.nextButton.enabled = true
+                    strongSelf.prevButton.isEnabled = true
+                    strongSelf.nextButton.isEnabled = true
                     
                     if let _ = error {
                         strongSelf.emptyLabel.text = error?.localizedDescription
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                            strongSelf.emptyLabel.hidden = false
-                            strongSelf.roundTableView.hidden = true
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
+                            strongSelf.emptyLabel.isHidden = false
+                            strongSelf.roundTableView.isHidden = true
                         }
                         
-                        let refreshButton = UIButton(type: .Custom)
+                        let refreshButton = UIButton(type: .custom)
                         let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
-                        refreshButton.setAttributedTitle(attrString, forState: .Normal)
-                        refreshButton.addTarget(self, action: #selector(strongSelf.refreshRoundRobin), forControlEvents: .TouchUpInside)
+                        refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                        refreshButton.addTarget(self, action: #selector(strongSelf.refreshRoundRobin), for: .touchUpInside)
                         strongSelf.view.addSubview(refreshButton)
                         
-                        refreshButton.snp_makeConstraints(closure: { (make) in
+                        refreshButton.snp.makeConstraints( { (make) in
                             make.centerX.equalTo(0)
-                            make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
+                            make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                         })
                         
                         strongSelf.refreshButtonRound = refreshButton
                     } else {
                         strongSelf.roundTableView.reloadData()
-                        strongSelf.roundTableView.hidden = false
-                        strongSelf.emptyLabel.hidden = strongSelf.roundTableView.numberOfRowsInSection(0) > 0
+                        strongSelf.roundTableView.isHidden = false
+                        strongSelf.emptyLabel.isHidden = strongSelf.roundTableView.numberOfRows(inSection: 0) > 0
                         strongSelf.emptyLabel.text = NSLocalizedString("No team ranks stub", comment: "")
                     }
                 }
@@ -208,13 +213,13 @@ class TableController: BaseController {
         }
     }
     
-    private func getPlayoff(showIndicator: Bool) {
-        if let compId = self.selectedCompetition.objectId?.integerValue {
+    fileprivate func getPlayoff(_ showIndicator: Bool) {
+        if let compId = self.selectedCompetition.objectId?.intValue {
             if showIndicator {
                 self.activityView.startAnimating()
-                self.roundTableView.hidden = true
-                self.playoffTableView.hidden = true
-                self.emptyLabel.hidden = true
+                self.roundTableView.isHidden = true
+                self.playoffTableView.isHidden = true
+                self.emptyLabel.isHidden = true
             }
             
             self.dataController.getPlayoff(compId) { [weak self] error in
@@ -223,32 +228,32 @@ class TableController: BaseController {
                     strongSelf.refreshControlPlayoff.endRefreshing()
                     
                     strongSelf.activityView.stopAnimating()
-                    strongSelf.prevButton.enabled = true
-                    strongSelf.nextButton.enabled = true
+                    strongSelf.prevButton.isEnabled = true
+                    strongSelf.nextButton.isEnabled = true
                     
                     if let _ = error {
                         strongSelf.emptyLabel.text = error?.localizedDescription
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                            strongSelf.emptyLabel.hidden = false
-                            strongSelf.playoffTableView.hidden = true
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
+                            strongSelf.emptyLabel.isHidden = false
+                            strongSelf.playoffTableView.isHidden = true
                         }
                         
-                        let refreshButton = UIButton(type: .Custom)
+                        let refreshButton = UIButton(type: .custom)
                         let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
-                        refreshButton.setAttributedTitle(attrString, forState: .Normal)
-                        refreshButton.addTarget(self, action: #selector(strongSelf.refreshPlayoff), forControlEvents: .TouchUpInside)
+                        refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                        refreshButton.addTarget(self, action: #selector(strongSelf.refreshPlayoff), for: .touchUpInside)
                         strongSelf.view.addSubview(refreshButton)
                         
-                        refreshButton.snp_makeConstraints(closure: { (make) in
+                        refreshButton.snp.makeConstraints({ (make) in
                             make.centerX.equalTo(0)
-                            make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
+                            make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                         })
                         
                         strongSelf.refreshButtonPlayoff = refreshButton
                     } else {
                         strongSelf.playoffTableView.reloadData()
-                        strongSelf.playoffTableView.hidden = false
-                        strongSelf.emptyLabel.hidden = strongSelf.playoffTableView.numberOfRowsInSection(0) > 0
+                        strongSelf.playoffTableView.isHidden = false
+                        strongSelf.emptyLabel.isHidden = strongSelf.playoffTableView.numberOfRows(inSection: 0) > 0
                         strongSelf.emptyLabel.text = NSLocalizedString("No playoffs stub", comment: "")
                     }
                 }
@@ -256,32 +261,32 @@ class TableController: BaseController {
         }
     }
     
-    @objc private func refreshRoundRobin(sender: UIButton) {
+    @objc fileprivate func refreshRoundRobin(_ sender: UIButton) {
         self.refreshButtonRound?.removeFromSuperview()
         self.refreshButtonRound = nil
         self.getRoundRobin(true)
     }
     
-    @objc private func refreshPlayoff(sender: UIButton) {
+    @objc fileprivate func refreshPlayoff(_ sender: UIButton) {
         self.refreshButtonPlayoff?.removeFromSuperview()
         self.refreshButtonPlayoff = nil
         self.getPlayoff(true)
     }
     
-    private func configureCell(cell: RobinTeamCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: RobinTeamCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        cell.rank = self.fetchedResultsController.objectAtIndexPath(indexPath) as! TeamRoundRank
+        cell.rank = self.fetchedResultsController.object(at: indexPath)
     }
     
-    private func configureCell(cell: PlayoffCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: PlayoffCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        cell.playoffSerie = self.playoffFetchedResultsController.objectAtIndexPath(indexPath) as! PlayoffSerie
+        cell.playoffSerie = self.playoffFetchedResultsController.object(at: indexPath)
     }
     
-    @IBAction private func prevDidTap() {
-        if let index = self.childrenComptetitions.indexOf(self.selectedCompetition) {
-            self.prevButton.enabled = false
-            self.nextButton.enabled = false
+    @IBAction fileprivate func prevDidTap() {
+        if let index = self.childrenComptetitions.index(of: self.selectedCompetition) {
+            self.prevButton.isEnabled = false
+            self.nextButton.isEnabled = false
             
             if index > 0 {
                 self.selectedCompetition = self.childrenComptetitions[index-1]
@@ -291,10 +296,10 @@ class TableController: BaseController {
         }
     }
     
-    @IBAction private func nextDidTap() {
-        if let index = self.childrenComptetitions.indexOf(self.selectedCompetition) {
-            self.prevButton.enabled = false
-            self.nextButton.enabled = false
+    @IBAction fileprivate func nextDidTap() {
+        if let index = self.childrenComptetitions.index(of: self.selectedCompetition) {
+            self.prevButton.isEnabled = false
+            self.nextButton.isEnabled = false
             
             if index < self.childrenComptetitions.count - 1 {
                 self.selectedCompetition = self.childrenComptetitions[index+1]
@@ -306,17 +311,17 @@ class TableController: BaseController {
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToGame" {
-            let gameController = segue.destinationViewController as! GameController
+            let gameController = segue.destination as! GameController
             gameController.dataController = self.dataController
             gameController.gameId = self.selectedGameId!
         } else if segue.identifier == "goToGamesSerie" {
-            let gameController = segue.destinationViewController as! PlayoffGamesController
+            let gameController = segue.destination as! PlayoffGamesController
             gameController.dataController = self.dataController
             gameController.gamesIds = self.selectedGameIds!
         } else if segue.identifier == "goToTeam" {
-            let teamController = segue.destinationViewController as! TeamController
+            let teamController = segue.destination as! TeamController
             teamController.dataController = self.dataController
             teamController.teamId = self.selectedTeamId!;
         }
@@ -325,39 +330,39 @@ class TableController: BaseController {
 
 extension TableController: UITableViewDelegate, UITableViewDataSource {
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        var frc: NSFetchedResultsController
+    func numberOfSections(in tableView: UITableView) -> Int {
+        var res = 0
         
         if tableView == self.roundTableView {
-            frc = self.fetchedResultsController
+            res = self.fetchedResultsController.sections?.count ?? 0
         } else {
-            frc = self.playoffFetchedResultsController
+            res = self.playoffFetchedResultsController.sections?.count ?? 0
         }
-        return frc.sections?.count ?? 0
+        return res
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var res = 0
-        var frc: NSFetchedResultsController
+        var sections: [NSFetchedResultsSectionInfo]?
         
         if tableView == self.roundTableView {
-            frc = self.fetchedResultsController
+            sections = self.fetchedResultsController.sections
         } else {
-            frc = self.playoffFetchedResultsController
+            sections = self.playoffFetchedResultsController.sections
         }
         
-        if let sections = frc.sections {
-            let currentSection = sections[section]
+        if let _ = sections {
+            let currentSection = sections![section]
             res = currentSection.numberOfObjects
         }
         
-        self.emptyLabel.hidden = res > 0 ||
-            tableView.hidden
+        self.emptyLabel.isHidden = res > 0 ||
+            tableView.isHidden
         
         return res
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == self.roundTableView {
             return self.rowHeight
         } else {
@@ -365,7 +370,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         var res: CGFloat = 0
         
         if tableView == self.playoffTableView {
@@ -376,18 +381,18 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
         return res
     }
 
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.1
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var res: String?
         
         if tableView == self.playoffTableView {
             // Только для игр на вылет
             let sectionInfo = self.playoffFetchedResultsController.sections?[section]
             if let playoffSerie = sectionInfo?.objects?.first as? PlayoffSerie {
-                let isLanguageRu = self.dataController.language.containsString("ru")
+                let isLanguageRu = self.dataController.language.contains("ru")
                 res = isLanguageRu ? playoffSerie.roundNameRu : playoffSerie.roundNameEn
             }
         }
@@ -395,40 +400,40 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
         return res
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var res: UIView?
         
         if tableView == self.playoffTableView {
             // Только для игр на вылет
             let label = UILabel()
             if #available(iOS 8.2, *) {
-                label.font = UIFont.systemFontOfSize(15, weight: UIFontWeightMedium)
+                label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
             } else {
-                label.font = UIFont.systemFontOfSize(15)
+                label.font = UIFont.systemFont(ofSize: 15)
             }
-            label.textAlignment = .Center
+            label.textAlignment = .center
             label.text = self.tableView(tableView, titleForHeaderInSection: section)
-            label.textColor = UIColor.blackColor()
+            label.textColor = UIColor.black
             res = label
         }
         return res
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell
         
         if tableView == self.roundTableView {
-            cell = tableView.dequeueReusableCellWithIdentifier("robinTeamCell", forIndexPath: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "robinTeamCell", for: indexPath)
         } else {
-            cell = tableView.dequeueReusableCellWithIdentifier("playoffCell", forIndexPath: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: "playoffCell", for: indexPath)
         }
         
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor.clearColor()
-        cell.contentView.backgroundColor = UIColor.clearColor()
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+        cell.contentView.backgroundColor = UIColor.clear
         
         if tableView == self.roundTableView {
             self.configureCell(cell as! RobinTeamCell, atIndexPath:indexPath)
@@ -437,24 +442,24 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {tableView.deselectRow(at: indexPath, animated: true)
         
         if tableView == self.roundTableView {
-            self.selectedTeamId = (self.fetchedResultsController.objectAtIndexPath(indexPath) as! TeamRoundRank).team?.objectId?.integerValue
+            self.selectedTeamId = self.fetchedResultsController.object(at: indexPath).team?.objectId?.intValue
             if let _ = self.selectedTeamId {
-                self.performSegueWithIdentifier("goToTeam", sender: nil)
+                self.performSegue(withIdentifier: "goToTeam", sender: nil)
             }
         } else if tableView == self.playoffTableView {
-            let playoffSerie = self.playoffFetchedResultsController.objectAtIndexPath(indexPath) as! PlayoffSerie
+            let playoffSerie = self.playoffFetchedResultsController.object(at: indexPath)
             if playoffSerie.games?.count == 1 {
-                self.selectedGameId = (playoffSerie.games?.anyObject() as? Game)?.objectId?.integerValue
+                self.selectedGameId = (playoffSerie.games?.anyObject() as? Game)?.objectId?.intValue
                 if let _ = self.selectedGameId {
-                    self.performSegueWithIdentifier("goToGame", sender: nil)
+                    self.performSegue(withIdentifier: "goToGame", sender: nil)
                 }
             } else {
-                self.selectedGameIds = (playoffSerie.games?.valueForKey("objectId") as? NSSet)?.allObjects as? [Int]
+                self.selectedGameIds = (playoffSerie.games?.value(forKey: "objectId") as? NSSet)?.allObjects as? [Int]
                 if self.selectedGameIds?.count ?? 0 > 0 {
-                    self.performSegueWithIdentifier("goToGamesSerie", sender: nil)
+                    self.performSegue(withIdentifier: "goToGamesSerie", sender: nil)
                 }
             }
         }
@@ -462,7 +467,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension TableController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(frc: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ frc: NSFetchedResultsController<NSFetchRequestResult>) {
         var tableView: UITableView
         if self.selectedCompetition.compType == 0 {
             tableView = self.roundTableView
@@ -473,7 +478,7 @@ extension TableController: NSFetchedResultsControllerDelegate {
         tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         var tableView: UITableView
         if self.selectedCompetition.compType == 0 {
             tableView = self.roundTableView
@@ -482,21 +487,21 @@ extension TableController: NSFetchedResultsControllerDelegate {
         }
         
         switch type {
-        case .Move:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation:.Fade)
-        case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation:.Fade)
+        case .move:
+            tableView.deleteRows(at: [indexPath!], with:.fade)
+            tableView.insertRows(at: [newIndexPath!], with:.fade)
+        case .insert:
+            tableView.insertRows(at: [newIndexPath!], with:.fade)
             
-        case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
+        case .delete:
+            tableView.deleteRows(at: [indexPath!], with:.fade)
             
-        case .Update:
-            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+        case .update:
+            tableView.reloadRows(at: [indexPath!], with: .fade)
         }
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         var tableView: UITableView
         if self.selectedCompetition.compType == 0 {
             tableView = self.roundTableView
@@ -505,18 +510,18 @@ extension TableController: NSFetchedResultsControllerDelegate {
         }
         
         switch(type) {
-        case .Insert:
-            tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
+        case .insert:
+            tableView.insertSections(IndexSet(integer: sectionIndex), with:.fade)
             
-        case .Delete:
-            tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
+        case .delete:
+            tableView.deleteSections(IndexSet(integer: sectionIndex), with:.fade)
             
         default:
             break
         }
     }
     
-    func controllerDidChangeContent(_: NSFetchedResultsController) {
+    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
         var tableView: UITableView
         if self.selectedCompetition.compType == 0 {
             tableView = self.roundTableView

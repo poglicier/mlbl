@@ -10,7 +10,7 @@ import CoreData
 
 class RoundRobinRequest: NetworkRequest {
     
-    private var compId: Int!
+    fileprivate var compId: Int!
     
     init(compId: Int) {
         super.init()
@@ -19,47 +19,47 @@ class RoundRobinRequest: NetworkRequest {
     }
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        let urlString = "RoundRobin/\(self.compId)?format=json"
-        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        let urlString = "RoundRobin/\(self.compId!)?format=json"
+        guard let url = URL(string: urlString, relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if json is [String:AnyObject] {
-                let errorMesage = json["Message"] as? String
+                let errorMesage = (json as! [String:AnyObject])["Message"] as? String
                 self.error = NSError(domain: "internal app error", code: -1, userInfo: [NSLocalizedDescriptionKey : errorMesage ?? "unknown error"])
             } else if let teamRoundRankDicts = json as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlockAndWait({
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.performAndWait({
                     // Удаляем старую турнирную таблицу
-                    let fetchRequest = NSFetchRequest(entityName: TeamRoundRank.entityName())
+                    let fetchRequest = NSFetchRequest<TeamRoundRank>(entityName: TeamRoundRank.entityName())
                     fetchRequest.predicate = NSPredicate(format: "competition.objectId = %d", self.compId)
                     do {
-                        let all = try context.executeFetchRequest(fetchRequest) as! [TeamRoundRank]
+                        let all = try context.fetch(fetchRequest)
                         for rank in all {
                             print("DELETE TeamRoundRank \(rank.team?.nameRu)")
-                            context.deleteObject(rank)
+                            context.delete(rank)
                         }
                     }
                     catch {}

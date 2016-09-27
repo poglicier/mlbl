@@ -9,8 +9,8 @@
 import CoreData
 
 class TeamGamesRequest: NetworkRequest {
-    private var compId: Int!
-    private var teamId: Int!
+    fileprivate var compId: Int!
+    fileprivate var teamId: Int!
     
     init(compId: Int, teamId: Int) {
         super.init()
@@ -20,36 +20,36 @@ class TeamGamesRequest: NetworkRequest {
     }
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        let urlString = "TeamGames/\(self.teamId)?compId=\(self.compId)&format=json"
-        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        let urlString = "TeamGames/\(self.teamId!)?compId=\(self.compId!)&format=json"
+        guard let url = URL(string: urlString, relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let gamesDicts = json as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlockAndWait({
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.performAndWait({
                     var gameIdsToSave = [NSNumber]()
                     for gameDict in gamesDicts {
                         let game = Game.gameWithDict(gameDict, inContext: context)
@@ -60,15 +60,15 @@ class TeamGamesRequest: NetworkRequest {
                     }
                     
                     // Удаляем старые игры
-                    let fetchRequest = NSFetchRequest(entityName: Game.entityName())
+                    let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
                     fetchRequest.predicate = NSPredicate(format: "teamAId = %d OR teamBId = %d", self.teamId, self.teamId)
                     do {
-                        let all = try context.executeFetchRequest(fetchRequest) as! [Game]
+                        let all = try context.fetch(fetchRequest)
                         for game in all {
                             if let gameId = game.objectId {
                                 if gameIdsToSave.contains(gameId) == false {
                                     print("DELETE Game \(game.date)")
-                                    context.deleteObject(game)
+                                    context.delete(game)
                                 }
                             }
                         }

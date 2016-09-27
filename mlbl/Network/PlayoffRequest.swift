@@ -10,7 +10,7 @@ import CoreData
 
 class PlayoffRequest: NetworkRequest {
     
-    private var compId: Int!
+    fileprivate var compId: Int!
     
     init(compId: Int) {
         super.init()
@@ -19,47 +19,47 @@ class PlayoffRequest: NetworkRequest {
     }
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        let urlString = "Playoff/\(self.compId)?format=json"
-        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        let urlString = "Playoff/\(self.compId!)?format=json"
+        guard let url = URL(string: urlString, relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if json is [String:AnyObject] {
-                let errorMesage = json["Message"] as? String
+                let errorMesage = (json as! [String:AnyObject])["Message"] as? String
                 self.error = NSError(domain: "internal app error", code: -1, userInfo: [NSLocalizedDescriptionKey : errorMesage ?? "unknown error"])
             } else if let playoffDicts = json as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlockAndWait({
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.performAndWait({
                     // Удаляем все плей-офф, потому что у них нет идентификаторов
-                    let fetchRequest = NSFetchRequest(entityName: PlayoffSerie.entityName())
+                    let fetchRequest = NSFetchRequest<PlayoffSerie>(entityName: PlayoffSerie.entityName())
                     fetchRequest.predicate = NSPredicate(format: "competition.objectId = %d", self.compId)
                     do {
-                        let all = try context.executeFetchRequest(fetchRequest) as! [PlayoffSerie]
+                        let all = try context.fetch(fetchRequest)
                         for rank in all {
                             print("DELETE PlayoffSerie \(rank.team1?.nameRu) - \(rank.team2?.nameRu)")
-                            context.deleteObject(rank)
+                            context.delete(rank)
                         }
                     }
                     catch {}
@@ -72,23 +72,23 @@ class PlayoffRequest: NetworkRequest {
                     }
                     
                     // Теперь для отображения игр на вылет по секциям необходимо ввести параметр sectionSort
-                    series.sortInPlace({ (serie1, serie2) -> Bool in
-                        if serie1.round?.integerValue ?? -1 < serie2.round?.integerValue ?? -1 {
+                    series.sort(by: { (serie1, serie2) -> Bool in
+                        if serie1.round?.intValue ?? -1 < serie2.round?.intValue ?? -1 {
                             return true
                         } else if serie1.round == serie2.round {
-                            return serie1.sort?.integerValue ?? -1 < serie2.sort?.integerValue ?? -1
+                            return serie1.sort?.intValue ?? -1 < serie2.sort?.intValue ?? -1
                         } else {
                             return false
                         }
                     })
                     var lastSerie: PlayoffSerie?
                     for serie in series {
-                        if serie.round?.integerValue ?? -1 != lastSerie?.round?.integerValue ?? -1 {
-                            serie.sectionSort = NSNumber(integer: (lastSerie?.sectionSort?.integerValue ?? -1) + 1)
+                        if serie.round?.intValue ?? -1 != lastSerie?.round?.intValue ?? -1 {
+                            serie.sectionSort = NSNumber(value: (lastSerie?.sectionSort?.intValue ?? -1) + 1 as Int)
                         } else if serie.roundNameRu == lastSerie?.roundNameRu {
                             serie.sectionSort = lastSerie?.sectionSort
                         } else {
-                            serie.sectionSort = NSNumber(integer: (lastSerie?.sectionSort?.integerValue ?? -1) + 1)
+                            serie.sectionSort = NSNumber(value: (lastSerie?.sectionSort?.intValue ?? -1) + 1 as Int)
                         }
                         
                         lastSerie = serie

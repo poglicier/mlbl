@@ -10,8 +10,8 @@ import CoreData
 
 class TeamRosterRequest: NetworkRequest {
     
-    private var compId: Int!
-    private var teamId: Int!
+    fileprivate var compId: Int!
+    fileprivate var teamId: Int!
     
     init(compId: Int, teamId: Int) {
         super.init()
@@ -21,41 +21,41 @@ class TeamRosterRequest: NetworkRequest {
     }
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        let urlString = "TeamRoster/\(self.teamId)?compId=\(self.compId)&format=json"
-        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        let urlString = "TeamRoster/\(self.teamId!)?compId=\(self.compId!)&format=json"
+        guard let url = URL(string: urlString, relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
-            if let playersDicts = json["Players"] as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlockAndWait({
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
+            if let playersDicts = (json as? [String:AnyObject])?["Players"] as? [[String:AnyObject]] {
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.performAndWait({
                     var team: Team?
-                    var fetchRequest = NSFetchRequest(entityName: Team.entityName())
+                    let fetchRequest = NSFetchRequest<Team>(entityName: Team.entityName())
                     fetchRequest.predicate = NSPredicate(format: "objectId = %d", self.teamId)
                     do {
-                        team = try context.executeFetchRequest(fetchRequest).first as? Team
+                        team = try context.fetch(fetchRequest).first
                     } catch {}
                     
                     var playerIdsToSave = [NSNumber]()
@@ -69,15 +69,15 @@ class TeamRosterRequest: NetworkRequest {
                     }
                     
                     // Удаляем старых игроков
-                    fetchRequest = NSFetchRequest(entityName: Player.entityName())
-                    fetchRequest.predicate = NSPredicate(format: "team.objectId = %d", self.teamId)
+                    let fetchRequestD = NSFetchRequest<Player>(entityName: Player.entityName())
+                    fetchRequestD.predicate = NSPredicate(format: "team.objectId = %d", self.teamId)
                     do {
-                        let all = try context.executeFetchRequest(fetchRequest) as! [Player]
+                        let all = try context.fetch(fetchRequestD)
                         for player in all {
                             if let playerId = player.objectId {
                                 if playerIdsToSave.contains(playerId) == false {
                                     print("DELETE Player \(player.lastNameRu)")
-                                    context.deleteObject(player)
+                                    context.delete(player)
                                 }
                             }
                         }

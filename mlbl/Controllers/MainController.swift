@@ -12,12 +12,12 @@ import CoreData
 
 class MainController: BaseController {
 
-    @IBOutlet private var buttonsScrollView: UIScrollView!
-    @IBOutlet private var sectionButtons: [UIButton]!
-    @IBOutlet private var contentView: UIView!
-    @IBOutlet private var selectedIndicatorView: UIView!
-    private var containerController: ContainerController!
-    private var choosenComp: Competition!
+    @IBOutlet fileprivate var buttonsScrollView: UIScrollView!
+    @IBOutlet fileprivate var sectionButtons: [UIButton]!
+    @IBOutlet fileprivate var contentView: UIView!
+    @IBOutlet fileprivate var selectedIndicatorView: UIView!
+    fileprivate var containerController: ContainerController!
+    fileprivate var choosenComp: Competition!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,17 +28,17 @@ class MainController: BaseController {
     
     // MARK: - Private
     
-    private func setupNavigatioBar() {
+    fileprivate func setupNavigatioBar() {
         self.navigationItem.hidesBackButton = true
         
-        let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+        let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
         fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
         
         do {
-            if let comp = try dataController.mainContext.executeFetchRequest(fetchRequest).first as? Competition {
+            if let comp = try dataController.mainContext.fetch(fetchRequest).first {
                 self.choosenComp = comp
                 
-                if self.dataController.language.containsString("ru") {
+                if self.dataController.language.contains("ru") {
                     self.title = self.choosenComp.compShortNameRu
                 } else {
                     self.title = self.choosenComp.compShortNameEn
@@ -49,60 +49,60 @@ class MainController: BaseController {
         }
     }
     
-    private func setupButtons() {
+    fileprivate func setupButtons() {
         self.buttonsScrollView.scrollsToTop = false
         
-        for (idx, button) in sectionButtons.enumerate() {
+        for (idx, button) in sectionButtons.enumerated() {
             if idx == 0 {
-                self.selectedIndicatorView.snp_remakeConstraints(closure: { (make) -> Void in
-                    make.centerX.equalTo(button.snp_centerX)
-                    make.width.equalTo(button.snp_width)
+                self.selectedIndicatorView.snp.remakeConstraints({ (make) -> Void in
+                    make.centerX.equalTo(button.snp.centerX)
+                    make.width.equalTo(button.snp.width)
                 })
-                button.enabled = false
+                button.isEnabled = false
             }
             
             button.tag = idx
             
             if let controllerType = ContainerController.ControllerType(rawValue: idx) {
                 switch controllerType {
-                case .Games:
-                    button.setTitle(NSLocalizedString("Games", comment: "").uppercaseString, forState: .Normal)
-                case .Table:
-                    button.setTitle(NSLocalizedString("Table", comment: "").uppercaseString, forState: .Normal)
-                case .Statistics:
-                    button.setTitle(NSLocalizedString("Statistics", comment: "").uppercaseString, forState: .Normal)
-                case .Players:
-                    button.setTitle(NSLocalizedString("Players rating", comment: "").uppercaseString, forState: .Normal)
+                case .games:
+                    button.setTitle(NSLocalizedString("Games", comment: "").uppercased(), for: UIControlState())
+                case .table:
+                    button.setTitle(NSLocalizedString("Table", comment: "").uppercased(), for: UIControlState())
+                case .statistics:
+                    button.setTitle(NSLocalizedString("Statistics", comment: "").uppercased(), for: UIControlState())
+                case .players:
+                    button.setTitle(NSLocalizedString("Players rating", comment: "").uppercased(), for: UIControlState())
                 }
             }
         }
     }
     
-    @IBAction private func sectionButtonDidTap(sender: UIButton) {
+    @IBAction fileprivate func sectionButtonDidTap(_ sender: UIButton) {
         for sectionButton in self.sectionButtons {
-            sectionButton.enabled = sectionButton != sender
+            sectionButton.isEnabled = sectionButton != sender
         }
         
-        self.selectedIndicatorView.snp_remakeConstraints(closure: { (make) -> Void in
-            make.centerX.equalTo(sender.snp_centerX)
-            make.width.equalTo(sender.snp_width)
+        self.selectedIndicatorView.snp.remakeConstraints({ (make) -> Void in
+            make.centerX.equalTo(sender.snp.centerX)
+            make.width.equalTo(sender.snp.width)
         })
         
-        UIView.animateWithDuration(0.3) { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.view.layoutIfNeeded()
-        }
+        }) 
         
         if let type = ContainerController.ControllerType(rawValue: sender.tag) {
             self.containerController.goToControllerWithControllerType(type)
         }
     }
     
-    @IBAction private func goToChooseRegion() {
-        if let ChooseCompetitionController = self.storyboard?.instantiateViewControllerWithIdentifier("ChooseCompetitionController") as? BaseController {
-            let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+    @IBAction fileprivate func goToChooseRegion() {
+        if let ChooseCompetitionController = self.storyboard?.instantiateViewController(withIdentifier: "ChooseCompetitionController") as? BaseController {
+            let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
             fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
             do {
-                let comp = try self.dataController.mainContext.executeFetchRequest(fetchRequest).first as? Competition
+                let comp = try self.dataController.mainContext.fetch(fetchRequest).first
                 comp?.isChoosen = false
                 self.dataController.saveContext(self.dataController.mainContext)
             } catch {}
@@ -114,9 +114,9 @@ class MainController: BaseController {
     
     // MARK: - Navigation
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "embedContainer" {
-            self.containerController = segue.destinationViewController as! ContainerController
+            self.containerController = segue.destination as! ContainerController
             self.containerController.dataController = self.dataController
         }
     }

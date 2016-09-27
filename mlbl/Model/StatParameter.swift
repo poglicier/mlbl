@@ -15,17 +15,18 @@ class StatParameter: NSManagedObject {
     static let StatParameterIdKey = "param"
     static let StatParameterNameKey = "name"
     
-    static func parameterWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> StatParameter? {
+    @discardableResult
+    static func parameterWithDict(_ dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> StatParameter? {
         var res: StatParameter?
         
         if let objectId = dict[StatParameterIdKey] as? NSNumber {
-            let fetchRequest = NSFetchRequest(entityName: StatParameter.entityName())
+            let fetchRequest = NSFetchRequest<StatParameter>(entityName: StatParameter.entityName())
             fetchRequest.predicate = NSPredicate(format: "objectId = %@", objectId)
             do {
-                res = try context.executeFetchRequest(fetchRequest).first as? StatParameter
+                res = try context.fetch(fetchRequest).first
                 
                 if res == nil {
-                    res = StatParameter(entity: NSEntityDescription.entityForName(StatParameter.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                    res = StatParameter(entity: NSEntityDescription.entity(forEntityName: StatParameter.entityName(), in: context)!, insertInto: context)
                     res?.objectId = objectId
                 }
             } catch {}

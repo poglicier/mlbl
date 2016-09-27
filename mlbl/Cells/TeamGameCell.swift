@@ -11,7 +11,7 @@ import UIKit
 class TeamGameCell: UITableViewCell {
 
     var language: String!
-    var dateFormatter: NSDateFormatter!
+    var dateFormatter: DateFormatter!
     var color: UIColor? {
         didSet {
             self.background.backgroundColor = color
@@ -22,7 +22,7 @@ class TeamGameCell: UITableViewCell {
     var game: Game! {
         didSet {
             if let date = game.date {
-                self.dateLabel.text = self.dateFormatter.stringFromDate(date)
+                self.dateLabel.text = self.dateFormatter.string(from: date as Date)
             } else {
                 self.dateLabel.text = nil
             }
@@ -41,16 +41,16 @@ class TeamGameCell: UITableViewCell {
                 rightScore = "-"
             }
             
-            let isLanguageRu = self.language.containsString("ru")
+            let isLanguageRu = self.language.contains("ru")
             
             if self.teamOfInterest?.shortNameRu == game.shortTeamNameAru {
                 self.opponentLabel.text = isLanguageRu ? game.shortTeamNameBru : game.shortTeamNameBen
-                self.homeImageView.hidden = false
+                self.homeImageView.isHidden = false
                 
                 self.scoreLabel.text = "\(leftScore):\(rightScore)"
             } else {
                 self.opponentLabel.text = isLanguageRu ? game.shortTeamNameAru : game.shortTeamNameAen
-                self.homeImageView.hidden = true
+                self.homeImageView.isHidden = true
                 
                 self.scoreLabel.text = "\(rightScore):\(leftScore)"
             }
@@ -59,11 +59,11 @@ class TeamGameCell: UITableViewCell {
     
     var isLast = false
     
-    @IBOutlet private var background: UIView!
-    @IBOutlet private var dateLabel: UILabel!
-    @IBOutlet private var homeImageView: UIImageView!
-    @IBOutlet private var opponentLabel: UILabel!
-    @IBOutlet private var scoreLabel: UILabel!
+    @IBOutlet fileprivate var background: UIView!
+    @IBOutlet fileprivate var dateLabel: UILabel!
+    @IBOutlet fileprivate var homeImageView: UIImageView!
+    @IBOutlet fileprivate var opponentLabel: UILabel!
+    @IBOutlet fileprivate var scoreLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -102,8 +102,8 @@ class TeamGameCell: UITableViewCell {
 //            self.background.layer.mask = maskLayer
 //        }
         
-        let isLanguageRu = self.language.containsString("ru")
-        if UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation) {
+        let isLanguageRu = self.language.contains("ru")
+        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
             if self.teamOfInterest?.shortNameRu == game.shortTeamNameAru {
                 self.opponentLabel.text = isLanguageRu ? game.shortTeamNameBru : game.shortTeamNameBen
             } else {
@@ -118,7 +118,7 @@ class TeamGameCell: UITableViewCell {
         }
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setSelected(selected, animated: animated)
         
@@ -127,7 +127,7 @@ class TeamGameCell: UITableViewCell {
         }
     }
     
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         let color = self.background.backgroundColor
         super.setHighlighted(highlighted, animated: animated)
         

@@ -13,39 +13,39 @@ class PlayerController: BaseController {
     
     // MARK: - Private
     
-    private enum Sections: Int {
-        case Title
-        case Games
-        case Teams
-        case Count
+    fileprivate enum Sections: Int {
+        case title
+        case games
+        case teams
+        case count
     }
     
-    @IBOutlet private var tableView: UITableView!
-    @IBOutlet private var emptyLabel: UILabel!
-    private var refreshButton: UIButton?
+    @IBOutlet fileprivate var tableView: UITableView!
+    @IBOutlet fileprivate var emptyLabel: UILabel!
+    fileprivate var refreshButton: UIButton?
     
-    private func setupTableView() {
+    fileprivate func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
-        self.tableView.registerNib(UINib(nibName: "PlayerCell", bundle: nil), forCellReuseIdentifier:"playerCell")
+        self.tableView.register(UINib(nibName: "PlayerCell", bundle: nil), forCellReuseIdentifier:"playerCell")
     }
     
-    private func setupPlayer() {
-        let fetchRequest = NSFetchRequest(entityName: Player.entityName())
-        fetchRequest.predicate = NSPredicate(format: "objectId = \(self.playerId)")
+    fileprivate func setupPlayer() {
+        let fetchRequest = NSFetchRequest<Player>(entityName: Player.entityName())
+        fetchRequest.predicate = NSPredicate(format: "objectId = \(self.playerId!)")
         do {
-            if let player = (try self.dataController.mainContext.executeFetchRequest(fetchRequest)).first as? Player {
+            if let player = try self.dataController.mainContext.fetch(fetchRequest).first {
                 self.player = player
             } else {
-                self.navigationController?.popViewControllerAnimated(true)
+                self.navigationController?.popViewController(animated: true)
             }
         } catch {
-            self.navigationController?.popViewControllerAnimated(true)
+            self.navigationController?.popViewController(animated: true)
         }
     }
     
-    lazy private var teamsFetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: SeasonTeam.entityName())
-        fetchRequest.predicate = NSPredicate(format: "player.objectId = \(self.playerId)")
+    lazy fileprivate var teamsFetchedResultsController: NSFetchedResultsController<SeasonTeam> = {
+        let fetchRequest = NSFetchRequest<SeasonTeam>(entityName: SeasonTeam.entityName())
+        fetchRequest.predicate = NSPredicate(format: "player.objectId = \(self.playerId!)")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "abcNameRu", ascending: false)]
         
         let frc = NSFetchedResultsController(
@@ -59,16 +59,16 @@ class PlayerController: BaseController {
         return frc
     }()
     
-    private func getData(showIndicator: Bool) {
+    fileprivate func getData(_ showIndicator: Bool) {
         if (showIndicator) {
             self.activityView.startAnimating()
-            self.tableView.hidden = true
-            self.emptyLabel.hidden = true
+            self.tableView.isHidden = true
+            self.emptyLabel.isHidden = true
         }
         
         var requestError: NSError?
         
-        let dispatchGroup = dispatch_group_create()
+        let dispatchGroup = DispatchGroup()
 //        dispatch_group_enter(dispatchGroup)
 //        self.dataController.getTeamInfo(self.dataController.currentCompetitionId(),
 //                                        teamId: self.teamId) { [weak self] error in
@@ -79,13 +79,13 @@ class PlayerController: BaseController {
 //                                            dispatch_group_leave(dispatchGroup)
 //        }
 //        
-        dispatch_group_enter(dispatchGroup)
+        dispatchGroup.enter()
         self.dataController.getPlayerTeams(self.playerId) { [weak self] error in
                                             if error == nil {
-                                                self?.tableView.reloadSections(NSIndexSet(index: Sections.Teams.rawValue), withRowAnimation: .None)
+                                                self?.tableView.reloadSections(IndexSet(integer: Sections.teams.rawValue), with: .none)
                                             }
                                             requestError = error
-                                            dispatch_group_leave(dispatchGroup)
+                                            dispatchGroup.leave()
         }
 //
 //        dispatch_group_enter(dispatchGroup)
@@ -108,37 +108,37 @@ class PlayerController: BaseController {
 //                                            dispatch_group_leave(dispatchGroup)
 //        }
         
-        dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), { [weak self] in
+        dispatchGroup.notify(queue: DispatchQueue.main, execute: { [weak self] in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
                 
                 if let _ = requestError {
                     strongSelf.emptyLabel.text = requestError?.localizedDescription
-                    strongSelf.emptyLabel.hidden = false
-                    strongSelf.tableView.hidden = true
+                    strongSelf.emptyLabel.isHidden = false
+                    strongSelf.tableView.isHidden = true
                     
-                    let refreshButton = UIButton(type: .Custom)
+                    let refreshButton = UIButton(type: .custom)
                     let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
-                    refreshButton.setAttributedTitle(attrString, forState: .Normal)
-                    refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), forControlEvents: .TouchUpInside)
+                    refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                    refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), for: .touchUpInside)
                     strongSelf.view.addSubview(refreshButton)
                     
-                    refreshButton.snp_makeConstraints(closure: { (make) in
+                    refreshButton.snp.makeConstraints({ (make) in
                         make.centerX.equalTo(0)
-                        make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
+                        make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                     })
                     
                     strongSelf.refreshButton = refreshButton
                 } else {
-                    strongSelf.tableView.hidden = false
-                    strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
+                    strongSelf.tableView.isHidden = false
+                    strongSelf.emptyLabel.isHidden = strongSelf.tableView.numberOfRows(inSection: 0) > 0
                     strongSelf.emptyLabel.text = NSLocalizedString("No player info stub", comment: "")
                 }
             }
             })
     }
     
-    @objc private func refreshDidTap(sender: UIButton) {
+    @objc fileprivate func refreshDidTap(_ sender: UIButton) {
         self.refreshButton?.removeFromSuperview()
         self.refreshButton = nil
         self.getData(true)
@@ -154,21 +154,21 @@ class PlayerController: BaseController {
         }
     }
     
-    private func configureCell(cell: PlayerCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: PlayerCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
         cell.player = self.player!
     }
     
-    private func configureCell(cell: PlayerGamesCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: PlayerGamesCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
 //        cell.player = self.player!
     }
     
-    private func configureCell(cell: PlayerTeamCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: PlayerTeamCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-        cell.seasonTeam = self.teamsFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! SeasonTeam
-        cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+        cell.seasonTeam = self.teamsFetchedResultsController.object(at: fixedIndexPath) as! SeasonTeam
+        cell.color = (indexPath as NSIndexPath).row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
     }
     
     // MARK: BaseController
@@ -187,7 +187,7 @@ class PlayerController: BaseController {
         } catch {}
     }
     
-    override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
     }
     
     // MARK: - Public
@@ -209,16 +209,16 @@ class PlayerController: BaseController {
 
 extension PlayerController: UITableViewDataSource, UITableViewDelegate {
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return Sections.Count.rawValue
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return Sections.count.rawValue
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         var res: CGFloat = 0.1
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .Teams:
+            case .teams:
                 res = 62
             default:
                 break
@@ -228,12 +228,12 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var res: UIView?
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .Teams:
+            case .teams:
                 res = PlayerTeamsHeader()
             default:
                 break
@@ -246,14 +246,14 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         var res: UIView?
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .Teams:
+            case .teams:
                 res = UIView()
-                res?.backgroundColor = UIColor.clearColor()
+                res?.backgroundColor = UIColor.clear
             default:
                 break
             }
@@ -262,12 +262,12 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         var res: CGFloat = 0.1
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .Teams:
+            case .teams:
                 res = 4
             default:
                 break
@@ -277,18 +277,18 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var res = 0
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .Title:
+            case .title:
                 if let _ = self.player {
                     res = 1
                 }
-            case .Games:
+            case .games:
                 return 1
-            case .Teams:
+            case .teams:
                 if let sections = self.teamsFetchedResultsController.sections {
                     if let currentSection = sections.first {
                         res = currentSection.numberOfObjects
@@ -302,14 +302,14 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var res: CGFloat = 0
         
-        if let enumSection = Sections(rawValue: indexPath.section) {
+        if let enumSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
             switch enumSection {
-            case .Title:
+            case .title:
                 res = 148
-            case .Games:
+            case .games:
                 res = 123
 //                res += CGFloat((self.player?.gameStatistics?.count ?? 0)*27)
             default:
@@ -319,38 +319,38 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cellIdentifier: String?
         
-        if let enumSection = Sections(rawValue: indexPath.section) {
+        if let enumSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
             switch enumSection {
-            case .Title:
+            case .title:
                 cellIdentifier = "playerCell"
-            case .Games:
+            case .games:
                 cellIdentifier = "playerGamesCell"
-            case .Teams:
+            case .teams:
                 cellIdentifier = "playerTeamCell"
             default:
                 return UITableViewCell()
             }
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier!, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier!, for: indexPath)
         
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor.clearColor()
-        cell.contentView.backgroundColor = UIColor.clearColor()
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+        cell.contentView.backgroundColor = UIColor.clear
         
-        if let enumSection = Sections(rawValue: indexPath.section) {
+        if let enumSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
             switch enumSection {
-            case .Title:
+            case .title:
                 self.configureCell(cell as! PlayerCell, atIndexPath:indexPath)
-            case .Games:
+            case .games:
                 self.configureCell(cell as! PlayerGamesCell, atIndexPath: indexPath)
-            case .Teams:
+            case .teams:
                 self.configureCell(cell as! PlayerTeamCell, atIndexPath: indexPath)
             default:
                 break
@@ -384,41 +384,41 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension PlayerController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(frc: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ frc: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        var fixedIndexPath: NSIndexPath?
-        var fixedNewIndexPath: NSIndexPath?
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        var fixedIndexPath: IndexPath?
+        var fixedNewIndexPath: IndexPath?
         
         if controller == self.teamsFetchedResultsController {
             if let _ = indexPath {
-                fixedIndexPath = NSIndexPath(forRow: indexPath!.row, inSection: Sections.Teams.rawValue)
+                fixedIndexPath = IndexPath(row: (indexPath! as NSIndexPath).row, section: Sections.teams.rawValue)
             }
             if let _ = newIndexPath {
-                fixedNewIndexPath = NSIndexPath(forRow: newIndexPath!.row, inSection: Sections.Teams.rawValue)
+                fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.teams.rawValue)
             }
         } else {
             return
         }
         
         switch type {
-        case .Move:
-            self.tableView.deleteRowsAtIndexPaths([fixedIndexPath!], withRowAnimation:.Fade)
-            self.tableView.insertRowsAtIndexPaths([fixedNewIndexPath!], withRowAnimation:.Fade)
-        case .Insert:
-            self.tableView.insertRowsAtIndexPaths([fixedNewIndexPath!], withRowAnimation:.Fade)
+        case .move:
+            self.tableView.deleteRows(at: [fixedIndexPath!], with:.fade)
+            self.tableView.insertRows(at: [fixedNewIndexPath!], with:.fade)
+        case .insert:
+            self.tableView.insertRows(at: [fixedNewIndexPath!], with:.fade)
             
-        case .Delete:
-            self.tableView.deleteRowsAtIndexPaths([fixedIndexPath!], withRowAnimation:.Fade)
+        case .delete:
+            self.tableView.deleteRows(at: [fixedIndexPath!], with:.fade)
             
-        case .Update:
-            self.tableView.reloadRowsAtIndexPaths([fixedIndexPath!], withRowAnimation: .Fade)
+        case .update:
+            self.tableView.reloadRows(at: [fixedIndexPath!], with: .fade)
         }
     }
     
-    func controllerDidChangeContent(_: NSFetchedResultsController) {
+    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }
 }

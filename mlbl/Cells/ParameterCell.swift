@@ -10,7 +10,7 @@ import UIKit
 
 class ParameterCell: UICollectionViewCell {
     
-    @IBOutlet private var label: UILabel!
+    @IBOutlet fileprivate var label: UILabel!
     
     var parameter: StatParameter! {
         didSet {
@@ -21,7 +21,7 @@ class ParameterCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.label.backgroundColor = UIColor.whiteColor()
+        self.label.backgroundColor = UIColor.white
         self.label.layer.cornerRadius = self.label.frame.size.height/2
         self.label.layer.masksToBounds = true
     }
@@ -30,8 +30,8 @@ class ParameterCell: UICollectionViewCell {
     
     var isParameterSelected: Bool! {
         didSet {
-            self.label.textColor = (isParameterSelected == true) ? UIColor.whiteColor() : UIColor.blackColor()
-            self.label.backgroundColor = (isParameterSelected == true) ? UIColor.mlblLightOrangeColor() : UIColor.whiteColor()
+            self.label.textColor = (isParameterSelected == true) ? UIColor.white : UIColor.black
+            self.label.backgroundColor = (isParameterSelected == true) ? UIColor.mlblLightOrangeColor() : UIColor.white
         }
     }
 }

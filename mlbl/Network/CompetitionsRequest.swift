@@ -9,7 +9,7 @@
 import CoreData
 
 class CompetitionsRequest: NetworkRequest {
-    private var parentId: Int!
+    fileprivate var parentId: Int!
     
     init(parentId: Int) {
         super.init()
@@ -18,61 +18,51 @@ class CompetitionsRequest: NetworkRequest {
     }
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        guard let url = NSURL(string: "CompIssue/\(self.parentId)", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        guard let url = URL(string: "CompIssue/\(self.parentId!)", relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let result = json as? [String:AnyObject] {
                 if let comps = result["Comps"] as? [[String:AnyObject]] {
-                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                    context.parentContext = self.dataController?.mainContext
-                    context.performBlockAndWait() {
-                        var compIdsToSave = [NSNumber]()
-                        for compDict in comps {
-                            let comp = Competition.compWithDict(compDict, inContext: context)
-                            
-                            if let compId = comp?.objectId {
-                                compIdsToSave.append(compId)
-                            }
-                        }
-                        
-                        // Удаляем из Core Data регионы
-                        let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
-                        fetchRequest.predicate = NSPredicate(format: "parent = nil")
+                    let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                    context.parent = self.dataController?.mainContext
+                    context.performAndWait() {
+                        // Удаляем из Core Data все регионы
+                        let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
                         
                         do {
-                            let all = try context.executeFetchRequest(fetchRequest) as! [Competition]
+                            let all = try context.fetch(fetchRequest)
                             for comp in all {
-                                if let compId = comp.objectId {
-                                    if compIdsToSave.contains(compId) == false {
-                                        print("DELETE COMPETITION \(comp.compAbcNameRu)-\(comp.compShortNameRu)")
-                                        context.deleteObject(comp)
-                                    }
-                                }
+                                print("DELETE COMPETITION \(comp.compAbcNameRu)-\(comp.compShortNameRu)")
+                                context.delete(comp)
                             }
                         }
                         catch {}
+                        
+                        for compDict in comps {
+                            Competition.compWithDict(compDict, inContext: context)
+                        }
                         
                         self.dataController?.saveContext(context)
                     }

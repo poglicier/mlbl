@@ -9,11 +9,11 @@
 import CoreData
 
 class PlayersRequest: NetworkRequest {
-    private var compId: Int!
+    fileprivate var compId: Int!
     var from: Int!
     var count: Int!
     var searchText: String?
-    private(set) var responseCount = 0
+    fileprivate(set) var responseCount = 0
     
     init(from: Int, count: Int, compId: Int, searchText: String? = nil) {
         super.init()
@@ -25,39 +25,39 @@ class PlayersRequest: NetworkRequest {
     }
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        var urlString = "CompGamePlayers/\(self.compId)?skip=\(self.from)&take=\(self.count)"
-        if let search = self.searchText?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) {
+        var urlString = "CompGamePlayers/\(self.compId!)?skip=\(self.from)&take=\(self.count)"
+        if let search = self.searchText?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
             urlString += "&search=\(search)"
         }
-        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        guard let url = URL(string: urlString, relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let playerDicts = json as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlockAndWait({
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.performAndWait({
                     for playerDict in playerDicts {
                         if let _ = Player.playerWithDict(playerDict, inContext: context) {
                             self.responseCount += 1

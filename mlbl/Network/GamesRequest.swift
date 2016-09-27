@@ -9,67 +9,67 @@
 import CoreData
 
 class GamesRequest: NetworkRequest {
-    private var date: NSDate!
-    private var compId: Int!
-    private(set) var prevDate: NSDate?
-    private(set) var nextDate: NSDate?
+    fileprivate var date: Date!
+    fileprivate var compId: Int!
+    fileprivate(set) var prevDate: Date?
+    fileprivate(set) var nextDate: Date?
     
-    init(date: NSDate, compId: Int) {
+    init(date: Date, compId: Int) {
         super.init()
         
-        let calendar = NSCalendar.currentCalendar()
-        let components = calendar.components([.Year, .Month, .Day], fromDate:date)
-        self.date = calendar.dateFromComponents(components)
+        let calendar = Calendar.current
+        let components = (calendar as NSCalendar).components([.year, .month, .day], from:date)
+        self.date = calendar.date(from: components)
         self.compId = compId
     }
     
-    static private var dateFormatter: NSDateFormatter = {
-        let res = NSDateFormatter()
+    static fileprivate var dateFormatter: DateFormatter = {
+        let res = DateFormatter()
         res.dateFormat = "dd.MM.yyyy"
         return res
     } ()
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        let formatter = NSDateFormatter()
+        let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.YYYY"
         
-        guard let url = NSURL(string: "CalendarDay/\(self.compId)?from=\(GamesRequest.dateFormatter.stringFromDate(self.date))", relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        guard let url = URL(string: "CalendarDay/\(self.compId!)?from=\(GamesRequest.dateFormatter.string(from: self.date))", relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let dict = json as? [String:AnyObject] {
                 if let prevDateString = dict["PrevDate"] as? String {
-                    self.prevDate = GamesRequest.dateFormatter.dateFromString(prevDateString)
+                    self.prevDate = GamesRequest.dateFormatter.date(from: prevDateString)
                 }
                 if let nextDateString = dict["NextDate"] as? String {
-                    self.nextDate = GamesRequest.dateFormatter.dateFromString(nextDateString)
+                    self.nextDate = GamesRequest.dateFormatter.date(from: nextDateString)
                 }
                 
                 if let gamesDicts = dict["Games"] as? [[String:AnyObject]] {
-                    let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                    context.parentContext = self.dataController?.mainContext
-                    context.performBlock({
+                    let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                    context.parent = self.dataController?.mainContext
+                    context.perform({
                         var gameIdsToSave = [NSNumber]()
                         for gameDict in gamesDicts {
                             let game = Game.gameWithDict(gameDict, inContext: context)
@@ -80,16 +80,16 @@ class GamesRequest: NetworkRequest {
                         }
                         
                         // Удаляем из Core Data игры
-                        let fetchRequest = NSFetchRequest(entityName: Game.entityName())
-                        fetchRequest.predicate = NSPredicate(format: "date = %@", self.date)
+                        let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
+                        fetchRequest.predicate = NSPredicate(format: "date = %@", self.date as CVarArg)
                         
                         do {
-                            let all = try context.executeFetchRequest(fetchRequest) as! [Game]
+                            let all = try context.fetch(fetchRequest)
                             for game in all {
                                 if let gameId = game.objectId {
                                     if gameIdsToSave.contains(gameId) == false {
                                         print("DELETE Game \(game.date)")
-                                        context.deleteObject(game)
+                                        context.delete(game)
                                     }
                                 }
                             }

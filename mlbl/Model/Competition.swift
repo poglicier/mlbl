@@ -12,26 +12,27 @@ import CoreData
 
 class Competition: NSManagedObject {
 
-    static private let objectIdKey = "CompID"
-    static private let compShortNameRuKey = "CompShortNameRu"
-    static private let compShortNameEnKey = "CompShortNameEn"
-    static private let compAbcNameRu = "CompAbcNameRu"
-    static private let compAbcNameEn = "CompAbcNameEn"
-    static private let compSortKey = "CompSort"
-    static private let compTypeKey = "CompType"
-    static private let childrenKey = "Children"
+    static fileprivate let objectIdKey = "CompID"
+    static fileprivate let compShortNameRuKey = "CompShortNameRu"
+    static fileprivate let compShortNameEnKey = "CompShortNameEn"
+    static fileprivate let compAbcNameRu = "CompAbcNameRu"
+    static fileprivate let compAbcNameEn = "CompAbcNameEn"
+    static fileprivate let compSortKey = "CompSort"
+    static fileprivate let compTypeKey = "CompType"
+    static fileprivate let childrenKey = "Children"
     
-    static func compWithDict(dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Competition? {
+    @discardableResult
+    static func compWithDict(_ dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Competition? {
         var res: Competition?
         
         if let objectId = dict[objectIdKey] as? NSNumber {
-            let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+            let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
             fetchRequest.predicate = NSPredicate(format: "objectId = %@", objectId)
             do {
-                res = try context.executeFetchRequest(fetchRequest).first as? Competition
+                res = try context.fetch(fetchRequest).first
                 
                 if res == nil {
-                    res = Competition(entity: NSEntityDescription.entityForName(Competition.entityName(), inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+                    res = Competition(entity: NSEntityDescription.entity(forEntityName: Competition.entityName(), in: context)!, insertInto: context)
                     res?.objectId = objectId
                 }
                 
@@ -39,8 +40,8 @@ class Competition: NSManagedObject {
                 res?.compShortNameEn = dict[compShortNameEnKey] as? String
                 res?.compAbcNameRu = dict[compAbcNameRu] as? String
                 res?.compAbcNameEn = dict[compAbcNameEn] as? String
-                res?.compSort = dict[compSortKey] as? Int
-                res?.compType = dict[compTypeKey] as? Int
+                res?.compSort = dict[compSortKey] as? Int as NSNumber?
+                res?.compType = dict[compTypeKey] as? Int as NSNumber?
                 
                 var childIdsToSave = [NSNumber]()
                 if let children = dict[childrenKey] as? [[String:AnyObject]] {
@@ -55,16 +56,16 @@ class Competition: NSManagedObject {
                     }
                     
                     // Удаляем из Core Data турниры
-                    let fetchRequest = NSFetchRequest(entityName: Competition.entityName())
+                    let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
                     fetchRequest.predicate = NSPredicate(format: "parent.objectId = %@", res!.objectId!)
                     
                     do {
-                        let all = try context.executeFetchRequest(fetchRequest) as! [Competition]
+                        let all = try context.fetch(fetchRequest)
                         for comp in all {
                             if let compId = comp.objectId {
                                 if childIdsToSave.contains(compId) == false {
                                     print("DELETE COMPETITION \(comp.compAbcNameRu)-\(comp.compShortNameRu)")
-                                    context.deleteObject(comp)
+                                    context.delete(comp)
                                 }
                             }
                         }
@@ -78,8 +79,8 @@ class Competition: NSManagedObject {
         return res
     }
     
-    private func compTypeStr() -> String {
-        switch self.compType?.integerValue ?? 0 {
+    fileprivate func compTypeStr() -> String {
+        switch self.compType?.intValue ?? 0 {
         case 0:
             return "Группа"
         case 1, 2, 3, 5, 7:
@@ -93,7 +94,7 @@ class Competition: NSManagedObject {
     
     override var description: String {
         get {
-            return String(format: "%@ <\(unsafeAddressOf(self))> \(self.objectId) \(self.compShortNameRu ?? "") Стадия: \(compTypeStr())", self.dynamicType.description())
+            return String(format: "%@ <\(Unmanaged.passUnretained(self).toOpaque())> \(self.objectId) \(self.compShortNameRu ?? "") Стадия: \(compTypeStr())", type(of: self).description())
         }
     }
 }

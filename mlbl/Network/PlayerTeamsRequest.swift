@@ -9,7 +9,7 @@
 import CoreData
 
 class PlayerTeamsRequest: NetworkRequest {
-    private var playerId: Int!
+    fileprivate var playerId: Int!
     
     init(playerId: Int) {
         super.init()
@@ -18,53 +18,53 @@ class PlayerTeamsRequest: NetworkRequest {
     }
     
     override func start() {
-        if cancelled {
-            finished = true
+        if isCancelled {
+            isFinished = true
             return
         }
         
-        let urlString = "PlayerTeams/\(self.playerId)?format=json"
-        guard let url = NSURL(string: urlString, relativeToURL: self.baseUrl) else { fatalError("Failed to build URL") }
+        let urlString = "PlayerTeams/\(self.playerId!)?format=json"
+        guard let url = URL(string: urlString, relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
         
-        let request = NSMutableURLRequest(URL: url)
-        request.HTTPMethod = "GET"
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
         if let _ = self.params {
             do {
-                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(self.params!, options: NSJSONWritingOptions.init(rawValue: 0))
+                request.httpBody = try JSONSerialization.data(withJSONObject: self.params!, options: JSONSerialization.WritingOptions.init(rawValue: 0))
             } catch {
-                finished = true
+                isFinished = true
                 return
             }
         }
         
-        self.sessionTask = localURLSession.dataTaskWithRequest(request)
+        self.sessionTask = localURLSession.dataTask(with: request)
         self.sessionTask?.resume()
     }
     
     override func processData() {
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(incomingData, options: .AllowFragments)
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let seasonTeamsDicts = json as? [[String:AnyObject]] {
-                let context = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-                context.parentContext = self.dataController?.mainContext
-                context.performBlockAndWait({
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.performAndWait({
                     // У SeasonTeam нет идентификаторов, поэтому удаляем все
-                    var fetchRequest = NSFetchRequest(entityName: SeasonTeam.entityName())
+                    let fetchRequest = NSFetchRequest<SeasonTeam>(entityName: SeasonTeam.entityName())
                     fetchRequest.predicate = NSPredicate(format: "player.objectId = %d", self.playerId)
                     do {
-                        let all = try context.executeFetchRequest(fetchRequest) as! [SeasonTeam]
+                        let all = try context.fetch(fetchRequest)
                         for seasonTeam in all {
                             print("DELETE SeasonTeam \(seasonTeam.team?.nameRu)")
-                            context.deleteObject(seasonTeam)
+                            context.delete(seasonTeam)
                         }
                     }
                     catch {}
                     
                     var player: Player?
-                    fetchRequest = NSFetchRequest(entityName: Player.entityName())
-                    fetchRequest.predicate = NSPredicate(format: "objectId = %d", self.playerId)
+                    let fetchRequestP = NSFetchRequest<Player>(entityName: Player.entityName())
+                    fetchRequestP.predicate = NSPredicate(format: "objectId = %d", self.playerId)
                     do {
-                        player = try context.executeFetchRequest(fetchRequest).first as? Player
+                        player = try context.fetch(fetchRequestP).first
                     } catch {}
                     
                     for seasonTeamDict in seasonTeamsDicts {

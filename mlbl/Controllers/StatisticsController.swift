@@ -8,25 +8,45 @@
 
 import UIKit
 import CoreData
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class StatisticsController: BaseController {
 
-    @IBOutlet private var tableView: UITableView!
-    @IBOutlet private var emptyLabel: UILabel!
-    @IBOutlet private var parameterLabelBackground: UIView!
-    @IBOutlet private var filtersCollectionView: UICollectionView!
-    @IBOutlet private var parameterLabel: UILabel!
-    @IBOutlet private var parameterButton: UIButton!
-    @IBOutlet private var parameterLabelTrailing: NSLayoutConstraint!
-    private let rowHeight: CGFloat = 97
-    private var parameters: [StatParameter]! = []
-    private var selectedParameterId = 1
-    private let refreshControl = UIRefreshControl()
-    private var refreshButton: UIButton?
-    private var selectedPlayerId: Int?
+    @IBOutlet fileprivate var tableView: UITableView!
+    @IBOutlet fileprivate var emptyLabel: UILabel!
+    @IBOutlet fileprivate var parameterLabelBackground: UIView!
+    @IBOutlet fileprivate var filtersCollectionView: UICollectionView!
+    @IBOutlet fileprivate var parameterLabel: UILabel!
+    @IBOutlet fileprivate var parameterButton: UIButton!
+    @IBOutlet fileprivate var parameterLabelTrailing: NSLayoutConstraint!
+    fileprivate let rowHeight: CGFloat = 97
+    fileprivate var parameters: [StatParameter]! = []
+    fileprivate var selectedParameterId = 1
+    fileprivate let refreshControl = UIRefreshControl()
+    fileprivate var refreshButton: UIButton?
+    fileprivate var selectedPlayerId: Int?
 
-    lazy private var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: PlayerRank.entityName())
+    lazy fileprivate var fetchedResultsController: NSFetchedResultsController<PlayerRank> = {
+        let fetchRequest = NSFetchRequest<PlayerRank>(entityName: PlayerRank.entityName())
         fetchRequest.predicate = NSPredicate(format: "parameter.objectId = %d", self.selectedParameterId)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "res", ascending: false)]
         
@@ -40,8 +60,8 @@ class StatisticsController: BaseController {
         return frc
     }()
     
-    lazy private var formatter: NSNumberFormatter = {
-        let f = NSNumberFormatter()
+    lazy fileprivate var formatter: NumberFormatter = {
+        let f = NumberFormatter()
         f.maximumFractionDigits = 1
         return f
     }()
@@ -56,54 +76,54 @@ class StatisticsController: BaseController {
         self.setupParameterLabel()
         self.setupParameterButton()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(contextDidChange(_:)), name: NSManagedObjectContextObjectsDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
 
         // Чтобы filtersCollectionView при пропадании не было видно поверх statusBar
         self.view.clipsToBounds = true
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - Private
     
-    @objc private func handleRefresh(refreshControl: UIRefreshControl) {
+    @objc fileprivate func handleRefresh(_ refreshControl: UIRefreshControl) {
         self.getParametersAndPlayers(false)
     }
     
-    private func setupTableView() {
+    fileprivate func setupTableView() {
         self.tableView.contentInset = UIEdgeInsetsMake(4, 0, 4, 0)
         self.tableView.scrollsToTop = true
         
         self.refreshControl.tintColor = UIColor.mlblLightOrangeColor()
-        self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), forControlEvents:.ValueChanged)
+        self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for:.valueChanged)
         self.tableView.addSubview(self.refreshControl)
-        self.tableView.sendSubviewToBack(self.refreshControl)
+        self.tableView.sendSubview(toBack: self.refreshControl)
     }
     
-    private func setupFiltersCollectionView() {
+    fileprivate func setupFiltersCollectionView() {
         var newFrame = self.filtersCollectionView.frame
         newFrame.origin.y = -self.filtersCollectionView.frame.size.height
         self.filtersCollectionView.frame = newFrame
-        self.filtersCollectionView.hidden = true
+        self.filtersCollectionView.isHidden = true
         self.filtersCollectionView.scrollsToTop = false
         self.filtersCollectionView.allowsMultipleSelection = false
     }
     
-    private func setupParameterLabel() {
+    fileprivate func setupParameterLabel() {
         self.parameterLabel.text = nil
     }
     
-    private func setupParameterButton() {
-        self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblDarkOrangeColor()), forState: .Normal)
-        self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblLightOrangeColor()), forState: .Highlighted)
+    fileprivate func setupParameterButton() {
+        self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblDarkOrangeColor()), for: UIControlState())
+        self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblLightOrangeColor()), for: .highlighted)
     }
     
-    private func setParamaterLabelText(text: String?) {
+    fileprivate func setParamaterLabelText(_ text: String?) {
         if text != nil {
-            let width = text!.boundingRectWithSize(CGSizeMake(CGFloat.max, self.parameterLabel.frame.size.height),
-                                                 options: .UsesLineFragmentOrigin,
+            let width = text!.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: self.parameterLabel.frame.size.height),
+                                                 options: .usesLineFragmentOrigin,
                                                  attributes: [NSFontAttributeName : self.parameterLabel.font],
                                                  context: nil).size.width
             if width > self.view.frame.size.width - 2*8 - 2*self.parameterButton.frame.size.width {
@@ -116,31 +136,31 @@ class StatisticsController: BaseController {
         self.parameterLabel.text = text
     }
     
-    private func getParametersAndPlayers(showIndicator: Bool) {
+    fileprivate func getParametersAndPlayers(_ showIndicator: Bool) {
         if showIndicator {
             self.activityView.startAnimating()
-            self.tableView.hidden = true
-            self.emptyLabel.hidden = true
-            self.parameterLabelBackground.hidden = true
+            self.tableView.isHidden = true
+            self.emptyLabel.isHidden = true
+            self.parameterLabelBackground.isHidden = true
         }
         
         var requestError: NSError?
         
-        let dispatchGroup = dispatch_group_create()
-        dispatch_group_enter(dispatchGroup)
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
         self.dataController.getStatParameters({ error in
             requestError = error
-            dispatch_group_leave(dispatchGroup)
+            dispatchGroup.leave()
             })
         
-        dispatch_group_enter(dispatchGroup)
+        dispatchGroup.enter()
         self.dataController.getBestPlayers(self.selectedParameterId,
             completion: { (error, responseCount) in
                 requestError = error
-                dispatch_group_leave(dispatchGroup)
+                dispatchGroup.leave()
         })
         
-        dispatch_group_notify(dispatchGroup, dispatch_get_main_queue(), { [weak self] in
+        dispatchGroup.notify(queue: DispatchQueue.main, execute: { [weak self] in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
                 
@@ -149,19 +169,19 @@ class StatisticsController: BaseController {
                 
                 if let _ = requestError {
                     strongSelf.emptyLabel.text = requestError?.localizedDescription
-                    strongSelf.emptyLabel.hidden = false
-                    strongSelf.tableView.hidden = true
-                    strongSelf.parameterLabelBackground.hidden = true
+                    strongSelf.emptyLabel.isHidden = false
+                    strongSelf.tableView.isHidden = true
+                    strongSelf.parameterLabelBackground.isHidden = true
                     
-                    let refreshButton = UIButton(type: .Custom)
+                    let refreshButton = UIButton(type: .custom)
                     let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
-                    refreshButton.setAttributedTitle(attrString, forState: .Normal)
-                    refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), forControlEvents: .TouchUpInside)
+                    refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                    refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), for: .touchUpInside)
                     strongSelf.view.addSubview(refreshButton)
                     
-                    refreshButton.snp_makeConstraints(closure: { (make) in
+                    refreshButton.snp.makeConstraints({ (make) in
                         make.centerX.equalTo(0)
-                        make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
+                        make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                     })
                     
                     strongSelf.refreshButton?.removeFromSuperview()
@@ -169,18 +189,18 @@ class StatisticsController: BaseController {
                     
                     strongSelf.parameterLabel.text = nil
                 } else {
-                    strongSelf.tableView.hidden = false
-                    strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
+                    strongSelf.tableView.isHidden = false
+                    strongSelf.emptyLabel.isHidden = strongSelf.tableView.numberOfRows(inSection: 0) > 0
                     strongSelf.emptyLabel.text = NSLocalizedString("No players stub", comment: "")
                     
-                    let fetchRequest = NSFetchRequest(entityName: StatParameter.entityName())
+                    let fetchRequest = NSFetchRequest<StatParameter>(entityName: StatParameter.entityName())
                     do {
-                        strongSelf.parameters = (try strongSelf.dataController.mainContext.executeFetchRequest(fetchRequest) as! [StatParameter]).sort { $0.objectId?.integerValue ?? 0 < $1.objectId?.integerValue ?? 0 }
+                        strongSelf.parameters = try strongSelf.dataController.mainContext.fetch(fetchRequest).sorted { $0.objectId?.intValue ?? 0 < $1.objectId?.intValue ?? 0 }
                     } catch {}
                     strongSelf.filtersCollectionView.reloadData()
                     
                     strongSelf.setParamaterLabelText(strongSelf.parameters.first?.name)
-                    strongSelf.parameterLabelBackground.hidden = false
+                    strongSelf.parameterLabelBackground.isHidden = false
                     
                     strongSelf.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "parameter.objectId = %d", strongSelf.selectedParameterId)
                     do {
@@ -192,17 +212,17 @@ class StatisticsController: BaseController {
             })
     }
     
-    private func getPlayers(showIndicator: Bool) {
+    fileprivate func getPlayers(_ showIndicator: Bool) {
         var requestReady = false
         
         if showIndicator {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
                 if !requestReady {
                     self.activityView.startAnimating()
                 }
             }
-            self.tableView.hidden = true
-            self.emptyLabel.hidden = true
+            self.tableView.isHidden = true
+            self.emptyLabel.isHidden = true
         }
         
         self.dataController.getBestPlayers(self.selectedParameterId,
@@ -216,24 +236,24 @@ class StatisticsController: BaseController {
                                                 
                                                 if let _ = error {
                                                     strongSelf.emptyLabel.text = error?.localizedDescription
-                                                    strongSelf.emptyLabel.hidden = false
-                                                    strongSelf.tableView.hidden = true
+                                                    strongSelf.emptyLabel.isHidden = false
+                                                    strongSelf.tableView.isHidden = true
                                                     
-                                                    let refreshButton = UIButton(type: .Custom)
+                                                    let refreshButton = UIButton(type: .custom)
                                                     let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
-                                                    refreshButton.setAttributedTitle(attrString, forState: .Normal)
-                                                    refreshButton.addTarget(self, action: #selector(strongSelf.refreshPlayersDidTap), forControlEvents: .TouchUpInside)
+                                                    refreshButton.setAttributedTitle(attrString, for: .normal)
+                                                    refreshButton.addTarget(self, action: #selector(strongSelf.refreshPlayersDidTap), for: .touchUpInside)
                                                     strongSelf.view.addSubview(refreshButton)
                                                     
-                                                    refreshButton.snp_makeConstraints(closure: { (make) in
+                                                    refreshButton.snp.makeConstraints({ (make) in
                                                         make.centerX.equalTo(0)
-                                                        make.top.equalTo(strongSelf.emptyLabel.snp_bottom)
+                                                        make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                                                     })
                                                     
                                                     strongSelf.refreshButton?.removeFromSuperview()
                                                     strongSelf.refreshButton = refreshButton
                                                 } else {
-                                                    strongSelf.tableView.contentOffset = CGPointZero
+                                                    strongSelf.tableView.contentOffset = CGPoint.zero
                                                     
                                                     strongSelf.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "parameter.objectId = %d", strongSelf.selectedParameterId)
                                                     do {
@@ -241,8 +261,8 @@ class StatisticsController: BaseController {
                                                     } catch { }
                                                     self?.tableView.reloadData()
 
-                                                    strongSelf.tableView.hidden = false
-                                                    strongSelf.emptyLabel.hidden = strongSelf.tableView.numberOfRowsInSection(0) > 0
+                                                    strongSelf.tableView.isHidden = false
+                                                    strongSelf.emptyLabel.isHidden = strongSelf.tableView.numberOfRows(inSection: 0) > 0
                                                     strongSelf.emptyLabel.text = NSLocalizedString("No players stub", comment: "")
                                                 }
                                             }
@@ -259,57 +279,57 @@ class StatisticsController: BaseController {
         }
     }
     
-    @objc private func refreshDidTap(sender: UIButton) {
+    @objc fileprivate func refreshDidTap(_ sender: UIButton) {
         self.refreshButton?.removeFromSuperview()
         self.refreshButton = nil
         self.getParametersAndPlayers(true)
     }
     
-    @objc private func refreshPlayersDidTap(sender: UIButton) {
+    @objc fileprivate func refreshPlayersDidTap(_ sender: UIButton) {
         self.refreshButton?.removeFromSuperview()
         self.refreshButton = nil
         self.getPlayers(true)
     }
     
-    private func configureCell(cell: PlayerStatCell, atIndexPath indexPath: NSIndexPath) {
+    fileprivate func configureCell(_ cell: PlayerStatCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        cell.rank = self.fetchedResultsController.objectAtIndexPath(indexPath) as! PlayerRank
+        cell.rank = self.fetchedResultsController.object(at: indexPath) 
     }
     
-    @IBAction private func filtersDidTap() {
-        if self.filtersCollectionView.hidden {
-            self.filtersCollectionView.hidden = false
+    @IBAction fileprivate func filtersDidTap() {
+        if self.filtersCollectionView.isHidden {
+            self.filtersCollectionView.isHidden = false
             var newFrame = self.filtersCollectionView.frame
             newFrame.origin.y = 44
-            UIView.animateWithDuration(0.3) {
+            UIView.animate(withDuration: 0.3, animations: {
                 self.filtersCollectionView.frame = newFrame
-            }
+            }) 
             self.tableView.scrollsToTop = false
             self.filtersCollectionView.scrollsToTop = true
             
-            self.emptyLabel.hidden = true
+            self.emptyLabel.isHidden = true
         } else {
             var newFrame = self.filtersCollectionView.frame
             newFrame.origin.y = -self.filtersCollectionView.frame.size.height
-            UIView.animateWithDuration(0.3, animations: {
+            UIView.animate(withDuration: 0.3, animations: {
                 self.filtersCollectionView.frame = newFrame
-            }) { (_) in
-                self.filtersCollectionView.hidden = true
-            }
+            }, completion: { (_) in
+                self.filtersCollectionView.isHidden = true
+            }) 
             self.tableView.scrollsToTop = true
             self.filtersCollectionView.scrollsToTop = false
         }
     }
     
-    @objc private func contextDidChange(notification: NSNotification) {
+    @objc fileprivate func contextDidChange(_ notification: Notification) {
         if (notification.object as? NSManagedObjectContext) == self.dataController.mainContext {
-            let inserted = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>
-            let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
+            let inserted = (notification as NSNotification).userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>
+            let updated = (notification as NSNotification).userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
             if (inserted?.filter{ $0 is StatParameter })?.count > 0 ||
                 (updated?.filter{ $0 is StatParameter })?.count > 0 {
-                let fetchRequest = NSFetchRequest(entityName: StatParameter.entityName())
+                let fetchRequest = NSFetchRequest<StatParameter>(entityName: StatParameter.entityName())
                 do {
-                    self.parameters = (try self.dataController.mainContext.executeFetchRequest(fetchRequest) as! [StatParameter]).sort { $0.objectId?.integerValue ?? 0 < $1.objectId?.integerValue ?? 0 }
+                    self.parameters = try self.dataController.mainContext.fetch(fetchRequest).sorted { $0.objectId?.intValue ?? 0 < $1.objectId?.intValue ?? 0 }
                 } catch {}
                 self.filtersCollectionView.reloadData()
             }
@@ -318,9 +338,9 @@ class StatisticsController: BaseController {
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToPlayer" {
-            let playerController = segue.destinationViewController as! PlayerController
+            let playerController = segue.destination as! PlayerController
             playerController.dataController = self.dataController
             playerController.playerId = self.selectedPlayerId!
         }
@@ -328,7 +348,7 @@ class StatisticsController: BaseController {
 }
 
 extension StatisticsController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var res = 0
         
         if let sections = self.fetchedResultsController.sections {
@@ -336,63 +356,63 @@ extension StatisticsController: UITableViewDelegate, UITableViewDataSource {
             res = currentSection.numberOfObjects
         }
         
-        self.emptyLabel.hidden = res > 0 ||
-            tableView.hidden
+        self.emptyLabel.isHidden = res > 0 ||
+            tableView.isHidden
         
         return res
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return self.rowHeight
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("playerStatCell", forIndexPath: indexPath) as! PlayerStatCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "playerStatCell", for: indexPath) as! PlayerStatCell
         cell.formatter = self.formatter
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        cell.backgroundColor = UIColor.clearColor()
-        cell.contentView.backgroundColor = UIColor.clearColor()
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+        cell.contentView.backgroundColor = UIColor.clear
         
         self.configureCell(cell as! PlayerStatCell, atIndexPath:indexPath)
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         
-        self.selectedPlayerId = (self.fetchedResultsController.objectAtIndexPath(indexPath) as! PlayerRank).player?.objectId as? Int
+        self.selectedPlayerId = self.fetchedResultsController.object(at: indexPath).player?.objectId as? Int
         
         if let _ = self.selectedPlayerId {
-            self.performSegueWithIdentifier("goToPlayer", sender: nil)
+            self.performSegue(withIdentifier: "goToPlayer", sender: nil)
         }
     }
 }
 
 extension StatisticsController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.parameters.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("parameterCell", forIndexPath: indexPath) as! ParameterCell
-        let parameter = self.parameters[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "parameterCell", for: indexPath) as! ParameterCell
+        let parameter = self.parameters[(indexPath as NSIndexPath).row]
         cell.parameter = parameter
-        cell.isParameterSelected = parameter.objectId == self.selectedParameterId
+        cell.isParameterSelected = parameter.objectId?.intValue == self.selectedParameterId
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if let parameterCell = collectionView.cellForItemAtIndexPath(indexPath) as? ParameterCell {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let parameterCell = collectionView.cellForItem(at: indexPath) as? ParameterCell {
             parameterCell.isParameterSelected = true
-            let parameter = self.parameters[indexPath.row]
+            let parameter = self.parameters[(indexPath as NSIndexPath).row]
             
-            if parameter.objectId != self.selectedParameterId {
+            if parameter.objectId?.intValue != self.selectedParameterId {
                 self.selectedParameterId = (parameter.objectId as? Int) ?? 1
                 
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.35 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(0.35 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) {
                     self.setParamaterLabelText(parameter.name)
                 }
                 
@@ -405,66 +425,66 @@ extension StatisticsController: UICollectionViewDelegate, UICollectionViewDataSo
         }
     }
     
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        if let parameterCell = collectionView.cellForItemAtIndexPath(indexPath) as? ParameterCell {
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let parameterCell = collectionView.cellForItem(at: indexPath) as? ParameterCell {
             parameterCell.isParameterSelected = false
         }
     }
 }
 
 extension StatisticsController : UICollectionViewDelegateFlowLayout {
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        if let name =  self.parameters[indexPath.row].name {
-            var size = name.boundingRectWithSize(CGSizeMake(CGFloat.max, 44),
-                                                 options: .UsesLineFragmentOrigin,
-                                                 attributes: [NSFontAttributeName : UIFont.systemFontOfSize(17)],
+                               sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if let name =  self.parameters[(indexPath as NSIndexPath).row].name {
+            var size = name.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44),
+                                                 options: .usesLineFragmentOrigin,
+                                                 attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: 17)],
                                                  context: nil).size
             size.width = min(size.width + 10, collectionView.frame.size.width - 2*8)
             size.height = 44
             return size
         } else {
-            return CGSizeZero
+            return CGSize.zero
         }
     }
 }
 
 extension StatisticsController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(frc: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ frc: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.beginUpdates()
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
-        case .Move:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation:.Fade)
-        case .Insert:
-            self.tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation:.Fade)
+        case .move:
+            self.tableView.deleteRows(at: [indexPath!], with:.fade)
+            self.tableView.insertRows(at: [newIndexPath!], with:.fade)
+        case .insert:
+            self.tableView.insertRows(at: [newIndexPath!], with:.fade)
             
-        case .Delete:
-            self.tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation:.Fade)
+        case .delete:
+            self.tableView.deleteRows(at: [indexPath!], with:.fade)
             
-        case .Update:
-            self.tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
+        case .update:
+            self.tableView.reloadRows(at: [indexPath!], with: .fade)
         }
     }
     
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch(type) {
-        case .Insert:
-            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
+        case .insert:
+            self.tableView.insertSections(IndexSet(integer: sectionIndex), with:.fade)
             
-        case .Delete:
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation:.Fade)
+        case .delete:
+            self.tableView.deleteSections(IndexSet(integer: sectionIndex), with:.fade)
             
         default:
             break
         }
     }
     
-    func controllerDidChangeContent(_: NSFetchedResultsController) {
+    func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
     }
 }
