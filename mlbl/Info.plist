@@ -44,6 +44,15 @@
 		<false/>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>ilovebasket.ru</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSTemporaryExceptionMinimumTLSVersion</key>
+				<string>TLSv1.1</string>
+			</dict>
 			<key>reg.infobasket.ru</key>
 			<dict>
 				<key>NSIncludesSubdomains</key>
