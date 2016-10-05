@@ -122,10 +122,10 @@ class TeamController: BaseController {
             if let team = (try self.dataController.mainContext.fetch(fetchRequest)).first{
                 self.team = team
             } else {
-                self.navigationController?.popViewController(animated: true)
+                _ = self.navigationController?.popViewController(animated: true)
             }
         } catch {
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         }
     }
     

@@ -36,10 +36,10 @@ class PlayerController: BaseController {
             if let player = try self.dataController.mainContext.fetch(fetchRequest).first {
                 self.player = player
             } else {
-                self.navigationController?.popViewController(animated: true)
+                _ = self.navigationController?.popViewController(animated: true)
             }
         } catch {
-            self.navigationController?.popViewController(animated: true)
+            _ = self.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -167,7 +167,7 @@ class PlayerController: BaseController {
     fileprivate func configureCell(_ cell: PlayerTeamCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
         let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
-        cell.seasonTeam = self.teamsFetchedResultsController.object(at: fixedIndexPath) as! SeasonTeam
+        cell.seasonTeam = self.teamsFetchedResultsController.object(at: fixedIndexPath)
         cell.color = (indexPath as NSIndexPath).row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
     }
     

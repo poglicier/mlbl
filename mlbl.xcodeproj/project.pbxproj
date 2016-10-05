@@ -10,6 +10,7 @@
 		89242E74280504C254BE86A7 /* Pods_mlbl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF0BF998002FB4DA321E13E /* Pods_mlbl.framework */; };
 		FC0645451D6C73FA0047FE1D /* RoundRobinRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0645441D6C73FA0047FE1D /* RoundRobinRequest.swift */; };
 		FC0645471D6C7C250047FE1D /* RobinTeamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */; };
+		FC22D2C51D9AA6FA009C6E27 /* PlayerStatsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC22D2C41D9AA6FA009C6E27 /* PlayerStatsRequest.swift */; };
 		FC321FA41C81B13E00674271 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FA31C81B13E00674271 /* ContainerController.swift */; };
 		FC321FA81C82DF8D00674271 /* PlayersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FA71C82DF8D00674271 /* PlayersController.swift */; };
 		FC321FAC1C82F97900674271 /* EmptySegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FAB1C82F97900674271 /* EmptySegue.swift */; };
@@ -76,6 +77,7 @@
 		FC9837BE1D7079E300534AB1 /* PlayoffCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837BD1D7079E300534AB1 /* PlayoffCell.swift */; };
 		FC9837C11D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837BF1D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift */; };
 		FC9837C21D7089AA00534AB1 /* PlayoffSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837C01D7089AA00534AB1 /* PlayoffSerie.swift */; };
+		FC9997611DA2897900F163CC /* comps.json in Resources */ = {isa = PBXBuildFile; fileRef = FC9997601DA2897900F163CC /* comps.json */; };
 		FCA941411D48D82600D95A7A /* Game+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413C1D48D82600D95A7A /* Game+CoreDataProperties.swift */; };
 		FCA941421D48D82600D95A7A /* Team+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413D1D48D82600D95A7A /* Team+CoreDataProperties.swift */; };
 		FCA941431D48D82600D95A7A /* Player+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413E1D48D82600D95A7A /* Player+CoreDataProperties.swift */; };
@@ -103,6 +105,7 @@
 		F6CA67808BC7A749E6A768D7 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC0645441D6C73FA0047FE1D /* RoundRobinRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundRobinRequest.swift; sourceTree = "<group>"; };
 		FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RobinTeamCell.swift; sourceTree = "<group>"; };
+		FC22D2C41D9AA6FA009C6E27 /* PlayerStatsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerStatsRequest.swift; sourceTree = "<group>"; };
 		FC321FA31C81B13E00674271 /* ContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
 		FC321FA71C82DF8D00674271 /* PlayersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayersController.swift; sourceTree = "<group>"; };
 		FC321FAB1C82F97900674271 /* EmptySegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptySegue.swift; sourceTree = "<group>"; };
@@ -173,6 +176,7 @@
 		FC9837BD1D7079E300534AB1 /* PlayoffCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffCell.swift; sourceTree = "<group>"; };
 		FC9837BF1D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlayoffSerie+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC9837C01D7089AA00534AB1 /* PlayoffSerie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffSerie.swift; sourceTree = "<group>"; };
+		FC9997601DA2897900F163CC /* comps.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = comps.json; sourceTree = "<group>"; };
 		FCA9413C1D48D82600D95A7A /* Game+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Game+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FCA9413D1D48D82600D95A7A /* Team+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Team+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FCA9413E1D48D82600D95A7A /* Player+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Player+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -274,6 +278,7 @@
 				FCD2D59F1D7A2B2800C436E9 /* TeamGamesRequest.swift */,
 				FC78EDC91D7C0F900008ED6E /* TeamStatsRequest.swift */,
 				FC7546BD1D7D8B6F00F02119 /* PlayerTeamsRequest.swift */,
+				FC22D2C41D9AA6FA009C6E27 /* PlayerStatsRequest.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -327,6 +332,7 @@
 				FC637E5F1C946617009EE880 /* Localizable.strings */,
 				FC705D421C80F00A00216AB8 /* LaunchScreen.storyboard */,
 				FC705D451C80F00A00216AB8 /* Info.plist */,
+				FC9997601DA2897900F163CC /* comps.json */,
 				FC7546B71D7D518100F02119 /* InfoPlist.strings */,
 				FC97930E1C8B5F2A00D4D5D9 /* Model */,
 			);
@@ -472,6 +478,7 @@
 				FC57AC0C1D7980BD009E67C6 /* TeamPlayersHeader.xib in Resources */,
 				FC4624001D82A836003E9E30 /* StatisticCell.xib in Resources */,
 				FC705D3C1C80F00A00216AB8 /* Main.storyboard in Resources */,
+				FC9997611DA2897900F163CC /* comps.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,6 +623,7 @@
 				FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */,
 				FC97931D1C8B6ADB00D4D5D9 /* Player.swift in Sources */,
 				FC7546BA1D7D776A00F02119 /* PlayerController.swift in Sources */,
+				FC22D2C51D9AA6FA009C6E27 /* PlayerStatsRequest.swift in Sources */,
 				FC321FA81C82DF8D00674271 /* PlayersController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

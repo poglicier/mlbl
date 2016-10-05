@@ -23,7 +23,7 @@ class CompetitionsRequest: NetworkRequest {
             return
         }
         
-        guard let url = URL(string: "CompIssue/\(self.parentId!)", relativeTo: self.baseUrl as URL?) else { fatalError("Failed to build URL") }
+        guard let url = URL(string: "http://ilovebasket.ru/comps.json"/*"CompIssue/\(self.parentId!)"*/, relativeTo: nil/*self.baseUrl as URL?*/) else { fatalError("Failed to build URL") }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -42,6 +42,9 @@ class CompetitionsRequest: NetworkRequest {
     
     override func processData() {
         do {
+//            let url = Bundle.main.url(forResource: "comps.json", withExtension: nil)!
+//            let data = try! Data(contentsOf: url)
+//            let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
             let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let result = json as? [String:AnyObject] {
                 if let comps = result["Comps"] as? [[String:AnyObject]] {
