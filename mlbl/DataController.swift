@@ -27,7 +27,6 @@ class DataController {
         return prefLanguage!
     }()
     
-    fileprivate let mlblCompId = 14004
     fileprivate let queue = OperationQueue()
     fileprivate var privateContext: NSManagedObjectContext!
     fileprivate(set) var mainContext: NSManagedObjectContext!
@@ -54,8 +53,8 @@ class DataController {
         self.mainContext!.parent = self.privateContext
     }
     
-    func getCompetitions(_ completion: ((NSError?) -> ())?) {
-        let request = CompetitionsRequest(parentId: self.mlblCompId)
+    func getCompetitions(parentCompId: Int?, completion: ((NSError?) -> ())?) {
+        let request = CompetitionsRequest(parentId: parentCompId)
         request.dataController = self
         
         request.completionBlock = {
@@ -219,6 +218,18 @@ class DataController {
     
     func getTeamStats(_ compId: Int, teamId: Int, completion: ((NSError?) -> ())?) {
         let request = TeamStatsRequest(compId: compId, teamId: teamId)
+        request.dataController = self
+        
+        request.completionBlock = {
+            DispatchQueue.main.async(execute: {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func getPlayerStats(_ compId: Int, playerId: Int, completion: ((NSError?) -> ())?) {
+        let request = PlayerStatsRequest(compId: compId, playerId: playerId)
         request.dataController = self
         
         request.completionBlock = {

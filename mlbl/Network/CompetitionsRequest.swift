@@ -9,9 +9,9 @@
 import CoreData
 
 class CompetitionsRequest: NetworkRequest {
-    fileprivate var parentId: Int!
+    fileprivate var parentId: Int?
     
-    init(parentId: Int) {
+    init(parentId: Int?) {
         super.init()
         
         self.parentId = parentId
@@ -23,8 +23,14 @@ class CompetitionsRequest: NetworkRequest {
             return
         }
         
-        guard let url = URL(string: "http://ilovebasket.ru/comps.json"/*"CompIssue/\(self.parentId!)"*/, relativeTo: nil/*self.baseUrl as URL?*/) else { fatalError("Failed to build URL") }
-        
+        var optionalUrl: URL?
+        if let _ = parentId {
+            optionalUrl = URL(string: "CompIssue/\(self.parentId!)", relativeTo: self.baseUrl)
+        } else {
+            optionalUrl = URL(string: "http://ilovebasket.ru/comps.json", relativeTo: nil)
+        }
+        guard let url = optionalUrl else { fatalError("Failed to build URL") }
+
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         if let _ = self.params {
@@ -41,11 +47,25 @@ class CompetitionsRequest: NetworkRequest {
     }
     
     override func processData() {
-        do {
-//            let url = Bundle.main.url(forResource: "comps.json", withExtension: nil)!
-//            let data = try! Data(contentsOf: url)
-//            let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
+//        do {
+            var json: Any
+            if let _ = self.parentId {
+                do {
+                    json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
+                } catch {
+                    self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
+                    return
+                }
+            } else {
+                let url = Bundle.main.url(forResource: "comps2.json", withExtension: nil)!
+                let data = try! Data(contentsOf: url)
+                do {
+                    json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                } catch {
+                    self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
+                    return
+                }
+            }
             if let result = json as? [String:AnyObject] {
                 if let comps = result["Comps"] as? [[String:AnyObject]] {
                     let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
@@ -53,6 +73,9 @@ class CompetitionsRequest: NetworkRequest {
                     context.performAndWait() {
                         // Удаляем из Core Data все регионы
                         let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
+                        if let _ = self.parentId {
+                            fetchRequest.predicate = NSPredicate(format: "objectId != %d", self.parentId!)
+                        }
                         
                         do {
                             let all = try context.fetch(fetchRequest)
@@ -63,8 +86,17 @@ class CompetitionsRequest: NetworkRequest {
                         }
                         catch {}
                         
+                        var parentComp: Competition?
+                        if let _ = self.parentId {
+                            fetchRequest.predicate = NSPredicate(format: "objectId = %d", self.parentId!)
+                            do {
+                                parentComp = try context.fetch(fetchRequest).first
+                            } catch {}
+                        }
+                        
                         for compDict in comps {
-                            Competition.compWithDict(compDict, inContext: context)
+                            let comp = Competition.compWithDict(compDict, inContext: context)
+                            comp?.parent = parentComp
                         }
                         
                         self.dataController?.saveContext(context)
@@ -75,8 +107,8 @@ class CompetitionsRequest: NetworkRequest {
             } else {
                 self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "json не словарь"])
             }
-        } catch {
-            self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
-        }
+//        } catch {
+//            self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
+//        }
     }
 }

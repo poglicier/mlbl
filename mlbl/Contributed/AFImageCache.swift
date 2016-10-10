@@ -40,6 +40,9 @@ class AFImageCache: NSCache<AnyObject, AnyObject>, AFImageCacheProtocol {
 }
 
 extension UIImageView {
+    fileprivate static var defaultImageCache = AFImageCache()
+    fileprivate static var queue = OperationQueue()
+    
     fileprivate struct AssociatedKeys {
         static var SharedImageCache = "SharedImageCache"
         static var RequestImageOperation = "RequestImageOperation"
@@ -51,31 +54,15 @@ extension UIImageView {
     }
     
     public class func sharedImageCache() -> AFImageCacheProtocol {
-        struct Static {
-            static var token : Int = 0
-            static var defaultImageCache:AFImageCache?
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: OperationQueue.main) { (NSNotification) -> Void in
+            self.defaultImageCache.removeAllObjects()
         }
-        
-//        dispatch_once(&Static.token, { () -> Void in
-            Static.defaultImageCache = AFImageCache()
-            NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: OperationQueue.main) { (NSNotification) -> Void in
-                Static.defaultImageCache!.removeAllObjects()
-            }
-//        })
-        return objc_getAssociatedObject(self, &AssociatedKeys.SharedImageCache) as? AFImageCacheProtocol ?? Static.defaultImageCache!
+        return objc_getAssociatedObject(self, &AssociatedKeys.SharedImageCache) as? AFImageCacheProtocol ?? self.defaultImageCache
     }
     
     fileprivate class func af_sharedImageRequestOperationQueue() -> OperationQueue {
-        struct Static {
-            static var token:Int = 0
-            static var queue:OperationQueue?
-        }
-        
-//        dispatch_once(&Static.token, { () -> Void in
-            Static.queue = OperationQueue()
-            Static.queue!.maxConcurrentOperationCount = OperationQueue.defaultMaxConcurrentOperationCount
-//        })
-        return Static.queue!
+        self.queue.maxConcurrentOperationCount = OperationQueue.defaultMaxConcurrentOperationCount
+        return self.queue
     }
     
     fileprivate var af_requestImageOperation:(operation:Operation?, request: URLRequest?) {

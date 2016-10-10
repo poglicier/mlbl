@@ -28,45 +28,47 @@ class TableController: BaseController {
     fileprivate let rowHeight: CGFloat = 112
     fileprivate let playoffRowHeight: CGFloat = 180
     fileprivate var childrenComptetitions = [Competition]()
-    fileprivate var selectedCompetition: Competition! {
+    fileprivate var selectedCompetition: Competition? {
         didSet {
             let isLanguageRu = self.dataController.language.contains("ru")
-            self.stageLabel.text = isLanguageRu ? selectedCompetition.compShortNameRu : selectedCompetition.compShortNameEn
+            self.stageLabel.text = isLanguageRu ? selectedCompetition?.compShortNameRu : selectedCompetition?.compShortNameEn
             
             self.refreshButtonPlayoff?.removeFromSuperview()
             self.refreshButtonPlayoff = nil
             self.refreshButtonRound?.removeFromSuperview()
             self.refreshButtonRound = nil
             
-            if selectedCompetition.compType?.intValue ?? -1 == 0 {
-                self.getRoundRobin(true)
-                
-                self.roundTableView.scrollsToTop = true
-                self.playoffTableView.scrollsToTop = false
-                self.roundTableView.contentOffset = CGPoint(x: 0, y: -4)
-                self.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition)
-                do {
-                    try self.fetchedResultsController.performFetch()
-                } catch {}
-                self.roundTableView.reloadData()
-            } else {
-                self.getPlayoff(true)
-                
-                self.roundTableView.scrollsToTop = false
-                self.playoffTableView.scrollsToTop = true
-                self.playoffTableView.contentOffset = CGPoint.zero
-                self.playoffFetchedResultsController.fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition)
-                do {
-                    try self.playoffFetchedResultsController.performFetch()
-                } catch {}
-                self.playoffTableView.reloadData()
+            if let _ = selectedCompetition {
+                if selectedCompetition?.compType?.intValue ?? -1 == 0 {
+                    self.getRoundRobin(true)
+                    
+                    self.roundTableView.scrollsToTop = true
+                    self.playoffTableView.scrollsToTop = false
+                    self.roundTableView.contentOffset = CGPoint(x: 0, y: -4)
+                    self.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition!)
+                    do {
+                        try self.fetchedResultsController.performFetch()
+                    } catch {}
+                    self.roundTableView.reloadData()
+                } else {
+                    self.getPlayoff(true)
+                    
+                    self.roundTableView.scrollsToTop = false
+                    self.playoffTableView.scrollsToTop = true
+                    self.playoffTableView.contentOffset = CGPoint.zero
+                    self.playoffFetchedResultsController.fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition!)
+                    do {
+                        try self.playoffFetchedResultsController.performFetch()
+                    } catch {}
+                    self.playoffTableView.reloadData()
+                }
             }
         }
     }
     
     lazy fileprivate var fetchedResultsController: NSFetchedResultsController<TeamRoundRank> = {
         let fetchRequest = NSFetchRequest<TeamRoundRank>(entityName: TeamRoundRank.entityName())
-        fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition)
+        fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition!)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "place", ascending: true)]
         
         let frc = NSFetchedResultsController(
@@ -81,7 +83,7 @@ class TableController: BaseController {
     
     lazy fileprivate var playoffFetchedResultsController: NSFetchedResultsController<PlayoffSerie> = {
         let fetchRequest = NSFetchRequest<PlayoffSerie>(entityName: PlayoffSerie.entityName())
-        fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition)
+        fetchRequest.predicate = NSPredicate(format: "competition = %@", self.selectedCompetition!)
         let isLanguageRu = self.dataController.language.contains("ru")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "sectionSort", ascending: true),
                                         NSSortDescriptor(key: "sort", ascending: true)]
@@ -128,7 +130,7 @@ class TableController: BaseController {
     }
     
     override func willEnterForegroud() {
-        if selectedCompetition.compType?.intValue ?? -1 == 0 {
+        if selectedCompetition?.compType?.intValue ?? -1 == 0 {
             if let _ = self.refreshButtonRound {
                 self.refreshButtonRound?.removeFromSuperview()
                 self.refreshButtonRound = nil
@@ -162,11 +164,11 @@ class TableController: BaseController {
             }
             
             self.selectedCompetition = self.childrenComptetitions.first!
-        } catch {}
+        } catch { }
     }
     
     fileprivate func getRoundRobin(_ showIndicator: Bool) {
-        if let compId = self.selectedCompetition.objectId?.intValue {
+        if let compId = self.selectedCompetition?.objectId?.intValue {
             if (showIndicator) {
                 self.activityView.startAnimating()
                 self.roundTableView.isHidden = true
@@ -214,7 +216,7 @@ class TableController: BaseController {
     }
     
     fileprivate func getPlayoff(_ showIndicator: Bool) {
-        if let compId = self.selectedCompetition.objectId?.intValue {
+        if let compId = self.selectedCompetition?.objectId?.intValue {
             if showIndicator {
                 self.activityView.startAnimating()
                 self.roundTableView.isHidden = true
@@ -284,27 +286,31 @@ class TableController: BaseController {
     }
     
     @IBAction fileprivate func prevDidTap() {
-        if let index = self.childrenComptetitions.index(of: self.selectedCompetition) {
-            self.prevButton.isEnabled = false
-            self.nextButton.isEnabled = false
-            
-            if index > 0 {
-                self.selectedCompetition = self.childrenComptetitions[index-1]
-            } else {
-                self.selectedCompetition = self.childrenComptetitions.last!
+        if let _ = self.selectedCompetition {
+            if let index = self.childrenComptetitions.index(of: self.selectedCompetition!) {
+                self.prevButton.isEnabled = false
+                self.nextButton.isEnabled = false
+                
+                if index > 0 {
+                    self.selectedCompetition = self.childrenComptetitions[index-1]
+                } else {
+                    self.selectedCompetition = self.childrenComptetitions.last!
+                }
             }
         }
     }
     
     @IBAction fileprivate func nextDidTap() {
-        if let index = self.childrenComptetitions.index(of: self.selectedCompetition) {
-            self.prevButton.isEnabled = false
-            self.nextButton.isEnabled = false
-            
-            if index < self.childrenComptetitions.count - 1 {
-                self.selectedCompetition = self.childrenComptetitions[index+1]
-            } else {
-                self.selectedCompetition = self.childrenComptetitions.first!
+        if let _ = self.selectedCompetition {
+            if let index = self.childrenComptetitions.index(of: self.selectedCompetition!) {
+                self.prevButton.isEnabled = false
+                self.nextButton.isEnabled = false
+                
+                if index < self.childrenComptetitions.count - 1 {
+                    self.selectedCompetition = self.childrenComptetitions[index+1]
+                } else {
+                    self.selectedCompetition = self.childrenComptetitions.first!
+                }
             }
         }
     }
@@ -333,11 +339,14 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         var res = 0
         
-        if tableView == self.roundTableView {
-            res = self.fetchedResultsController.sections?.count ?? 0
-        } else {
-            res = self.playoffFetchedResultsController.sections?.count ?? 0
+        if let _ = self.selectedCompetition {
+            if tableView == self.roundTableView {
+                res = self.fetchedResultsController.sections?.count ?? 0
+            } else {
+                res = self.playoffFetchedResultsController.sections?.count ?? 0
+            }
         }
+        
         return res
     }
     
@@ -469,7 +478,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
 extension TableController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(_ frc: NSFetchedResultsController<NSFetchRequestResult>) {
         var tableView: UITableView
-        if self.selectedCompetition.compType == 0 {
+        if self.selectedCompetition?.compType == 0 {
             tableView = self.roundTableView
         } else {
             tableView = self.playoffTableView
@@ -480,7 +489,7 @@ extension TableController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         var tableView: UITableView
-        if self.selectedCompetition.compType == 0 {
+        if self.selectedCompetition?.compType == 0 {
             tableView = self.roundTableView
         } else {
             tableView = self.playoffTableView
@@ -503,7 +512,7 @@ extension TableController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         var tableView: UITableView
-        if self.selectedCompetition.compType == 0 {
+        if self.selectedCompetition?.compType == 0 {
             tableView = self.roundTableView
         } else {
             tableView = self.playoffTableView
@@ -523,7 +532,7 @@ extension TableController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
         var tableView: UITableView
-        if self.selectedCompetition.compType == 0 {
+        if self.selectedCompetition?.compType == 0 {
             tableView = self.roundTableView
         } else {
             tableView = self.playoffTableView

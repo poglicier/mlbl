@@ -22,8 +22,13 @@ class ParameterCell: UICollectionViewCell {
         super.awakeFromNib()
         
         self.label.backgroundColor = UIColor.white
-        self.label.layer.cornerRadius = self.label.frame.size.height/2
         self.label.layer.masksToBounds = true
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
+        self.label.layer.cornerRadius = self.label.frame.size.height/2
     }
     
     // MARK: - Public

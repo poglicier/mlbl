@@ -10,6 +10,7 @@
 		89242E74280504C254BE86A7 /* Pods_mlbl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBF0BF998002FB4DA321E13E /* Pods_mlbl.framework */; };
 		FC0645451D6C73FA0047FE1D /* RoundRobinRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0645441D6C73FA0047FE1D /* RoundRobinRequest.swift */; };
 		FC0645471D6C7C250047FE1D /* RobinTeamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */; };
+		FC14B0A91DAB9867007E1D84 /* comps2.json in Resources */ = {isa = PBXBuildFile; fileRef = FC14B0A81DAB9867007E1D84 /* comps2.json */; };
 		FC22D2C51D9AA6FA009C6E27 /* PlayerStatsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC22D2C41D9AA6FA009C6E27 /* PlayerStatsRequest.swift */; };
 		FC321FA41C81B13E00674271 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FA31C81B13E00674271 /* ContainerController.swift */; };
 		FC321FA81C82DF8D00674271 /* PlayersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FA71C82DF8D00674271 /* PlayersController.swift */; };
@@ -104,6 +105,7 @@
 		F6CA67808BC7A749E6A768D7 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC0645441D6C73FA0047FE1D /* RoundRobinRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundRobinRequest.swift; sourceTree = "<group>"; };
 		FC0645461D6C7C250047FE1D /* RobinTeamCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RobinTeamCell.swift; sourceTree = "<group>"; };
+		FC14B0A81DAB9867007E1D84 /* comps2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = comps2.json; sourceTree = "<group>"; };
 		FC22D2C41D9AA6FA009C6E27 /* PlayerStatsRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerStatsRequest.swift; sourceTree = "<group>"; };
 		FC321FA31C81B13E00674271 /* ContainerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
 		FC321FA71C82DF8D00674271 /* PlayersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayersController.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 				FC705D421C80F00A00216AB8 /* LaunchScreen.storyboard */,
 				FC705D451C80F00A00216AB8 /* Info.plist */,
 				FC7546B71D7D518100F02119 /* InfoPlist.strings */,
+				FC14B0A81DAB9867007E1D84 /* comps2.json */,
 				FC97930E1C8B5F2A00D4D5D9 /* Model */,
 			);
 			path = mlbl;
@@ -475,6 +478,7 @@
 				FC57AC0C1D7980BD009E67C6 /* TeamPlayersHeader.xib in Resources */,
 				FC4624001D82A836003E9E30 /* StatisticCell.xib in Resources */,
 				FC705D3C1C80F00A00216AB8 /* Main.storyboard in Resources */,
+				FC14B0A91DAB9867007E1D84 /* comps2.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,7 +16,7 @@ class ChooseCompetitionController: BaseController {
     
     lazy fileprivate var fetchedResultsController: NSFetchedResultsController<Competition> = {
         let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
-        fetchRequest.predicate = NSPredicate(format: "compType < 0 AND ANY children.compType >= 0")
+        fetchRequest.predicate = NSPredicate(format: "compType < 0 AND parent != nil")
         let isLanguageRu = self.dataController.language.contains("ru")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: isLanguageRu ? "parent.compShortNameRu" : "parent.compShortNameEn", ascending: true),
                                         NSSortDescriptor(key: isLanguageRu ? "compAbcNameRu" : "compAbcNameEn", ascending: true), NSSortDescriptor(key: self.dataController.language.contains("ru") ? "compShortNameRu" : "compShortNameEn", ascending: true)]
@@ -58,7 +58,7 @@ class ChooseCompetitionController: BaseController {
             self.emptyLabel.isHidden = true
         }
         
-        self.dataController.getCompetitions() { [weak self] (error) in
+        self.dataController.getCompetitions(parentCompId: nil) { [weak self] (error) in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
                 if let _ = error {
@@ -102,6 +102,10 @@ class ChooseCompetitionController: BaseController {
     
     fileprivate func goToMain() {
         if let selectedPath = self.tableView.indexPathForSelectedRow {
+            self.activityView.startAnimating()
+            self.tableView.isHidden = true
+            self.emptyLabel.isHidden = true
+            
             let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
             fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
             
@@ -131,11 +135,42 @@ class ChooseCompetitionController: BaseController {
                             print("DELETE Game \(game.date)")
                         }
                     }
+                    
+                    self.dataController.saveContext(self.dataController.mainContext)
+                    
+                    // Запрос поддерева выбранного чемпионата
+                    if let compId = newComp.objectId?.intValue {
+                        self.dataController.getCompetitions(parentCompId: compId) { [weak self] (error) in
+                            if let strongSelf = self {
+                                strongSelf.activityView.stopAnimating()
+                                if let _ = error {
+                                    strongSelf.emptyLabel.text = error?.localizedDescription
+                                    strongSelf.tableView.isHidden = true
+                                    strongSelf.emptyLabel.isHidden = false
+                                    
+                                    let refreshButton = UIButton(type: .custom)
+                                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
+                                    refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                                    refreshButton.addTarget(strongSelf, action: #selector(strongSelf.refreshPlayersDidTap), for: .touchUpInside)
+                                    strongSelf.view.addSubview(refreshButton)
+                                    
+                                    refreshButton.snp.makeConstraints({ (make) in
+                                        make.centerX.equalTo(0)
+                                        make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
+                                    })
+                                    
+                                    strongSelf.refreshButton = refreshButton
+                                } else {
+                                    strongSelf.emptyLabel.isHidden = true
+                                    strongSelf.tableView.isHidden = false
+                                    
+                                    strongSelf.performSegue(withIdentifier: "goToMain", sender: nil)
+                                }
+                            }
+                        }
+                    }
                 }
             } catch {}
-            
-            self.dataController.saveContext(self.dataController.mainContext)
-            self.performSegue(withIdentifier: "goToMain", sender: nil)
         }
     }
     

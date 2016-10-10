@@ -44,8 +44,8 @@ class PlayerStatsRequest: NetworkRequest {
     }
     
     override func processData() {
-//        do {
-//            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
+        do {
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
 //            if let seasonTeamsDicts = json as? [[String:AnyObject]] {
 //                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
 //                context.parent = self.dataController?.mainContext
@@ -80,8 +80,8 @@ class PlayerStatsRequest: NetworkRequest {
 //            } else {
 //                self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "json не является массивом словарей"])
 //            }
-//        } catch {
-//            self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
-//        }
+        } catch {
+            self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
+        }
     }
 }

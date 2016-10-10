@@ -87,26 +87,15 @@ class PlayerController: BaseController {
                                             requestError = error
                                             dispatchGroup.leave()
         }
-//
-//        dispatch_group_enter(dispatchGroup)
-//        self.dataController.getTeamGames(self.dataController.currentCompetitionId(),
-//                                         teamId: self.teamId) { [weak self] error in
-//                                            if error == nil {
-//                                                self?.tableView.reloadSections(NSIndexSet(index: Sections.Games.rawValue), withRowAnimation: .None)
-//                                            }
-//                                            requestError = error
-//                                            dispatch_group_leave(dispatchGroup)
-//        }
-//        
-//        dispatch_group_enter(dispatchGroup)
-//        self.dataController.getTeamStats(self.dataController.currentCompetitionId(),
-//                                         teamId: self.teamId) { [weak self] error in
-//                                            if error == nil {
-//                                                self?.tableView.reloadSections(NSIndexSet(index: Sections.Statistics.rawValue), withRowAnimation: .None)
-//                                            }
-//                                            requestError = error
-//                                            dispatch_group_leave(dispatchGroup)
-//        }
+
+        dispatchGroup.enter()
+        self.dataController.getPlayerStats(self.dataController.currentCompetitionId(), playerId: self.playerId) { [weak self] error in
+            if error == nil {
+                self?.tableView.reloadSections(IndexSet(integer: Sections.games.rawValue), with: .none)
+            }
+            requestError = error
+            dispatchGroup.leave()
+        }
         
         dispatchGroup.notify(queue: DispatchQueue.main, execute: { [weak self] in
             if let strongSelf = self {
