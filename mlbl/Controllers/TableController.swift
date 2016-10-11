@@ -152,7 +152,7 @@ class TableController: BaseController {
     fileprivate func setupSubcompetitions() {
         let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
         fetchRequest.predicate = NSPredicate(format: "parent.objectId = %d AND compType >= 0", self.dataController.currentCompetitionId())
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compType", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "compType", ascending: true), NSSortDescriptor(key: self.dataController.language.contains("ru") ? "compShortNameRu" : "compShortNameEn", ascending: true)]
         do {
             self.childrenComptetitions = try self.dataController.mainContext.fetch(fetchRequest)
             

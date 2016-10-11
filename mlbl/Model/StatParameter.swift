@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 
-class StatParameter: NSManagedObject {
+public class StatParameter: NSManagedObject {
 
     static let StatParameterIdKey = "param"
     static let StatParameterNameKey = "name"

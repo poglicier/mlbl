@@ -2,11 +2,8 @@
 //  TeamRoundRank+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 26.08.16.
+//  Created by Valentin Shamardin on 10.10.16.
 //
-//
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
 //
 
 import Foundation
@@ -14,13 +11,17 @@ import CoreData
 
 extension TeamRoundRank {
 
-    @NSManaged var place: NSNumber?
-    @NSManaged var standingsGoalPlus: NSNumber?
-    @NSManaged var standingsGoalMinus: NSNumber?
-    @NSManaged var standingWin: NSNumber?
-    @NSManaged var standingLose: NSNumber?
-    @NSManaged var standingPoints: NSNumber?
-    @NSManaged var team: Team?
-    @NSManaged var competition: Competition?
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<TeamRoundRank> {
+        return NSFetchRequest<TeamRoundRank>(entityName: "TeamRoundRank");
+    }
+
+    @NSManaged public var place: NSNumber?
+    @NSManaged public var standingLose: NSNumber?
+    @NSManaged public var standingPoints: NSNumber?
+    @NSManaged public var standingsGoalMinus: NSNumber?
+    @NSManaged public var standingsGoalPlus: NSNumber?
+    @NSManaged public var standingWin: NSNumber?
+    @NSManaged public var competition: Competition?
+    @NSManaged public var team: Team?
 
 }

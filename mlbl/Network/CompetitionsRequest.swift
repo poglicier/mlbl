@@ -27,7 +27,7 @@ class CompetitionsRequest: NetworkRequest {
         if let _ = parentId {
             optionalUrl = URL(string: "CompIssue/\(self.parentId!)", relativeTo: self.baseUrl)
         } else {
-            optionalUrl = URL(string: "http://ilovebasket.ru/comps.json", relativeTo: nil)
+            optionalUrl = URL(string: "http://ilovebasket.ru/comps2.json", relativeTo: nil)
         }
         guard let url = optionalUrl else { fatalError("Failed to build URL") }
 
@@ -47,25 +47,8 @@ class CompetitionsRequest: NetworkRequest {
     }
     
     override func processData() {
-//        do {
-            var json: Any
-            if let _ = self.parentId {
-                do {
-                    json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
-                } catch {
-                    self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
-                    return
-                }
-            } else {
-                let url = Bundle.main.url(forResource: "comps2.json", withExtension: nil)!
-                let data = try! Data(contentsOf: url)
-                do {
-                    json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
-                } catch {
-                    self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
-                    return
-                }
-            }
+        do {
+            let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let result = json as? [String:AnyObject] {
                 if let comps = result["Comps"] as? [[String:AnyObject]] {
                     let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
@@ -107,8 +90,8 @@ class CompetitionsRequest: NetworkRequest {
             } else {
                 self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "json не словарь"])
             }
-//        } catch {
-//            self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
-//        }
+        } catch {
+            self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
+        }
     }
 }

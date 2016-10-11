@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class Game: NSManagedObject {
+public class Game: NSManagedObject {
     
     enum GameStatus: Int {
         case scheduled
@@ -20,7 +20,7 @@ class Game: NSManagedObject {
     }
     
     static fileprivate let GameIdKey = "GameID"
-    static fileprivate let GameDateKey = "GameDate"
+    static let GameDateKey = "GameDate"
     static fileprivate let GameTimeKey = "GameTime"
     static let ScoreAKey = "ScoreA"
     static let ScoreBKey = "ScoreB"
@@ -67,7 +67,10 @@ class Game: NSManagedObject {
                 
                 if let dateString = dict[GameDateKey] as? String {
                     if let timeString = dict[GameTimeKey] as? String {
-                        res?.date = self.dateFormatter.date(from: "\(dateString) \(timeString)")
+                        res?.date = self.dateFormatter.date(from: "\(dateString) \(timeString)") as NSDate?
+                        if res?.date == nil {
+                            res?.date = self.dateFormatter.date(from: dateString + " 0:0") as NSDate?
+                        }
                     }
                 }
                 
@@ -80,19 +83,19 @@ class Game: NSManagedObject {
 
                 if let statisticsADict = dict[TeamAKey] as? [String:AnyObject] {
                     if let statisticsA = GameStatistics.gameStatisticsWithDict(statisticsADict, gameId: objectId as Int, inContext: context) {
-                        res?.addStatisticsObject(statisticsA)
+                        res?.addToStatistics(statisticsA)
                         
                         if let playersDicts = statisticsADict[PlayersKey] as? [[String:AnyObject]] {
                             for playerDict in playersDicts {
                                 if let playerStat = GameStatistics.gameStatisticsWithDict(playerDict, gameId: objectId as Int, inContext: context) {
-                                    res?.addStatisticsObject(playerStat)
+                                    res?.addToStatistics(playerStat)
                                 }
                             }
                         }
                         
                         if let coachDict = statisticsADict[CoachKey] as? [String:AnyObject] {
                             if let coachStat = GameStatistics.gameStatisticsWithDict(coachDict, gameId: objectId as Int, inContext: context) {
-                                res?.addStatisticsObject(coachStat)
+                                res?.addToStatistics(coachStat)
                             }
                         }
                     }
@@ -100,19 +103,19 @@ class Game: NSManagedObject {
                 
                 if let statisticsBDict = dict[TeamBKey] as? [String:AnyObject] {
                     if let statisticsB = GameStatistics.gameStatisticsWithDict(statisticsBDict, gameId: objectId as Int, inContext: context) {
-                        res?.addStatisticsObject(statisticsB)
+                        res?.addToStatistics(statisticsB)
                         
                         if let playersDicts = statisticsBDict[PlayersKey] as? [[String:AnyObject]] {
                             for playerDict in playersDicts {
                                 if let playerStat = GameStatistics.gameStatisticsWithDict(playerDict, gameId: objectId as Int, inContext: context) {
-                                    res?.addStatisticsObject(playerStat)
+                                    res?.addToStatistics(playerStat)
                                 }
                             }
                         }
                         
                         if let coachDict = statisticsBDict[CoachKey] as? [String:AnyObject] {
                             if let coachStat = GameStatistics.gameStatisticsWithDict(coachDict, gameId: objectId as Int, inContext: context) {
-                                res?.addStatisticsObject(coachStat)
+                                res?.addToStatistics(coachStat)
                             }
                         }
                     }
@@ -164,27 +167,5 @@ class Game: NSManagedObject {
         }
         
         return res
-    }
-    
-    func addStatisticsObject(_ value: GameStatistics) {
-        var newItems: Set<GameStatistics>
-        if let statistics = self.statistics {
-            newItems = statistics as! Set<GameStatistics>
-        } else {
-            newItems = Set<GameStatistics>()
-        }
-        newItems.insert(value)
-        self.statistics = newItems as NSSet?
-    }
-    
-    func removeStatisticsObject(_ value: GameStatistics) {
-        var newItems: Set<GameStatistics>
-        if let statistics = self.statistics {
-            newItems = statistics as! Set<GameStatistics>
-        } else {
-            newItems = Set<GameStatistics>()
-        }
-        newItems.remove(value)
-        self.statistics = newItems as NSSet?
     }
 }

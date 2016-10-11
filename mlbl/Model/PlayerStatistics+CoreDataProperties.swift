@@ -1,18 +1,18 @@
 //
-//  GameStatistics+CoreDataProperties.swift
+//  PlayerStatistics+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 10.10.16.
+//  Created by Valentin Shamardin on 11.10.16.
 //
 //
 
 import Foundation
 import CoreData
 
-extension GameStatistics {
+extension PlayerStatistics {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<GameStatistics> {
-        return NSFetchRequest<GameStatistics>(entityName: "GameStatistics");
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<PlayerStatistics> {
+        return NSFetchRequest<PlayerStatistics>(entityName: "PlayerStatistics");
     }
 
     @NSManaged public var assists: NSNumber?
@@ -22,10 +22,8 @@ extension GameStatistics {
     @NSManaged public var goal1: NSNumber?
     @NSManaged public var goal2: NSNumber?
     @NSManaged public var goal3: NSNumber?
-    @NSManaged public var isStart: NSNumber?
     @NSManaged public var offensiveRebounds: NSNumber?
     @NSManaged public var opponentFouls: NSNumber?
-    @NSManaged public var playerNumber: NSNumber?
     @NSManaged public var plusMinus: NSNumber?
     @NSManaged public var points: NSNumber?
     @NSManaged public var seconds: NSNumber?
@@ -33,12 +31,10 @@ extension GameStatistics {
     @NSManaged public var shot2: NSNumber?
     @NSManaged public var shot3: NSNumber?
     @NSManaged public var steals: NSNumber?
-    @NSManaged public var teamDefensiveRebounds: NSNumber?
-    @NSManaged public var teamNumber: NSNumber?
-    @NSManaged public var teamOffensiveRebounds: NSNumber?
     @NSManaged public var turnovers: NSNumber?
     @NSManaged public var game: Game?
     @NSManaged public var player: Player?
-    @NSManaged public var team: Team?
+    @NSManaged public var teamA: Team?
+    @NSManaged public var teamB: Team?
 
 }

@@ -80,7 +80,7 @@ class TeamController: BaseController {
     lazy fileprivate var gamesFetchedResultsController: NSFetchedResultsController<Game> = {
         let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
         fetchRequest.predicate = NSPredicate(format: "teamAId = \(self.teamId!) OR teamBId = \(self.teamId!)")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true)]
         
         let frc = NSFetchedResultsController(
             fetchRequest: fetchRequest,

@@ -2,11 +2,8 @@
 //  StatParameter+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 17.08.16.
+//  Created by Valentin Shamardin on 10.10.16.
 //
-//
-//  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
-//  to delete and recreate this implementation file for your updated model.
 //
 
 import Foundation
@@ -14,8 +11,29 @@ import CoreData
 
 extension StatParameter {
 
-    @NSManaged var name: String?
-    @NSManaged var objectId: NSNumber?
-    @NSManaged var ranks: NSSet?
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<StatParameter> {
+        return NSFetchRequest<StatParameter>(entityName: "StatParameter");
+    }
+
+    @NSManaged public var name: String?
+    @NSManaged public var objectId: NSNumber?
+    @NSManaged public var ranks: NSSet?
+
+}
+
+// MARK: Generated accessors for ranks
+extension StatParameter {
+
+    @objc(addRanksObject:)
+    @NSManaged public func addToRanks(_ value: PlayerRank)
+
+    @objc(removeRanksObject:)
+    @NSManaged public func removeFromRanks(_ value: PlayerRank)
+
+    @objc(addRanks:)
+    @NSManaged public func addToRanks(_ values: NSSet)
+
+    @objc(removeRanks:)
+    @NSManaged public func removeFromRanks(_ values: NSSet)
 
 }

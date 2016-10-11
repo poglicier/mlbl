@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class PlayerRank: NSManagedObject {
+public class PlayerRank: NSManagedObject {
 
     static fileprivate let PersonKey = "Person"
     static fileprivate let ResKey = "Res"

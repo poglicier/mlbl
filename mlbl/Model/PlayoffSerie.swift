@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 
-class PlayoffSerie: NSManagedObject {
+public class PlayoffSerie: NSManagedObject {
 
     static fileprivate let TeamName1Key = "TeamName1"
     static fileprivate let TeamName2Key = "TeamName2"
@@ -110,7 +110,7 @@ class PlayoffSerie: NSManagedObject {
         return res
     }
     
-    override var description: String {
+    override public var description: String {
         get {
             var sortStr = ""
             if let _ = self.sort {

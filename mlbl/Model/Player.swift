@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 
-class Player: NSManagedObject {
+public class Player: NSManagedObject {
 
     static let PlayerIdKey = "PersonID"
     static let PersonInfoKey = "PersonInfo"
@@ -73,7 +73,7 @@ class Player: NSManagedObject {
                 }
                 if let birthIntervalString = personInfo[PersonBirthdayKey] as? NSString {
                     if let birthInterval = Double((birthIntervalString.replacingOccurrences(of: "/Date(", with: "") as NSString).replacingOccurrences(of: ")/", with: "")) {
-                        res?.birth = Date(timeIntervalSince1970: birthInterval/1000)
+                        res?.birth = Date(timeIntervalSince1970: birthInterval/1000) as NSDate?
                     }
                 }
                 

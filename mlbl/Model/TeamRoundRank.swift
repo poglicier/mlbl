@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class TeamRoundRank: NSManagedObject {
+public class TeamRoundRank: NSManagedObject {
 
     static fileprivate let CompTeamIDKey = "TeamID"
     static fileprivate let CompTeamNameKey = "CompTeamName"

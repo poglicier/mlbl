@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class SeasonTeam: NSManagedObject {
+public class SeasonTeam: NSManagedObject {
 
     fileprivate static let TeamKey = "Team"
     fileprivate static let TeamIdKey = "TeamID"

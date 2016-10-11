@@ -23,6 +23,9 @@ class PlayerController: BaseController {
     @IBOutlet fileprivate var tableView: UITableView!
     @IBOutlet fileprivate var emptyLabel: UILabel!
     fileprivate var refreshButton: UIButton?
+    fileprivate var statisticCellOffset = CGPoint.zero
+    fileprivate var playerGamesHeader: PlayerGamesHeader?
+    fileprivate var selectedGameId: Int?
     
     fileprivate func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
@@ -59,6 +62,22 @@ class PlayerController: BaseController {
         return frc
     }()
     
+    lazy fileprivate var statsFetchedResultsController: NSFetchedResultsController<PlayerStatistics> = {
+        let fetchRequest = NSFetchRequest<PlayerStatistics>(entityName: PlayerStatistics.entityName())
+        fetchRequest.predicate = NSPredicate(format: "player.objectId = \(self.playerId!)")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "game.date", ascending: false)]
+        
+        let frc = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: self.dataController.mainContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        
+        frc.delegate = self
+        
+        return frc
+    }()
+    
     fileprivate func getData(_ showIndicator: Bool) {
         if (showIndicator) {
             self.activityView.startAnimating()
@@ -69,16 +88,6 @@ class PlayerController: BaseController {
         var requestError: NSError?
         
         let dispatchGroup = DispatchGroup()
-//        dispatch_group_enter(dispatchGroup)
-//        self.dataController.getTeamInfo(self.dataController.currentCompetitionId(),
-//                                        teamId: self.teamId) { [weak self] error in
-//                                            if error == nil {
-//                                                self?.tableView.reloadSections(NSIndexSet(index: Sections.Title.rawValue), withRowAnimation: .None)
-//                                            }
-//                                            requestError = error
-//                                            dispatch_group_leave(dispatchGroup)
-//        }
-//        
         dispatchGroup.enter()
         self.dataController.getPlayerTeams(self.playerId) { [weak self] error in
                                             if error == nil {
@@ -150,7 +159,11 @@ class PlayerController: BaseController {
     
     fileprivate func configureCell(_ cell: PlayerGamesCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-//        cell.player = self.player!
+        cell.delegate = self
+        cell.total = NSLocalizedString("Average", comment: "")
+        let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+        cell.statistics = self.statsFetchedResultsController.object(at: fixedIndexPath)
+        cell.color = (indexPath as NSIndexPath).row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
     }
     
     fileprivate func configureCell(_ cell: PlayerTeamCell, atIndexPath indexPath: IndexPath) {
@@ -174,6 +187,10 @@ class PlayerController: BaseController {
         do {
             try self.teamsFetchedResultsController.performFetch()
         } catch {}
+        
+        do {
+            try self.statsFetchedResultsController.performFetch()
+        } catch {}
     }
     
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -184,16 +201,15 @@ class PlayerController: BaseController {
     var playerId: Int!
     var player: Player?
 
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToGame" {
+            let gameController = segue.destination as! GameController
+            gameController.dataController = self.dataController
+            gameController.gameId = self.selectedGameId!
+        }
     }
-    */
-
 }
 
 extension PlayerController: UITableViewDataSource, UITableViewDelegate {
@@ -207,7 +223,7 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .teams:
+            case .teams, .games:
                 res = 62
             default:
                 break
@@ -224,6 +240,12 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
             switch enumSection {
             case .teams:
                 res = PlayerTeamsHeader()
+            case .games:
+                self.playerGamesHeader = PlayerGamesHeader()
+                self.playerGamesHeader?.contentOffset = self.statisticCellOffset
+                self.playerGamesHeader?.title = NSLocalizedString("Games", comment: "").uppercased()
+                self.playerGamesHeader?.delegate = self
+                res = self.playerGamesHeader
             default:
                 break
             }
@@ -240,7 +262,7 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         
         if let enumSection = Sections(rawValue: section) {
             switch enumSection {
-            case .teams:
+            case .teams, .games:
                 res = UIView()
                 res?.backgroundColor = UIColor.clear
             default:
@@ -276,7 +298,11 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
                     res = 1
                 }
             case .games:
-                return 1
+                if let sections = self.statsFetchedResultsController.sections {
+                    if let currentSection = sections.first {
+                        res = currentSection.numberOfObjects
+                    }
+                }
             case .teams:
                 if let sections = self.teamsFetchedResultsController.sections {
                     if let currentSection = sections.first {
@@ -299,8 +325,13 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
             case .title:
                 res = 148
             case .games:
-                res = 123
-//                res += CGFloat((self.player?.gameStatistics?.count ?? 0)*27)
+                let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+                let teamStatistics = self.statsFetchedResultsController.object(at: fixedIndexPath)
+                if teamStatistics.game == nil {
+                    res = 54
+                } else {
+                    res = 27
+                }
             default:
                 res = 27
             }
@@ -347,29 +378,22 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-//    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-//        
-//        if let enumSection = Sections(rawValue: indexPath.section) {
-//            switch enumSection {
-//            case .Players:
-//                let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-//                self.selectedPlayerId = (self.playersFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! Player).objectId as? Int
-//                if let _ = self.selectedPlayerId {
-//                    self.performSegueWithIdentifier("goToPlayer", sender: nil)
-//                }
-//            case .Games:
-//                let fixedIndexPath = NSIndexPath(forRow: indexPath.row, inSection: 0)
-//                self.selectedGameId = (self.gamesFetchedResultsController.objectAtIndexPath(fixedIndexPath) as! Game).objectId as? Int
-//                if let _ = self.selectedGameId {
-//                    self.performSegueWithIdentifier("goToGame", sender: nil)
-//                }
-//            //            case .Statistics:
-//            default:
-//                break
-//            }
-//        }
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if let enumSection = Sections(rawValue: indexPath.section) {
+            switch enumSection {
+            case .games:
+                let fixedIndexPath = IndexPath(row: indexPath.row, section: 0)
+                self.selectedGameId = (self.statsFetchedResultsController.object(at: fixedIndexPath)).game?.objectId as? Int
+                if let _ = self.selectedGameId {
+                    self.performSegue(withIdentifier: "goToGame", sender: nil)
+                }
+            default:
+                break
+            }
+        }
+    }
 }
 
 extension PlayerController: NSFetchedResultsControllerDelegate {
@@ -388,8 +412,13 @@ extension PlayerController: NSFetchedResultsControllerDelegate {
             if let _ = newIndexPath {
                 fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.teams.rawValue)
             }
-        } else {
-            return
+        } else if controller == self.statsFetchedResultsController {
+            if let _ = indexPath {
+                fixedIndexPath = IndexPath(row: (indexPath! as NSIndexPath).row, section: Sections.games.rawValue)
+            }
+            if let _ = newIndexPath {
+                fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.games.rawValue)
+            }
         }
         
         switch type {
@@ -409,5 +438,28 @@ extension PlayerController: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableView.endUpdates()
+    }
+}
+
+extension PlayerController: PlayerGamesCellDelegate {
+    func cell(_ cell: PlayerGamesCell, didScrollTo contentOffset: CGPoint, tag: Int) {
+        self.statisticCellOffset = contentOffset
+        self.tableView.visibleCells.forEach { cell in
+            if let statisticCell = cell as? StatisticCell {
+                statisticCell.contentOffset = contentOffset
+            }
+        }
+        self.playerGamesHeader?.contentOffset = contentOffset
+    }
+}
+
+extension PlayerController: PlayerGamesHeaderDelegate {
+    func header(_ header: PlayerGamesHeader, didScrollTo contentOffset: CGPoint) {
+        self.statisticCellOffset = contentOffset
+        self.tableView.visibleCells.forEach { cell in
+            if let statisticCell = cell as? PlayerGamesCell {
+                statisticCell.contentOffset = contentOffset
+            }
+        }
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 
-class Competition: NSManagedObject {
+public class Competition: NSManagedObject {
 
     static fileprivate let objectIdKey = "CompID"
     static fileprivate let compShortNameRuKey = "CompShortNameRu"
@@ -92,7 +92,7 @@ class Competition: NSManagedObject {
         }
     }
     
-    override var description: String {
+    override public var description: String {
         get {
             return String(format: "%@ <\(Unmanaged.passUnretained(self).toOpaque())> \(self.objectId) \(self.compShortNameRu ?? "") Стадия: \(compTypeStr())", type(of: self).description())
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Xcode 7.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Xcode 7.3" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Competition" representedClassName=".Competition" syncable="YES">
         <attribute name="compAbcNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compAbcNameRu" optional="YES" attributeType="String" syncable="YES"/>
@@ -33,6 +33,7 @@
         <attribute name="teamNameBru" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="venueEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="venueRu" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="playerStatistics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayerStatistics" inverseName="game" inverseEntity="PlayerStatistics" syncable="YES"/>
         <relationship name="playoffSerie" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PlayoffSerie" inverseName="games" inverseEntity="PlayoffSerie" syncable="YES"/>
         <relationship name="statistics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GameStatistics" inverseName="game" inverseEntity="GameStatistics" syncable="YES"/>
     </entity>
@@ -79,6 +80,7 @@
         <attribute name="positionShortRu" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="gameStatistics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GameStatistics" inverseName="player" inverseEntity="GameStatistics" syncable="YES"/>
+        <relationship name="playerStatistics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayerStatistics" inverseName="player" inverseEntity="PlayerStatistics" syncable="YES"/>
         <relationship name="ranks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayerRank" inverseName="player" inverseEntity="PlayerRank" syncable="YES"/>
         <relationship name="seasonTeams" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SeasonTeam" inverseName="player" inverseEntity="SeasonTeam" syncable="YES"/>
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="players" inverseEntity="Team" syncable="YES"/>
@@ -88,6 +90,29 @@
         <attribute name="res" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="parameter" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StatParameter" inverseName="ranks" inverseEntity="StatParameter" syncable="YES"/>
         <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="ranks" inverseEntity="Player" syncable="YES"/>
+    </entity>
+    <entity name="PlayerStatistics" representedClassName=".PlayerStatistics" syncable="YES">
+        <attribute name="assists" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="blocks" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="defensiveRebounds" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="fouls" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="goal1" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="goal2" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="goal3" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="offensiveRebounds" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="opponentFouls" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="plusMinus" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="points" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="seconds" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="shot1" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="shot2" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="shot3" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="steals" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="turnovers" optional="YES" attributeType="Float" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="game" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Game" inverseName="playerStatistics" inverseEntity="Game" syncable="YES"/>
+        <relationship name="player" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Player" inverseName="playerStatistics" inverseEntity="Player" syncable="YES"/>
+        <relationship name="teamA" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="playerStatisticsA" inverseEntity="Team" syncable="YES"/>
+        <relationship name="teamB" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="playerStatisticsB" inverseEntity="Team" syncable="YES"/>
     </entity>
     <entity name="PlayoffSerie" representedClassName=".PlayoffSerie" syncable="YES">
         <attribute name="round" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -125,6 +150,8 @@
         <attribute name="shortNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="gameStatistics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GameStatistics" inverseName="team" inverseEntity="GameStatistics" syncable="YES"/>
         <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="team" inverseEntity="Player" syncable="YES"/>
+        <relationship name="playerStatisticsA" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayerStatistics" inverseName="teamA" inverseEntity="PlayerStatistics" syncable="YES"/>
+        <relationship name="playerStatisticsB" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayerStatistics" inverseName="teamB" inverseEntity="PlayerStatistics" syncable="YES"/>
         <relationship name="playoffSeries1" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayoffSerie" inverseName="team1" inverseEntity="PlayoffSerie" syncable="YES"/>
         <relationship name="playoffSeries2" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayoffSerie" inverseName="team2" inverseEntity="PlayoffSerie" syncable="YES"/>
         <relationship name="roundRanks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TeamRoundRank" inverseName="team" inverseEntity="TeamRoundRank" syncable="YES"/>
@@ -169,14 +196,15 @@
     </entity>
     <elements>
         <element name="Competition" positionX="-54" positionY="117" width="128" height="225"/>
-        <element name="Game" positionX="-63" positionY="-18" width="128" height="345"/>
+        <element name="Game" positionX="-63" positionY="-18" width="128" height="360"/>
         <element name="GameStatistics" positionX="-36" positionY="144" width="128" height="420"/>
-        <element name="Player" positionX="-27" positionY="81" width="128" height="330"/>
+        <element name="Player" positionX="-27" positionY="81" width="128" height="345"/>
         <element name="PlayerRank" positionX="-36" positionY="135" width="128" height="90"/>
+        <element name="PlayerStatistics" positionX="-18" positionY="153" width="128" height="360"/>
         <element name="PlayoffSerie" positionX="-27" positionY="144" width="128" height="210"/>
         <element name="SeasonTeam" positionX="-36" positionY="135" width="128" height="135"/>
         <element name="StatParameter" positionX="-36" positionY="135" width="128" height="90"/>
-        <element name="Team" positionX="-54" positionY="36" width="128" height="255"/>
+        <element name="Team" positionX="-54" positionY="36" width="128" height="285"/>
         <element name="TeamRoundRank" positionX="-36" positionY="135" width="128" height="165"/>
         <element name="TeamStatistics" positionX="-36" positionY="135" width="128" height="405"/>
     </elements>

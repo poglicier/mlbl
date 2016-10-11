@@ -46,40 +46,29 @@ class PlayerStatsRequest: NetworkRequest {
     override func processData() {
         do {
             let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
-//            if let seasonTeamsDicts = json as? [[String:AnyObject]] {
-//                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-//                context.parent = self.dataController?.mainContext
-//                context.performAndWait({
-//                    // У SeasonTeam нет идентификаторов, поэтому удаляем все
-//                    let fetchRequest = NSFetchRequest<Statis>(entityName: SeasonTeam.entityName())
-//                    fetchRequest.predicate = NSPredicate(format: "player.objectId = %d", self.playerId)
-//                    do {
-//                        let all = try context.fetch(fetchRequest)
-//                        for seasonTeam in all {
-//                            print("DELETE SeasonTeam \(seasonTeam.team?.nameRu)")
-//                            context.delete(seasonTeam)
-//                        }
-//                    }
-//                    catch {}
-//                    
-//                    var player: Player?
-//                    let fetchRequestP = NSFetchRequest<Player>(entityName: Player.entityName())
-//                    fetchRequestP.predicate = NSPredicate(format: "objectId = %d", self.playerId)
-//                    do {
-//                        player = try context.fetch(fetchRequestP).first
-//                    } catch {}
-//                    
-//                    for seasonTeamDict in seasonTeamsDicts {
-//                        if let seasonTeam = SeasonTeam.seasonTeamWithDict(seasonTeamDict, inContext: context) {
-//                            seasonTeam.player = player
-//                        }
-//                    }
-//                    
-//                    self.dataController?.saveContext(context)
-//                })
-//            } else {
-//                self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "json не является массивом словарей"])
-//            }
+            if let playerStatisticsDict = json as? [String:AnyObject] {
+                let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                context.parent = self.dataController?.mainContext
+                context.performAndWait({
+                    // У PlayersStatistics нет идентификаторов, поэтому удаляем все
+                    let fetchRequest = NSFetchRequest<PlayerStatistics>(entityName: PlayerStatistics.entityName())
+                    fetchRequest.predicate = NSPredicate(format: "player.objectId = %d", self.playerId)
+                    do {
+                        let all = try context.fetch(fetchRequest)
+                        for playerStatistics in all {
+                            print("DELETE PlayerStatistics \(playerStatistics.player?.lastNameRu)")
+                            context.delete(playerStatistics)
+                        }
+                    }
+                    catch {}
+                    
+                    PlayerStatistics.playerStatisticsWithDict(playerStatisticsDict, playerId: self.playerId, in: context)
+                    
+                    self.dataController?.saveContext(context)
+                })
+            } else {
+                self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "json не является массивом словарей"])
+            }
         } catch {
             self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
         }
