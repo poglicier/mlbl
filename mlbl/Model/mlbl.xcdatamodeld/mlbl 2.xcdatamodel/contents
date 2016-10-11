@@ -5,7 +5,6 @@
         <attribute name="compAbcNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compShortNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compShortNameRu" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="compSort" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="compType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isChoosen" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="objectId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -195,7 +194,7 @@
         <relationship name="team" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Team" inverseName="teamStatistics" inverseEntity="Team" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Competition" positionX="-54" positionY="117" width="128" height="225"/>
+        <element name="Competition" positionX="-54" positionY="117" width="128" height="210"/>
         <element name="Game" positionX="-63" positionY="-18" width="128" height="360"/>
         <element name="GameStatistics" positionX="-36" positionY="144" width="128" height="420"/>
         <element name="Player" positionX="-27" positionY="81" width="128" height="345"/>

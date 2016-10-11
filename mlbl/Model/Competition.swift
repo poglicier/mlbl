@@ -17,7 +17,6 @@ public class Competition: NSManagedObject {
     static fileprivate let compShortNameEnKey = "CompShortNameEn"
     static fileprivate let compAbcNameRu = "CompAbcNameRu"
     static fileprivate let compAbcNameEn = "CompAbcNameEn"
-    static fileprivate let compSortKey = "CompSort"
     static fileprivate let compTypeKey = "CompType"
     static fileprivate let childrenKey = "Children"
     
@@ -40,7 +39,6 @@ public class Competition: NSManagedObject {
                 res?.compShortNameEn = dict[compShortNameEnKey] as? String
                 res?.compAbcNameRu = dict[compAbcNameRu] as? String
                 res?.compAbcNameEn = dict[compAbcNameEn] as? String
-                res?.compSort = dict[compSortKey] as? Int as NSNumber?
                 res?.compType = dict[compTypeKey] as? Int as NSNumber?
                 
                 var childIdsToSave = [NSNumber]()

@@ -2,7 +2,7 @@
 //  Competition+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 10.10.16.
+//  Created by Valentin Shamardin on 11.10.16.
 //
 //
 
@@ -19,7 +19,6 @@ extension Competition {
     @NSManaged public var compAbcNameRu: String?
     @NSManaged public var compShortNameEn: String?
     @NSManaged public var compShortNameRu: String?
-    @NSManaged public var compSort: NSNumber?
     @NSManaged public var compType: NSNumber?
     @NSManaged public var isChoosen: NSNumber?
     @NSManaged public var objectId: NSNumber?
