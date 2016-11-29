@@ -76,31 +76,33 @@ public class GameStatistics: NSManagedObject {
             // Чтобы в fetchedResultsController статистика команды была в самом конце
             res?.playerNumber = 9999
         } else if let personId = dict[Player.PlayerIdKey] as? NSNumber {
-            // Статистика игрока
-            let fetchRequest = NSFetchRequest<GameStatistics>(entityName: GameStatistics.entityName())
-            fetchRequest.predicate = NSPredicate(format: "game.objectId = \(gameId) AND player.objectId = %@", personId)
-            do {
-                res = try context.fetch(fetchRequest).first
-                
-                if res == nil {
-                    res = GameStatistics(entity: NSEntityDescription.entity(forEntityName: GameStatistics.entityName(), in: context)!, insertInto: context)
+            if let playerNumber = dict[PlayerNumberKey] as? NSNumber {
+                // Статистика игрока
+                let fetchRequest = NSFetchRequest<GameStatistics>(entityName: GameStatistics.entityName())
+                fetchRequest.predicate = NSPredicate(format: "game.objectId = \(gameId) AND player.objectId = %@ AND playerNumber = %@", personId, playerNumber)
+                do {
+                    res = try context.fetch(fetchRequest).first
                     
-                    var playerDict = [String:AnyObject]()
-                    playerDict[Player.PlayerIdKey] = personId
-                    var personInfo = [String:AnyObject]()
-                    personInfo[Player.PersonLastNameRuKey] = dict[LastNameRuKey] as? String as AnyObject?
-                    personInfo[Player.PersonLastNameEnKey] = dict[LastNameEnKey] as? String as AnyObject?
-                    personInfo[Player.PersonFirstNameRuKey] = dict[FirstNameRuKey] as? String as AnyObject?
-                    personInfo[Player.PersonFirstNameEnKey] = dict[FirstNameEnKey] as? String as AnyObject?
-                    personInfo[Player.PersonBirthdayKey] = dict[PersonBirthKey] as? String as AnyObject?
-                    personInfo[Player.PersonHeightKey] = dict[HeightKey] as? Int as AnyObject?
-                    personInfo[Player.PersonWeightKey] = dict[WeightKey] as? Int as AnyObject?
-                    playerDict[Player.PersonInfoKey] = personInfo as AnyObject?
-                    res?.player = Player.playerWithDict(playerDict, inContext: context)
-                }
-            } catch {}
-            
-            res?.playerNumber = dict[PlayerNumberKey] as? Int as NSNumber?
+                    if res == nil {
+                        res = GameStatistics(entity: NSEntityDescription.entity(forEntityName: GameStatistics.entityName(), in: context)!, insertInto: context)
+                        
+                        var playerDict = [String:AnyObject]()
+                        playerDict[Player.PlayerIdKey] = personId
+                        var personInfo = [String:AnyObject]()
+                        personInfo[Player.PersonLastNameRuKey] = dict[LastNameRuKey] as? String as AnyObject?
+                        personInfo[Player.PersonLastNameEnKey] = dict[LastNameEnKey] as? String as AnyObject?
+                        personInfo[Player.PersonFirstNameRuKey] = dict[FirstNameRuKey] as? String as AnyObject?
+                        personInfo[Player.PersonFirstNameEnKey] = dict[FirstNameEnKey] as? String as AnyObject?
+                        personInfo[Player.PersonBirthdayKey] = dict[PersonBirthKey] as? String as AnyObject?
+                        personInfo[Player.PersonHeightKey] = dict[HeightKey] as? Int as AnyObject?
+                        personInfo[Player.PersonWeightKey] = dict[WeightKey] as? Int as AnyObject?
+                        playerDict[Player.PersonInfoKey] = personInfo as AnyObject?
+                        res?.player = Player.playerWithDict(playerDict, inContext: context)
+                    }
+                } catch {}
+                
+                res?.playerNumber = playerNumber
+            }
         }
         
         res?.teamNumber = dict[TeamNumberKey] as? Int as NSNumber?

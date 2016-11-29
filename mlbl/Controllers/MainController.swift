@@ -97,18 +97,10 @@ class MainController: BaseController {
         }
     }
     
-    @IBAction fileprivate func goToChooseRegion() {
-        if let ChooseCompetitionController = self.storyboard?.instantiateViewController(withIdentifier: "ChooseCompetitionController") as? BaseController {
-            let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
-            fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
-            do {
-                let comp = try self.dataController.mainContext.fetch(fetchRequest).first
-                comp?.isChoosen = false
-                self.dataController.saveContext(self.dataController.mainContext)
-            } catch {}
-            
-            ChooseCompetitionController.dataController = self.dataController
-            self.navigationController?.setViewControllers([ChooseCompetitionController], animated: false)
+    @IBAction fileprivate func settingsDidTap() {
+        if let settingsController = UIStoryboard(name: "Settings", bundle: nil).instantiateViewController(withIdentifier: "SettingsController") as? SettingsController {
+            settingsController.dataController = self.dataController
+            self.navigationController?.pushViewController(settingsController, animated: true)
         }
     }
     
