@@ -489,15 +489,19 @@ extension GameController: TeamStatisticsHeaderDelegate {
         if header == self.teamStatisticsAHeader {
             self.statisticACellOffset = contentOffset
             self.tableView.indexPathsForVisibleRows?.forEach { indexPath in
-                if (indexPath as NSIndexPath).section == Sections.teamA.rawValue {
-                    (self.tableView.cellForRow(at: indexPath) as? StatisticCell)?.contentOffset = contentOffset
+                if indexPath.section == Sections.teamA.rawValue {
+                    if let cell = self.tableView.cellForRow(at: indexPath) as? StatisticCell {
+                        cell.contentOffset = contentOffset
+                    }
                 }
             }
         } else if header == self.teamStatisticsBHeader {
             self.statisticBCellOffset = contentOffset
             self.tableView.indexPathsForVisibleRows?.forEach { indexPath in
-                if (indexPath as NSIndexPath).section == Sections.teamB.rawValue {
-                    (self.tableView.cellForRow(at: indexPath) as? StatisticCell)?.contentOffset = contentOffset
+                if indexPath.section == Sections.teamB.rawValue {
+                    if let cell = self.tableView.cellForRow(at: indexPath) as? StatisticCell {
+                        cell.contentOffset = contentOffset
+                    }
                 }
             }
         }
