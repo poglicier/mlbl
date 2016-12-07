@@ -181,12 +181,14 @@ class ChooseCompetitionController: BaseController {
     }
     
     override func willEnterForegroud() {
-        if let _ = self.refreshButton {
-            self.refreshButton?.removeFromSuperview()
-            self.refreshButton = nil
-            self.getData(true)
-        } else {
-            self.getData(false)
+        if self.navigationController?.topViewController == self {
+            if let _ = self.refreshButton {
+                self.refreshButton?.removeFromSuperview()
+                self.refreshButton = nil
+                self.getData(true)
+            } else {
+                self.getData(false)
+            }
         }
     }
 

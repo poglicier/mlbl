@@ -199,7 +199,10 @@ class StatisticsController: BaseController {
                     } catch {}
                     strongSelf.filtersCollectionView.reloadData()
                     
-                    strongSelf.setParamaterLabelText(strongSelf.parameters.first?.name)
+                    // Это условие должно сработать только в первый раз
+                    if strongSelf.parameterLabel.text == nil {
+                        strongSelf.setParamaterLabelText(strongSelf.parameters.first?.name)
+                    }
                     strongSelf.parameterLabelBackground.isHidden = false
                     
                     strongSelf.fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "parameter.objectId = %d", strongSelf.selectedParameterId)
