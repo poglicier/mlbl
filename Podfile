@@ -6,4 +6,5 @@ target 'mlbl' do
     pod 'Fabric'
     pod 'Crashlytics'
     pod 'SnapKit'
+    pod 'TTTAttributedLabel'
 end

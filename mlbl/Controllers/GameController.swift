@@ -129,7 +129,7 @@ class GameController: BaseController {
             do {
                 if let intStatus = try self.dataController.mainContext.fetch(fetchRequest).first?.status?.intValue {
                     if let status = Game.GameStatus(rawValue: intStatus) {
-//                        if status == .online {
+                        if status == .online {
                             if let url = URL(string: "http://www.infobasket.ru/stats/game.html?id=\(self.gameId!)&compId=\(self.dataController.currentCompetitionId())&tab=2") {
                                 print(url.absoluteString)
                                 self.tableView.isHidden = true
@@ -138,7 +138,7 @@ class GameController: BaseController {
                                 self.activityView.startAnimating()
                                 return
                             }
-//                        }
+                        }
                     }
                 }
                 
@@ -537,40 +537,11 @@ extension GameController: TeamStatisticsHeaderDelegate {
 extension GameController: UIWebViewDelegate {
     func webViewDidFinishLoad(_ webView: UIWebView) {
         self.webViewFailedToLoad = false
-//        let jsString = "jQuery().ready(function() {" +
-//        "jQuery('h1, .scoreboard, header, footer, .nav-tabs').hide();" +
-//        
-//        "jQuery('.page_wrap, body, #main, #main .container, #main .post_content, #main .tabbable, .play-by-play-container, .col-md-12, .row').prop('class','');" +
-//        "});"
         
-        var jsString = "document.readyState"
-        
-//        let jsString = "function hideElByClName(clname) {" + "\n" +
-//        "var s = document.getElementsByClassName(clname);" + "\n" +
-//        "if (s.length) {" + "\n" +
-//            "s[0].style = 'display:none;';" + "\n" +
-//        "}" + "\n" +
-//    "}" + "\n" +
-//    
-//    "hideElByClName('scoreboard');" +
-//    "hideElByClName('nav-tabs');" +
-//        "}"
-//        print(jsString)
-        
+        let jsString = "document.readyState"
         let res = self.webView.stringByEvaluatingJavaScript(from: jsString)
-//        print(res)
-//        
+        
         if res == "complete" {
-//            jsString = "function hideElByClName(clname) {" + "\n" +
-//                            "var s = document.getElementsByClassName(clname);" + "\n" +
-//                            "if (s.length) {" + "\n" +
-//                                "s[0].style = 'display:none;';" + "\n" +
-//                            "}" + "\n" +
-//                        "}" + "\n" +
-//                        "hideElByClName('scoreboard');" + "\n" +
-//                        "hideElByClName('nav-tabs');"
-//            let res = self.webView.stringByEvaluatingJavaScript(from: jsString)
-            //            print(res)
             self.webView.isHidden = false
             self.activityView.stopAnimating()
         } else {

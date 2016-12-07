@@ -134,3 +134,12 @@ extension String {
         }
     }
 }
+
+extension UIFont {
+    func sizeOfString(string: NSString, constrainedToWidth width: CGFloat) -> CGSize {
+        return string.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
+                                   options: .usesLineFragmentOrigin,
+                                   attributes: [NSFontAttributeName: self],
+                                   context: nil).size
+    }
+}

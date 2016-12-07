@@ -22,7 +22,6 @@
 		FC321FAC1C82F97900674271 /* EmptySegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FAB1C82F97900674271 /* EmptySegue.swift */; };
 		FC321FAE1C82F9A200674271 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC321FAD1C82F9A200674271 /* PlayerCell.swift */; };
 		FC3336201DF5C9770082EBD7 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC33361F1DF5C9770082EBD7 /* SettingsCell.swift */; };
-		FC3336221DF6DADB0082EBD7 /* AboutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3336211DF6DADB0082EBD7 /* AboutController.swift */; };
 		FC3558D91D75C304004C5080 /* GameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC3558D81D75C304004C5080 /* GameCell.xib */; };
 		FC3558DB1D75C4D2004C5080 /* PlayoffGamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3558DA1D75C4D2004C5080 /* PlayoffGamesController.swift */; };
 		FC3939541D2ED2BD00F8361E /* NetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3939531D2ED2BC00F8361E /* NetworkRequest.swift */; };
@@ -126,7 +125,6 @@
 		FC321FAB1C82F97900674271 /* EmptySegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptySegue.swift; sourceTree = "<group>"; };
 		FC321FAD1C82F9A200674271 /* PlayerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
 		FC33361F1DF5C9770082EBD7 /* SettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
-		FC3336211DF6DADB0082EBD7 /* AboutController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutController.swift; sourceTree = "<group>"; };
 		FC3558D81D75C304004C5080 /* GameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GameCell.xib; sourceTree = "<group>"; };
 		FC3558DA1D75C4D2004C5080 /* PlayoffGamesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffGamesController.swift; sourceTree = "<group>"; };
 		FC3939531D2ED2BC00F8361E /* NetworkRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
@@ -429,7 +427,6 @@
 			children = (
 				FCFD97F81DEC5CEA00BBD360 /* Settings.storyboard */,
 				FCFD97F61DEC5CD900BBD360 /* SettingsController.swift */,
-				FC3336211DF6DADB0082EBD7 /* AboutController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -587,7 +584,6 @@
 				FC57AC051D787093009E67C6 /* TeamMainCell.swift in Sources */,
 				FC0645451D6C73FA0047FE1D /* RoundRobinRequest.swift in Sources */,
 				FC3939581D2ED52800F8361E /* GameStatsRequest.swift in Sources */,
-				FC3336221DF6DADB0082EBD7 /* AboutController.swift in Sources */,
 				FC14B0BC1DAD1091007E1D84 /* TappableScrollView.swift in Sources */,
 				FC4624021D82A852003E9E30 /* StatisticCell.swift in Sources */,
 				FC9793261C8D8AEA00D4D5D9 /* GameController.swift in Sources */,

@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import MessageUI
+import SafariServices
 
 class SettingsController: BaseController {
 
@@ -21,19 +22,6 @@ class SettingsController: BaseController {
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         // Пустая реализация нужна для того, чтобы затереть реализацию BaseController,
         // в которой прячется navigationBar
-    }
-
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let aboutController = segue.destination as? AboutController {
-            if segue.identifier == "goToAboutLeague" {
-                aboutController.imageURL = URL(string: "http://ilovebasket.ru/wp-content/themes/basliga/public/common/logo.png")
-                aboutController.text = NSLocalizedString("About league text", comment: "")
-            } else if segue.identifier == "goToAboutApp" {
-                aboutController.image = UIImage(named: "AppIcon60x60")
-                aboutController.text = NSLocalizedString("About app text", comment: "")
-            }
-        }
     }
     
     // MARK: - Private
@@ -50,6 +38,7 @@ class SettingsController: BaseController {
     @IBOutlet fileprivate var appInfoLabel: UILabel!
     @IBOutlet fileprivate var tableView: UITableView!
     fileprivate var aboutLeagueDroppedDown = false
+    fileprivate var aboutAppDroppedDown = false
 
     fileprivate func setupViews() {
         self.title = NSLocalizedString("Settings", comment: "")
@@ -60,10 +49,6 @@ class SettingsController: BaseController {
     
     fileprivate func goToAppStore() {
         UIApplication.shared.openURL(URL(string: "itms-apps://itunes.apple.com/app/id1088559757")!)
-    }
-        
-    fileprivate func goToAboutApp() {
-        self.performSegue(withIdentifier: "goToAboutApp", sender: nil)
     }
     
     fileprivate func goToEmailSupport() {
@@ -76,7 +61,8 @@ class SettingsController: BaseController {
             let composeViewController = MFMailComposeViewController()
             composeViewController.mailComposeDelegate = self
             composeViewController.setToRecipients(["info@ilovebasket.ru"])
-            composeViewController.setSubject((Bundle.main.localizedInfoDictionary?["CFBundleDisplayName"] as? String) ?? "")
+            let subj = ((Bundle.main.localizedInfoDictionary?["CFBundleDisplayName"] as? String) ?? "") + " iOS"
+            composeViewController.setSubject(subj)
             self.present(composeViewController, animated:true, completion:nil)
         }
     }
@@ -112,6 +98,10 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
         return res
     }
     
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.1
+    }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let res = " "
         if let sect = Sections(rawValue: section) {
@@ -128,7 +118,11 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
         if let sect = Sections(rawValue: indexPath.section) {
             switch sect {
             case .aboutLeague:
-                res = self.aboutLeagueDroppedDown ? 44*3 : 44;
+                let size = UIFont.systemFont(ofSize: 17).sizeOfString(string: NSLocalizedString("About league text", comment: "") as NSString, constrainedToWidth: self.tableView.frame.size.width - 44)
+                res = self.aboutLeagueDroppedDown ? (44 + size.height + 16) : 44;
+            case .aboutApp:
+                let size = UIFont.systemFont(ofSize: 17).sizeOfString(string: NSLocalizedString("About app text", comment: "") as NSString, constrainedToWidth: self.tableView.frame.size.width - 44)
+                res = self.aboutAppDroppedDown ? (44 + size.height + 16) : 44;
             default:
                 break
             }
@@ -147,22 +141,53 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
             case .aboutLeague:
                 settingsCell.cellType = .simple
                 settingsCell.title = NSLocalizedString("About league", comment: "")
-                settingsCell.descriptionText = NSLocalizedString("About league text", comment: "")
+                settingsCell.descriptionText = NSMutableAttributedString(string: NSLocalizedString("About league text", comment: ""), attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 17)])
+                settingsCell.selectionStyle = .none
             case .aboutApp:
-                settingsCell.cellType = .disclosure
+                settingsCell.cellType = .simple
                 settingsCell.title = NSLocalizedString("About app", comment: "")
+                
+                let plainText = NSLocalizedString("About app text", comment: "")
+                let attributedText = NSMutableAttributedString(string: plainText, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 17)])
+                attributedText.addAttribute(NSLinkAttributeName, value: "http://github.com/poglicier/mlbl", range: (attributedText.mutableString.range(of: "GitHub")))
+                settingsCell.descriptionText = attributedText
+                settingsCell.selectionStyle = .none
+                settingsCell.linkDidSelectBlock = { [weak self] url in
+                    if let strongSelf = self {
+                        if #available(iOS 9.0, *) {
+                            let safari = SFSafariViewController(url: url)
+                            if #available(iOS 10.0, *) {
+                                safari.preferredBarTintColor = UIColor.mlblLightOrangeColor()
+                                safari.preferredControlTintColor = .white
+                            } else {
+                                safari.view.tintColor = UIColor.mlblLightOrangeColor()
+                            }
+                            strongSelf.present(safari, animated: true, completion: nil)
+                        } else {
+                            UIApplication.shared.openURL(url)
+                        }
+                    }
+                }
             case .sendError:
                 settingsCell.cellType = .simple
                 settingsCell.title = NSLocalizedString("Send error report", comment: "")
+                settingsCell.descriptionText = nil
+                settingsCell.selectionStyle = .gray
             case .rate:
                 settingsCell.cellType = .simple
                 settingsCell.title = NSLocalizedString("Rate in AppStore", comment: "")
+                settingsCell.descriptionText = nil
+                settingsCell.selectionStyle = .gray
             case .changeCompetition:
                 settingsCell.cellType = .red
                 settingsCell.title = NSLocalizedString("Change competition", comment: "")
+                settingsCell.descriptionText = nil
+                settingsCell.selectionStyle = .gray
             default:
                 settingsCell.cellType = .simple
                 settingsCell.title = nil
+                settingsCell.descriptionText = nil
+                settingsCell.selectionStyle = .gray
             }
         }
     }
@@ -174,9 +199,10 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
             switch sect {
             case .aboutLeague:
                 self.aboutLeagueDroppedDown = !self.aboutLeagueDroppedDown
-                tableView.reloadRows(at: [indexPath], with: .automatic)
+                tableView.reloadRows(at: [indexPath], with: .fade)
             case .aboutApp:
-                self.goToAboutApp()
+                self.aboutAppDroppedDown = !self.aboutAppDroppedDown
+                tableView.reloadRows(at: [indexPath], with: .fade)
             case .sendError:
                 self.goToEmailSupport()
             case .rate:

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TTTAttributedLabel.TTTAttributedLabel
 
 class SettingsCell: UITableViewCell {
 
@@ -24,7 +25,7 @@ class SettingsCell: UITableViewCell {
     // MARK: - Private
     
     @IBOutlet fileprivate var titleLabel: UILabel!
-    @IBOutlet fileprivate var descriptionLabel: UILabel!
+    @IBOutlet fileprivate var descriptionLabel: TTTAttributedLabel!
     
     // MARK: - Public
     
@@ -59,9 +60,24 @@ class SettingsCell: UITableViewCell {
         }
     }
     
-    var descriptionText: String? {
+    var descriptionText: NSMutableAttributedString? {
         didSet {
-            self.descriptionLabel.text = descriptionText
+            if let _ = descriptionText {
+                self.descriptionLabel.attributedText = descriptionText!
+                self.descriptionLabel.addLink(to: URL(string: "https://github.com/poglicier/mlbl"), with: descriptionText!.mutableString.range(of: "GitHub"))
+            } else {
+                self.descriptionLabel.attributedText = nil
+            }
+        }
+    }
+    
+    var linkDidSelectBlock: ((URL) -> ())?
+}
+
+extension SettingsCell: TTTAttributedLabelDelegate {
+    func attributedLabel(_ label: TTTAttributedLabel!, didSelectLinkWith url: URL!) {
+        if let block = self.linkDidSelectBlock {
+            block(url)
         }
     }
 }

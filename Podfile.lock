@@ -3,17 +3,20 @@ PODS:
     - Fabric (~> 1.6.3)
   - Fabric (1.6.6)
   - SnapKit (3.0.1)
+  - TTTAttributedLabel (2.0.0)
 
 DEPENDENCIES:
   - Crashlytics
   - Fabric
   - SnapKit
+  - TTTAttributedLabel
 
 SPEC CHECKSUMS:
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
   Fabric: 1abc1e59f11fa39ede6f690ef7309d8563e3ec59
   SnapKit: f818b8326d45b4e1c777d0ab27b5c0a3624bfdeb
+  TTTAttributedLabel: 8cffe8e127e4e82ff3af1e5386d4cd0ad000b656
 
-PODFILE CHECKSUM: 5374763b435d22f2bafc21aa468da63747bfe550
+PODFILE CHECKSUM: 251dd8e11e146e588279307e66e29a66328c3f81
 
 COCOAPODS: 1.0.0
