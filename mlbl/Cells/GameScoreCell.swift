@@ -32,7 +32,7 @@ class GameScoreCell: UITableViewCell {
             
             self.titleLabel.text = nil
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd MMMM yyyy, hh:mm"
+            dateFormatter.dateFormat = "dd MMMM yyyy, HH:mm"
             if let date = game.date {
                 var titleString = dateFormatter.string(from: date as Date)
                 
