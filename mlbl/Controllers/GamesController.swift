@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SafariServices
 
 class GamesController: BaseController {
     @IBOutlet fileprivate var tableView: UITableView!
@@ -315,7 +316,9 @@ extension GamesController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        self.selectedGameId = self.fetchedResultsController.object(at: indexPath).objectId as? Int
+        let game = self.fetchedResultsController.object(at: indexPath)
+        self.selectedGameId = game.objectId as? Int
+        
         if let _ = self.selectedGameId {
             self.performSegue(withIdentifier: "goToGame", sender: nil)
         }

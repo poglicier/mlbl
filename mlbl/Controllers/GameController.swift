@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
@@ -30,23 +31,6 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 class GameController: BaseController {
-    fileprivate enum Sections: NSInteger {
-        case hat
-        case teamA
-        case teamB
-        case count
-    }
-    
-    var gameId: Int!
-    fileprivate var game: Game?
-    @IBOutlet fileprivate var tableView: UITableView!
-    fileprivate var refreshButton: UIButton?
-    fileprivate var statisticACellOffset = CGPoint.zero
-    fileprivate var teamStatisticsAHeader: TeamStatisticsHeader?
-    fileprivate var statisticBCellOffset = CGPoint.zero
-    fileprivate var teamStatisticsBHeader: TeamStatisticsHeader?
-    fileprivate let teamATag = 1
-    fileprivate let teamBTag = 2
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +56,26 @@ class GameController: BaseController {
     }
     
     // MARK: - Private
+    
+    fileprivate enum Sections: NSInteger {
+        case hat
+        case teamA
+        case teamB
+        case count
+    }
+    
+    var gameId: Int!
+    fileprivate var game: Game?
+    @IBOutlet fileprivate var tableView: UITableView!
+    @IBOutlet fileprivate var webView: UIWebView!
+    fileprivate var webViewFailedToLoad = false
+    fileprivate var refreshButton: UIButton?
+    fileprivate var statisticACellOffset = CGPoint.zero
+    fileprivate var teamStatisticsAHeader: TeamStatisticsHeader?
+    fileprivate var statisticBCellOffset = CGPoint.zero
+    fileprivate var teamStatisticsBHeader: TeamStatisticsHeader?
+    fileprivate let teamATag = 1
+    fileprivate let teamBTag = 2
     
     lazy fileprivate var statisticsAFetchedResultsController: NSFetchedResultsController<GameStatistics> = {
         let fetchRequest = NSFetchRequest<GameStatistics>(entityName: GameStatistics.entityName())
@@ -119,6 +123,28 @@ class GameController: BaseController {
     }
     
     fileprivate func getData(_ showIndicator: Bool) {
+        if !self.webViewFailedToLoad {
+            let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
+            fetchRequest.predicate = NSPredicate(format: "objectId = \(self.gameId!)")
+            do {
+                if let intStatus = try self.dataController.mainContext.fetch(fetchRequest).first?.status?.intValue {
+                    if let status = Game.GameStatus(rawValue: intStatus) {
+//                        if status == .online {
+                            if let url = URL(string: "http://www.infobasket.ru/stats/game.html?id=\(self.gameId!)&compId=\(self.dataController.currentCompetitionId())&tab=2") {
+                                print(url.absoluteString)
+                                self.tableView.isHidden = true
+                                self.webView.isHidden = true
+                                self.webView.loadRequest(URLRequest(url: url))
+                                self.activityView.startAnimating()
+                                return
+                            }
+//                        }
+                    }
+                }
+                
+            } catch {}
+        }
+        
         if (showIndicator) {
             self.activityView.startAnimating()
             self.tableView.isHidden = true
@@ -505,5 +531,57 @@ extension GameController: TeamStatisticsHeaderDelegate {
                 }
             }
         }
+    }
+}
+
+extension GameController: UIWebViewDelegate {
+    func webViewDidFinishLoad(_ webView: UIWebView) {
+        self.webViewFailedToLoad = false
+//        let jsString = "jQuery().ready(function() {" +
+//        "jQuery('h1, .scoreboard, header, footer, .nav-tabs').hide();" +
+//        
+//        "jQuery('.page_wrap, body, #main, #main .container, #main .post_content, #main .tabbable, .play-by-play-container, .col-md-12, .row').prop('class','');" +
+//        "});"
+        
+        var jsString = "document.readyState"
+        
+//        let jsString = "function hideElByClName(clname) {" + "\n" +
+//        "var s = document.getElementsByClassName(clname);" + "\n" +
+//        "if (s.length) {" + "\n" +
+//            "s[0].style = 'display:none;';" + "\n" +
+//        "}" + "\n" +
+//    "}" + "\n" +
+//    
+//    "hideElByClName('scoreboard');" +
+//    "hideElByClName('nav-tabs');" +
+//        "}"
+//        print(jsString)
+        
+        let res = self.webView.stringByEvaluatingJavaScript(from: jsString)
+//        print(res)
+//        
+        if res == "complete" {
+//            jsString = "function hideElByClName(clname) {" + "\n" +
+//                            "var s = document.getElementsByClassName(clname);" + "\n" +
+//                            "if (s.length) {" + "\n" +
+//                                "s[0].style = 'display:none;';" + "\n" +
+//                            "}" + "\n" +
+//                        "}" + "\n" +
+//                        "hideElByClName('scoreboard');" + "\n" +
+//                        "hideElByClName('nav-tabs');"
+//            let res = self.webView.stringByEvaluatingJavaScript(from: jsString)
+            //            print(res)
+            self.webView.isHidden = false
+            self.activityView.stopAnimating()
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(1.0 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)) { [weak self] in
+                self?.webViewDidFinishLoad(webView)
+            }
+        }
+    }
+    
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        self.webViewFailedToLoad = true
+        self.getData(true)
     }
 }

@@ -30,7 +30,7 @@
                                         <rect key="frame" x="0.0" y="28" width="335" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bd4-zX-UZM" id="2iw-ob-ekP">
-                                            <rect key="frame" x="0.0" y="0.0" width="335" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="335" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -425,6 +425,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSz-ag-Zgq">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ycI-sX-n8Y" id="juS-Aa-0Ct"/>
+                                </connections>
+                            </webView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Zik-K9-sV1">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" red="0.83137254901960778" green="0.83137254901960778" blue="0.83137254901960778" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -697,11 +704,15 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="TyM-BB-gC9" firstAttribute="top" secondItem="eSz-ag-Zgq" secondAttribute="bottom" id="E2B-GW-N13"/>
                             <constraint firstItem="Zik-K9-sV1" firstAttribute="leading" secondItem="8WR-Rz-Hnc" secondAttribute="leading" id="InN-iB-McO"/>
                             <constraint firstItem="Zik-K9-sV1" firstAttribute="top" secondItem="Xt0-YU-LBu" secondAttribute="bottom" id="LeI-aG-x6o"/>
+                            <constraint firstItem="eSz-ag-Zgq" firstAttribute="top" secondItem="Xt0-YU-LBu" secondAttribute="bottom" id="SWZ-Td-TXZ"/>
+                            <constraint firstAttribute="trailing" secondItem="eSz-ag-Zgq" secondAttribute="trailing" id="cz5-SL-ceO"/>
                             <constraint firstAttribute="trailing" secondItem="Zik-K9-sV1" secondAttribute="trailing" id="frB-Vl-FV0"/>
                             <constraint firstItem="TyM-BB-gC9" firstAttribute="top" secondItem="Zik-K9-sV1" secondAttribute="bottom" id="uDH-ti-s7O"/>
                             <constraint firstItem="Zik-K9-sV1" firstAttribute="top" secondItem="Xt0-YU-LBu" secondAttribute="bottom" id="zLP-W4-bEP"/>
+                            <constraint firstItem="eSz-ag-Zgq" firstAttribute="leading" secondItem="8WR-Rz-Hnc" secondAttribute="leading" id="zMf-DB-HFV"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -711,6 +722,7 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="Zik-K9-sV1" id="1ZK-QS-e0F"/>
+                        <outlet property="webView" destination="eSz-ag-Zgq" id="spV-Xb-bOD"/>
                         <segue destination="M0Z-ID-aCQ" kind="show" identifier="goToPlayer" id="Yiv-GP-9Ve"/>
                     </connections>
                 </viewController>

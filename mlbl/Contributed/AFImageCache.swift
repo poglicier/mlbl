@@ -77,10 +77,10 @@ extension UIImageView {
         }
     }
     
-    public func setImageWithUrl(_ url:URL, placeHolderImage:UIImage? = nil) {
-        let request:NSMutableURLRequest = NSMutableURLRequest(url: url)
+    public func setImageWithUrl(_ url: URL, placeHolderImage:UIImage? = nil) {
+        var request = URLRequest(url: url)
         request.addValue("image/*", forHTTPHeaderField: "Accept")
-        self.setImageWithUrlRequest(request as URLRequest, placeHolderImage: placeHolderImage, success: nil, failure: nil)
+        self.setImageWithUrlRequest(request, placeHolderImage: placeHolderImage, success: nil, failure: nil)
     }
     
     public func setImageWithUrlRequest(_ request:URLRequest, placeHolderImage:UIImage? = nil,

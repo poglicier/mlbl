@@ -75,3 +75,11 @@
 "Guest" = "Guest";
 
 "Settings" = "Settings";
+"About info format" = "Interregional Amateur Basketball League\nVersion %@";
+"About league" = "About league";
+"About app" = "About app";
+"Send error report" = "Email to support";
+"Rate in AppStore" = "Rate in AppStore";
+"Change competition" = "Change competition";
+"About app text" = "";
+"About league text" = "Interregional Amateur Basketball League - the official Russian championship among amateur teams, joined more than 2,000 teams from 60 regions of Russia.";
