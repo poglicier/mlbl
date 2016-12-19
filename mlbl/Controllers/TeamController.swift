@@ -26,6 +26,7 @@ class TeamController: BaseController {
     fileprivate var refreshButton: UIButton?
     fileprivate var statisticCellOffset = CGPoint.zero
     fileprivate var teamStatisticsHeader: TeamStatisticsHeader?
+    fileprivate var isAdjustingScroll = false
     
     var teamId: Int!
     var team: Team?
@@ -547,23 +548,35 @@ extension TeamController: NSFetchedResultsControllerDelegate {
 
 extension TeamController: StatisticCellDelegate {
     func cell(_ cell: StatisticCell, didScrollTo contentOffset: CGPoint, tag: Int) {
-        self.statisticCellOffset = contentOffset
-        self.tableView.visibleCells.forEach { cell in
-            if let statisticCell = cell as? StatisticCell {
-                statisticCell.contentOffset = contentOffset
+        if !self.isAdjustingScroll {
+            self.isAdjustingScroll = true
+            
+            self.statisticCellOffset = contentOffset
+            self.tableView.visibleCells.forEach { cell in
+                if let statisticCell = cell as? StatisticCell {
+                    statisticCell.contentOffset = contentOffset
+                }
             }
+            self.teamStatisticsHeader?.contentOffset = contentOffset
+            
+            self.isAdjustingScroll = false
         }
-        self.teamStatisticsHeader?.contentOffset = contentOffset
     }
 }
 
 extension TeamController: TeamStatisticsHeaderDelegate {
     func header(_ header: TeamStatisticsHeader, didScrollTo contentOffset: CGPoint) {
-        self.statisticCellOffset = contentOffset
-        self.tableView.visibleCells.forEach { cell in
-            if let statisticCell = cell as? StatisticCell {
-                statisticCell.contentOffset = contentOffset
+        if !self.isAdjustingScroll {
+            self.isAdjustingScroll = true
+            
+            self.statisticCellOffset = contentOffset
+            self.tableView.visibleCells.forEach { cell in
+                if let statisticCell = cell as? StatisticCell {
+                    statisticCell.contentOffset = contentOffset
+                }
             }
+            
+            self.isAdjustingScroll = false
         }
     }
 }

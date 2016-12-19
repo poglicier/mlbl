@@ -60,7 +60,7 @@ class PlayerGamesHeader: UIView {
     // MARK: - Public
     
     var delegate: PlayerGamesHeaderDelegate?
-    var contentOffset = CGPoint.zero {
+    var contentOffset: CGPoint! {
         didSet {
             self.scrollView.contentOffset = contentOffset
         }
@@ -107,6 +107,8 @@ class PlayerGamesHeader: UIView {
 
 extension PlayerGamesHeader: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.delegate?.header(self, didScrollTo: scrollView.contentOffset)
+        if scrollView.contentSize != CGSize.zero {
+            self.delegate?.header(self, didScrollTo: scrollView.contentOffset)
+        }
     }
 }

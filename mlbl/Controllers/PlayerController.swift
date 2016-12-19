@@ -26,6 +26,7 @@ class PlayerController: BaseController {
     fileprivate var statisticCellOffset = CGPoint.zero
     fileprivate var playerGamesHeader: PlayerGamesHeader?
     fileprivate var selectedGameId: Int?
+    fileprivate var isAdjustingScroll = false
     
     fileprivate func setupTableView() {
         self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
@@ -159,6 +160,7 @@ class PlayerController: BaseController {
     
     fileprivate func configureCell(_ cell: PlayerGamesCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
+        cell.contentOffset = self.statisticCellOffset
         cell.delegate = self
         cell.total = NSLocalizedString("Average", comment: "")
         let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
@@ -443,23 +445,35 @@ extension PlayerController: NSFetchedResultsControllerDelegate {
 
 extension PlayerController: PlayerGamesCellDelegate {
     func cell(_ cell: PlayerGamesCell, didScrollTo contentOffset: CGPoint, tag: Int) {
-        self.statisticCellOffset = contentOffset
-        self.tableView.visibleCells.forEach { cell in
-            if let statisticCell = cell as? StatisticCell {
-                statisticCell.contentOffset = contentOffset
+        if !self.isAdjustingScroll {
+            self.isAdjustingScroll = true
+            
+            self.statisticCellOffset = contentOffset
+            self.tableView.visibleCells.forEach { cell in
+                if let statisticCell = cell as? PlayerGamesCell {
+                    statisticCell.contentOffset = contentOffset
+                }
             }
+            self.playerGamesHeader?.contentOffset = contentOffset
+            
+            self.isAdjustingScroll = false
         }
-        self.playerGamesHeader?.contentOffset = contentOffset
     }
 }
 
 extension PlayerController: PlayerGamesHeaderDelegate {
     func header(_ header: PlayerGamesHeader, didScrollTo contentOffset: CGPoint) {
-        self.statisticCellOffset = contentOffset
-        self.tableView.visibleCells.forEach { cell in
-            if let statisticCell = cell as? PlayerGamesCell {
-                statisticCell.contentOffset = contentOffset
+        if !self.isAdjustingScroll {
+            self.isAdjustingScroll = true
+            
+            self.statisticCellOffset = contentOffset
+            self.tableView.visibleCells.forEach { cell in
+                if let statisticCell = cell as? PlayerGamesCell {
+                    statisticCell.contentOffset = contentOffset
+                }
             }
+            
+            self.isAdjustingScroll = false
         }
     }
 }
