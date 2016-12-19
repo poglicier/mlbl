@@ -64,6 +64,12 @@ class GamesController: BaseController {
         self.setupButtons()
         self.setupEmptyLabel()
         self.getData(true)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,6 +85,20 @@ class GamesController: BaseController {
     }
 
     // MARK: - Private
+    
+    @objc fileprivate func contextDidChange(_ notification: Notification) {
+        if (notification.object as? NSManagedObjectContext) == self.dataController.mainContext {
+            let inserted = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>
+            if (inserted?.contains(where: { $0 is Game }) ?? false) {
+                self.updateGamesStatuses()
+            } else {
+                let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
+                if (updated?.contains( where: { $0 is Game }) ?? false) {
+                    self.updateGamesStatuses()
+                }
+            }
+        }
+    }
     
     fileprivate func setupDate() {
         self.currentDate = Date()
@@ -148,6 +168,20 @@ class GamesController: BaseController {
                     }
                 }
             }
+        }
+    }
+    
+    fileprivate func updateGamesStatuses() {
+        if let games = self.fetchedResultsController.fetchedObjects {
+            var gameIds = [Int]()
+            
+            for game in games {
+                if let gameId = game.objectId?.intValue {
+                    gameIds.append(gameId)
+                }
+            }
+            
+            self.dataController.getGamesOnlineStatuses(gameIds: gameIds, completion: nil)
         }
     }
     

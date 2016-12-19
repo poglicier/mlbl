@@ -69,7 +69,7 @@ class GameStatsRequest: NetworkRequest {
                         }
                         catch {}
                         
-                        Game.gameWithDict(dict, inContext: context)
+                        Game.gameWithDict(dict, in: context)
                         self.dataController?.saveContext(context)
                     })
                 }

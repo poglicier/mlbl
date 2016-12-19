@@ -51,7 +51,7 @@ public class Game: NSManagedObject {
     }()
     
     @discardableResult
-    static func gameWithDict(_ dict: [String:AnyObject], inContext context: NSManagedObjectContext) -> Game? {
+    static func gameWithDict(_ dict: [String:AnyObject], in context: NSManagedObjectContext) -> Game? {
         var res: Game?
         
         if let objectId = dict[GameIdKey] as? NSNumber {
@@ -167,5 +167,32 @@ public class Game: NSManagedObject {
         }
         
         return res
+    }
+    
+    static func updateWithStatusDict(_ dict: [String:AnyObject], in context: NSManagedObjectContext) {
+        if let objectId = dict[GameIdKey] as? NSNumber {
+            let fetchRequest = NSFetchRequest<Game>(entityName: Game.entityName())
+            fetchRequest.predicate = NSPredicate(format: "objectId = %@", objectId)
+            do {
+                let game = try context.fetch(fetchRequest).first
+                if let statusStr = dict[GameStatusKey] as? String {
+                    switch statusStr {
+                        case "Schedule":
+                            game?.status = NSNumber(value: GameStatus.scheduled.rawValue)
+                        case "Result":
+                            game?.status = NSNumber(value: GameStatus.accomplished.rawValue)
+                        case "Online":
+                            game?.status = NSNumber(value: GameStatus.online.rawValue)
+                        default:
+                            game?.status = NSNumber(value: GameStatus.scheduled.rawValue)
+                    }
+                } else {
+                    game?.status = NSNumber(value: GameStatus.scheduled.rawValue)
+                }
+                game?.scoreA = dict[ScoreAKey] as? NSNumber
+                game?.scoreB = dict[ScoreBKey] as? NSNumber
+            }
+            catch {}
+        }
     }
 }

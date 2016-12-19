@@ -52,7 +52,7 @@ class TeamGamesRequest: NetworkRequest {
                 context.performAndWait({
                     var gameIdsToSave = [NSNumber]()
                     for gameDict in gamesDicts {
-                        let game = Game.gameWithDict(gameDict, inContext: context)
+                        let game = Game.gameWithDict(gameDict, in: context)
                         
                         if let gameId = game?.objectId {
                             gameIdsToSave.append(gameId)

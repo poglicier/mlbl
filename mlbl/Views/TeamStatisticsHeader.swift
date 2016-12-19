@@ -58,7 +58,7 @@ class TeamStatisticsHeader: UIView {
     // MARK: - Public
     
     var delegate: TeamStatisticsHeaderDelegate?
-    var contentOffset = CGPoint.zero {
+    var contentOffset: CGPoint! {
         didSet {
             self.scrollView.contentOffset = contentOffset
         }
@@ -80,7 +80,6 @@ class TeamStatisticsHeader: UIView {
         }
         
         self.scrollView.scrollsToTop = false
-        self.scrollView.delegate = self
         self.numberLabel.text = NSLocalizedString("Number", comment: "")
         self.playerLabel.text = NSLocalizedString("Player", comment: "")
         self.timeLabel.text = NSLocalizedString("Time", comment: "")
@@ -103,6 +102,8 @@ class TeamStatisticsHeader: UIView {
 
 extension TeamStatisticsHeader: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.delegate?.header(self, didScrollTo: scrollView.contentOffset)
+        if scrollView.contentSize != CGSize.zero {
+            self.delegate?.header(self, didScrollTo: scrollView.contentOffset)
+        }
     }
 }

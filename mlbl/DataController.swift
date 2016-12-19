@@ -77,6 +77,18 @@ class DataController {
         self.queue.addOperation(request)
     }
     
+    func getGamesOnlineStatuses(gameIds: [Int], completion: ((NSError?) -> ())?) {
+        let request = OnlineStatusRequest(gameIds: gameIds)
+        request.dataController = self
+        
+        request.completionBlock = {
+            DispatchQueue.main.async(execute: {
+                completion?(request.error)
+            })
+        }
+        self.queue.addOperation(request)
+    }
+    
     func getGameStats(_ gameId: Int, completion: ((NSError?) -> ())?) {
         let request = GameStatsRequest(gameId: gameId)
         request.dataController = self

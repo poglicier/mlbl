@@ -83,6 +83,7 @@
 		FC9837BE1D7079E300534AB1 /* PlayoffCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837BD1D7079E300534AB1 /* PlayoffCell.swift */; };
 		FC9837C11D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837BF1D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift */; };
 		FC9837C21D7089AA00534AB1 /* PlayoffSerie.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9837C01D7089AA00534AB1 /* PlayoffSerie.swift */; };
+		FCA661881E07C4A800D3EF6F /* OnlineStatusRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA661871E07C4A800D3EF6F /* OnlineStatusRequest.swift */; };
 		FCA941411D48D82600D95A7A /* Game+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413C1D48D82600D95A7A /* Game+CoreDataProperties.swift */; };
 		FCA941421D48D82600D95A7A /* Team+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413D1D48D82600D95A7A /* Team+CoreDataProperties.swift */; };
 		FCA941431D48D82600D95A7A /* Player+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA9413E1D48D82600D95A7A /* Player+CoreDataProperties.swift */; };
@@ -190,6 +191,7 @@
 		FC9837BD1D7079E300534AB1 /* PlayoffCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffCell.swift; sourceTree = "<group>"; };
 		FC9837BF1D7089AA00534AB1 /* PlayoffSerie+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PlayoffSerie+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FC9837C01D7089AA00534AB1 /* PlayoffSerie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayoffSerie.swift; sourceTree = "<group>"; };
+		FCA661871E07C4A800D3EF6F /* OnlineStatusRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnlineStatusRequest.swift; sourceTree = "<group>"; };
 		FCA9413C1D48D82600D95A7A /* Game+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Game+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FCA9413D1D48D82600D95A7A /* Team+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Team+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		FCA9413E1D48D82600D95A7A /* Player+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Player+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 				FC78EDC91D7C0F900008ED6E /* TeamStatsRequest.swift */,
 				FC7546BD1D7D8B6F00F02119 /* PlayerTeamsRequest.swift */,
 				FC22D2C41D9AA6FA009C6E27 /* PlayerStatsRequest.swift */,
+				FCA661871E07C4A800D3EF6F /* OnlineStatusRequest.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -641,6 +644,7 @@
 				FC97930D1C8B5D9C00D4D5D9 /* GamesController.swift in Sources */,
 				FC74B8131C8F646F000E6CC6 /* Extensions.swift in Sources */,
 				FC8F7A151D3CF2A50056C4D4 /* TableController.swift in Sources */,
+				FCA661881E07C4A800D3EF6F /* OnlineStatusRequest.swift in Sources */,
 				FCEEA9271D5BBCB800686DD6 /* ParameterCell.swift in Sources */,
 				FC77C0A01D64C78800A12D1E /* BestPlayersRequest.swift in Sources */,
 				FC78EDD71D7C56C10008ED6E /* TeamStatistics+CoreDataProperties.swift in Sources */,

@@ -60,6 +60,9 @@ class StatisticCell: UITableViewCell {
     var statistics: TeamStatistics! {
         didSet {
             self.teamReboundsHeight.constant = 0
+            self.teamReboundsLabel.text = nil
+            self.teamReboundsDLabel.text = nil
+            self.teamReboundsOLabel.text = nil
             
             if statistics.player == nil {
                 if #available(iOS 8.2, *) {
@@ -109,6 +112,10 @@ class StatisticCell: UITableViewCell {
                     }
                 }
             } else {
+                self.onePercentLabel.text = nil
+                self.threePercentLabel.text = nil
+                self.threePercentLabel.text = nil
+                
                 self.playerLabel.font = UIFont.systemFont(ofSize: 15)
                 for subview in self.scrollContentView.subviews {
                     if let label = subview as? UILabel {
@@ -335,6 +342,12 @@ class StatisticCell: UITableViewCell {
                 }
             } else {
                 self.teamReboundsHeight.constant = 0
+                self.teamReboundsLabel.text = nil
+                self.teamReboundsDLabel.text = nil
+                self.teamReboundsOLabel.text = nil
+                self.onePercentLabel.text = nil
+                self.threePercentLabel.text = nil
+                self.threePercentLabel.text = nil
                 
                 self.playerLabel.font = UIFont.systemFont(ofSize: 15)
                 for subview in self.scrollContentView.subviews {
@@ -536,6 +549,8 @@ class StatisticCell: UITableViewCell {
 
 extension StatisticCell: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.delegate?.cell(self, didScrollTo: scrollView.contentOffset, tag: self.tag)
+        if scrollView.contentSize != CGSize.zero {
+            self.delegate?.cell(self, didScrollTo: scrollView.contentOffset, tag: self.tag)
+        }
     }
 }

@@ -176,7 +176,7 @@ public class PlayerStatistics: NSManagedObject {
                 if let gameDict = gameStatDict[GameKey] as? [String:AnyObject] {
                     var fixedGameDict = gameDict
                     fixedGameDict[Game.GameDateKey] = gameStatDict[GameDateKey]
-                    if let game = Game.gameWithDict(fixedGameDict, inContext: context) {
+                    if let game = Game.gameWithDict(fixedGameDict, in: context) {
                         let res = self.playerStatisticsWithDict(gameStatDict, playerId: playerId, in: game, in: context)
                         if let teamADict = gameStatDict[TeamNameAKey] as? [String:AnyObject] {
                             var teamDict = [String:AnyObject]()

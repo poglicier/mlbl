@@ -96,7 +96,7 @@ public class PlayoffSerie: NSManagedObject {
                                     }
                                 }
                                 
-                                if let game = Game.gameWithDict(fixedGameDict, inContext: context) {
+                                if let game = Game.gameWithDict(fixedGameDict, in: context) {
                                     games.insert(game)
                                 }
                             }

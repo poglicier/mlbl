@@ -76,6 +76,7 @@ class GameController: BaseController {
     fileprivate var teamStatisticsBHeader: TeamStatisticsHeader?
     fileprivate let teamATag = 1
     fileprivate let teamBTag = 2
+    fileprivate var isAdjustingScroll = false
     
     lazy fileprivate var statisticsAFetchedResultsController: NSFetchedResultsController<GameStatistics> = {
         let fetchRequest = NSFetchRequest<GameStatistics>(entityName: GameStatistics.entityName())
@@ -131,7 +132,6 @@ class GameController: BaseController {
                     if let status = Game.GameStatus(rawValue: intStatus) {
                         if status == .online {
                             if let url = URL(string: "http://www.infobasket.ru/stats/game.html?id=\(self.gameId!)&compId=\(self.dataController.currentCompetitionId())&tab=2") {
-                                print(url.absoluteString)
                                 self.tableView.isHidden = true
                                 self.webView.isHidden = true
                                 self.webView.loadRequest(URLRequest(url: url))
@@ -195,13 +195,13 @@ class GameController: BaseController {
         cell.color = (indexPath as NSIndexPath).row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
         let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
         
-        if (indexPath as NSIndexPath).section == Sections.teamA.rawValue {
+        if indexPath.section == Sections.teamA.rawValue {
             cell.total = NSLocalizedString("Total", comment: "").uppercased()
             cell.gameStatistics = self.statisticsAFetchedResultsController.object(at: fixedIndexPath)
             cell.selectionStyle = cell.gameStatistics.player == nil ? .none : .default
             cell.contentOffset = self.statisticACellOffset
             cell.tag = self.teamATag
-        } else if (indexPath as NSIndexPath).section == Sections.teamB.rawValue {
+        } else if indexPath.section == Sections.teamB.rawValue {
             cell.total = NSLocalizedString("Total", comment: "").uppercased()
             cell.gameStatistics = self.statisticsBFetchedResultsController.object(at: fixedIndexPath)
             cell.selectionStyle = cell.gameStatistics.player == nil ? .none : .default
@@ -292,6 +292,19 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         return res
     }
     
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let enumSection = Sections(rawValue: section) {
+            switch enumSection {
+            case .teamA:
+                self.teamStatisticsAHeader?.delegate = self
+            case .teamB:
+                self.teamStatisticsBHeader?.delegate = self
+            default:
+                break
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         var res: CGFloat = 0.1
         
@@ -351,7 +364,7 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
                 let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
                 let gameStatistics = self.statisticsAFetchedResultsController.object(at: fixedIndexPath)
                 if gameStatistics.player == nil {
-                    res = 81
+                    res = 81 // 3 строки: КОМАНДА, ВСЕГО и проценты
                 } else {
                     res = 27
                 }
@@ -359,7 +372,7 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
                 let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
                 let gameStatistics = self.statisticsBFetchedResultsController.object(at: fixedIndexPath)
                 if gameStatistics.player == nil {
-                    res = 81
+                    res = 81 // 3 строки: КОМАНДА, ВСЕГО и проценты
                 } else {
                     res = 27
                 }
@@ -367,13 +380,6 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
                 res = 27
             }
         }
-//        if indexPath.section == Sections.Hat.rawValue {
-//            res = 252
-//        } else {
-//            if let statistics = ((self.game?.statistics as? Set<GameStatistics>)?.filter {$0.teamNumber?.integerValue == indexPath.section && $0.player != nil }) {
-//                res += CGFloat((statistics.count)*27)
-//            }
-//        }
         
         return res
     }
@@ -486,50 +492,63 @@ extension GameController: NSFetchedResultsControllerDelegate {
 
 extension GameController: StatisticCellDelegate {
     func cell(_ cell: StatisticCell, didScrollTo contentOffset: CGPoint, tag: Int) {
-        if tag == self.teamATag {
-            self.statisticACellOffset = contentOffset
-            self.tableView.visibleCells.forEach { cell in
-                if let statisticCell = cell as? StatisticCell {
-                    if statisticCell.tag == tag {
-                        statisticCell.contentOffset = contentOffset
+        if !self.isAdjustingScroll {
+            self.isAdjustingScroll = true
+            
+            if tag == self.teamATag {
+                self.statisticACellOffset = contentOffset
+                
+                self.tableView.visibleCells.forEach { cell in
+                    if let statisticCell = cell as? StatisticCell {
+                        if statisticCell.tag == tag {
+                            statisticCell.contentOffset = contentOffset
+                        }
                     }
                 }
-            }
-            self.teamStatisticsAHeader?.contentOffset = contentOffset
-        } else if tag == self.teamBTag {
-            self.statisticBCellOffset = contentOffset
-            self.tableView.visibleCells.forEach { cell in
-                if let statisticCell = cell as? StatisticCell {
-                    if statisticCell.tag == tag {
-                        statisticCell.contentOffset = contentOffset
+                self.teamStatisticsAHeader?.contentOffset = contentOffset
+            } else if tag == self.teamBTag {
+                self.statisticBCellOffset = contentOffset
+                self.tableView.visibleCells.forEach { cell in
+                    if let statisticCell = cell as? StatisticCell {
+                        if statisticCell.tag == tag {
+                            statisticCell.contentOffset = contentOffset
+                        }
                     }
                 }
+                self.teamStatisticsBHeader?.contentOffset = contentOffset
             }
-            self.teamStatisticsBHeader?.contentOffset = contentOffset
+            
+            self.isAdjustingScroll = false
         }
     }
 }
 
 extension GameController: TeamStatisticsHeaderDelegate {
     func header(_ header: TeamStatisticsHeader, didScrollTo contentOffset: CGPoint) {
-        if header == self.teamStatisticsAHeader {
-            self.statisticACellOffset = contentOffset
-            self.tableView.indexPathsForVisibleRows?.forEach { indexPath in
-                if indexPath.section == Sections.teamA.rawValue {
-                    if let cell = self.tableView.cellForRow(at: indexPath) as? StatisticCell {
-                        cell.contentOffset = contentOffset
+        if !self.isAdjustingScroll {
+            self.isAdjustingScroll = true
+            
+            if header == self.teamStatisticsAHeader {
+                self.statisticACellOffset = contentOffset
+                
+                self.tableView.indexPathsForVisibleRows?.forEach { indexPath in
+                    if indexPath.section == Sections.teamA.rawValue {
+                        if let cell = self.tableView.cellForRow(at: indexPath) as? StatisticCell {
+                            cell.contentOffset = contentOffset
+                        }
+                    }
+                }
+            } else if header == self.teamStatisticsBHeader {
+                self.statisticBCellOffset = contentOffset
+                self.tableView.indexPathsForVisibleRows?.forEach { indexPath in
+                    if indexPath.section == Sections.teamB.rawValue {
+                        if let cell = self.tableView.cellForRow(at: indexPath) as? StatisticCell {
+                            cell.contentOffset = contentOffset
+                        }
                     }
                 }
             }
-        } else if header == self.teamStatisticsBHeader {
-            self.statisticBCellOffset = contentOffset
-            self.tableView.indexPathsForVisibleRows?.forEach { indexPath in
-                if indexPath.section == Sections.teamB.rawValue {
-                    if let cell = self.tableView.cellForRow(at: indexPath) as? StatisticCell {
-                        cell.contentOffset = contentOffset
-                    }
-                }
-            }
+            self.isAdjustingScroll = false
         }
     }
 }

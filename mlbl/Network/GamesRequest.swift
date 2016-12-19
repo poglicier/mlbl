@@ -69,10 +69,10 @@ class GamesRequest: NetworkRequest {
                 if let gamesDicts = dict["Games"] as? [[String:AnyObject]] {
                     let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
                     context.parent = self.dataController?.mainContext
-                    context.perform({
+                    context.performAndWait({
                         var gameIdsToSave = [NSNumber]()
                         for gameDict in gamesDicts {
-                            let game = Game.gameWithDict(gameDict, inContext: context)
+                            let game = Game.gameWithDict(gameDict, in: context)
                             
                             if let gameId = game?.objectId {
                                 gameIdsToSave.append(gameId)
