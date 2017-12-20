@@ -116,7 +116,7 @@ public class PlayoffSerie: NSManagedObject {
             if let _ = self.sort {
                 sortStr = "\(self.sort!)"
             }
-            return String(format: "%@ <\(Unmanaged.passUnretained(self).toOpaque())> round: \(self.round) sort: \(sortStr) \(self.roundNameRu) sectionSort \(self.sectionSort)", type(of: self).description())
+            return String(format: "%@ <\(Unmanaged.passUnretained(self).toOpaque())> round: \(self.round?.intValue ?? -1) sort: \(sortStr) \(self.roundNameRu ?? "") sectionSort \(self.sectionSort?.intValue ?? -1)", type(of: self).description())
         }
     }
 }

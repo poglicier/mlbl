@@ -63,7 +63,7 @@ class CompetitionsRequest: NetworkRequest {
                         do {
                             let all = try context.fetch(fetchRequest)
                             for comp in all {
-                                print("DELETE COMPETITION \(comp.compAbcNameRu)-\(comp.compShortNameRu)")
+                                print("DELETE COMPETITION \(comp.compAbcNameRu ?? "")-\(comp.compShortNameRu ?? "")")
                                 context.delete(comp)
                             }
                         }

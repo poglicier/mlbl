@@ -104,6 +104,9 @@
 		FCEEA9271D5BBCB800686DD6 /* ParameterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEEA9261D5BBCB800686DD6 /* ParameterCell.swift */; };
 		FCFD97F71DEC5CD900BBD360 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCFD97F61DEC5CD900BBD360 /* SettingsController.swift */; };
 		FCFD97F91DEC5CEA00BBD360 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCFD97F81DEC5CEA00BBD360 /* Settings.storyboard */; };
+		FCFF819B1FE9ADDD0038E768 /* DefaultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCFF819A1FE9ADDD0038E768 /* DefaultsController.swift */; };
+		FCFF819D1FE9AEA30038E768 /* PushesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCFF819C1FE9AEA30038E768 /* PushesController.swift */; };
+		FCFF819F1FE9AFF70038E768 /* SendTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCFF819E1FE9AFF70038E768 /* SendTokenRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -214,6 +217,10 @@
 		FCEEA9261D5BBCB800686DD6 /* ParameterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParameterCell.swift; sourceTree = "<group>"; };
 		FCFD97F61DEC5CD900BBD360 /* SettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		FCFD97F81DEC5CEA00BBD360 /* Settings.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
+		FCFF819A1FE9ADDD0038E768 /* DefaultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultsController.swift; sourceTree = "<group>"; };
+		FCFF819C1FE9AEA30038E768 /* PushesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushesController.swift; sourceTree = "<group>"; };
+		FCFF819E1FE9AFF70038E768 /* SendTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendTokenRequest.swift; sourceTree = "<group>"; };
+		FCFF81A01FE9BCFC0038E768 /* mlbl.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = mlbl.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -298,6 +305,7 @@
 				FC7546BD1D7D8B6F00F02119 /* PlayerTeamsRequest.swift */,
 				FC22D2C41D9AA6FA009C6E27 /* PlayerStatsRequest.swift */,
 				FCA661871E07C4A800D3EF6F /* OnlineStatusRequest.swift */,
+				FCFF819E1FE9AFF70038E768 /* SendTokenRequest.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -341,9 +349,12 @@
 		FC705D351C80F00A00216AB8 /* mlbl */ = {
 			isa = PBXGroup;
 			children = (
+				FCFF81A01FE9BCFC0038E768 /* mlbl.entitlements */,
 				FC705D361C80F00A00216AB8 /* AppDelegate.swift */,
 				FC705D3A1C80F00A00216AB8 /* Main.storyboard */,
 				FC9793221C8B729100D4D5D9 /* DataController.swift */,
+				FCFF819A1FE9ADDD0038E768 /* DefaultsController.swift */,
+				FCFF819C1FE9AEA30038E768 /* PushesController.swift */,
 				FC3939521D2ED2BC00F8361E /* Network */,
 				FC74B8111C8F646F000E6CC6 /* Contributed */,
 				FC321FAA1C82F96800674271 /* Segue */,
@@ -441,13 +452,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FC705D481C80F00A00216AB8 /* Build configuration list for PBXNativeTarget "mlbl" */;
 			buildPhases = (
-				5C38D92F4EED38F1CE67C5E0 /* 📦 Check Pods Manifest.lock */,
+				5C38D92F4EED38F1CE67C5E0 /* [CP] Check Pods Manifest.lock */,
 				FC705D2F1C80F00A00216AB8 /* Sources */,
 				FC705D301C80F00A00216AB8 /* Frameworks */,
 				FC705D311C80F00A00216AB8 /* Resources */,
 				FC9793241C8D84E900D4D5D9 /* ShellScript */,
-				AE6C86D0B55239EFA813195C /* 📦 Embed Pods Frameworks */,
-				D5D407D5BAFCF301C973FB0F /* 📦 Copy Pods Resources */,
+				AE6C86D0B55239EFA813195C /* [CP] Embed Pods Frameworks */,
+				D5D407D5BAFCF301C973FB0F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -465,13 +476,18 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Valentin Shamardin";
 				TargetAttributes = {
 					FC705D321C80F00A00216AB8 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = U7BR77R5M8;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0920;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -519,44 +535,52 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5C38D92F4EED38F1CE67C5E0 /* 📦 Check Pods Manifest.lock */ = {
+		5C38D92F4EED38F1CE67C5E0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-mlbl-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AE6C86D0B55239EFA813195C /* 📦 Embed Pods Frameworks */ = {
+		AE6C86D0B55239EFA813195C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-mlbl/Pods-mlbl-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/TTTAttributedLabel/TTTAttributedLabel.framework",
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TTTAttributedLabel.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-mlbl/Pods-mlbl-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D5D407D5BAFCF301C973FB0F /* 📦 Copy Pods Resources */ = {
+		D5D407D5BAFCF301C973FB0F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -585,6 +609,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC57AC051D787093009E67C6 /* TeamMainCell.swift in Sources */,
+				FCFF819D1FE9AEA30038E768 /* PushesController.swift in Sources */,
 				FC0645451D6C73FA0047FE1D /* RoundRobinRequest.swift in Sources */,
 				FC3939581D2ED52800F8361E /* GameStatsRequest.swift in Sources */,
 				FC14B0BC1DAD1091007E1D84 /* TappableScrollView.swift in Sources */,
@@ -660,12 +685,14 @@
 				FC57AC0E1D7980D7009E67C6 /* TeamPlayersHeader.swift in Sources */,
 				FC9837BC1D7069FD00534AB1 /* PlayoffRequest.swift in Sources */,
 				FC3336201DF5C9770082EBD7 /* SettingsCell.swift in Sources */,
+				FCFF819F1FE9AFF70038E768 /* SendTokenRequest.swift in Sources */,
 				FCD76E161D3F4172002BB24A /* Competition.swift in Sources */,
 				FC705D371C80F00A00216AB8 /* AppDelegate.swift in Sources */,
 				FC97931D1C8B6ADB00D4D5D9 /* Player.swift in Sources */,
 				FC7546BA1D7D776A00F02119 /* PlayerController.swift in Sources */,
 				FC22D2C51D9AA6FA009C6E27 /* PlayerStatsRequest.swift in Sources */,
 				FC321FA81C82DF8D00674271 /* PlayersController.swift in Sources */,
+				FCFF819B1FE9ADDD0038E768 /* DefaultsController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -718,14 +745,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -767,14 +800,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -805,9 +844,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 78ACB04B86F9AEF1DC78789F /* Pods-mlbl.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = mlbl/mlbl.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -819,7 +859,8 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "mlbl/Contributed/mlbl-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -827,9 +868,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EF75FE81432D237347A9693D /* Pods-mlbl.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = mlbl/mlbl.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = mlbl/Info.plist;
@@ -839,7 +881,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "mlbl/Contributed/mlbl-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

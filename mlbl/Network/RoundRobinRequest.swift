@@ -58,7 +58,7 @@ class RoundRobinRequest: NetworkRequest {
                     do {
                         let all = try context.fetch(fetchRequest)
                         for rank in all {
-                            print("DELETE TeamRoundRank \(rank.team?.nameRu)")
+                            print("DELETE TeamRoundRank \(rank.team?.nameRu ?? "")")
                             context.delete(rank)
                         }
                     }

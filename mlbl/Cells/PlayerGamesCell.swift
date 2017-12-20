@@ -120,7 +120,7 @@ class PlayerGamesCell: UITableViewCell {
                             if label != self.onePercentLabel &&
                                 label != self.twoPercentLabel &&
                                 label != self.threePercentLabel {
-                                label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
+                                label.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold)
                             }
                         }
                     }

@@ -54,7 +54,7 @@ class PlayerTeamsRequest: NetworkRequest {
                     do {
                         let all = try context.fetch(fetchRequest)
                         for seasonTeam in all {
-                            print("DELETE SeasonTeam \(seasonTeam.team?.nameRu)")
+                            print("DELETE SeasonTeam \(seasonTeam.team?.nameRu ?? "")")
                             context.delete(seasonTeam)
                         }
                     }

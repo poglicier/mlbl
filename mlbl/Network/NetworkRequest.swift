@@ -14,7 +14,7 @@ class NetworkRequest: Operation {
     var sessionTask: URLSessionTask?
     let incomingData = NSMutableData()
     var error: NSError?
-    var params: [String:AnyObject]?
+    var params: [String:Any]?
     
     var localURLSession: Foundation.URLSession {
         return Foundation.URLSession(configuration: localConfig, delegate: self, delegateQueue: nil)
@@ -45,6 +45,38 @@ class NetworkRequest: Operation {
     
     func processData() {
         
+    }
+    
+    @nonobjc func createHttpParameters(with parameters: [String:Any]) -> String {
+        var body = ""
+        for (key, value) in parameters {
+            if body.count > 0 {
+                body += "&"
+            }
+            
+            if value is String {
+                body += "\(self.urlEncodedUTF8String(key))=\(self.urlEncodedUTF8String(value as! String))"
+            } else if value is Bool {
+                let strValue = (value as! Bool) ? "true" : "false"
+                body += "\(self.urlEncodedUTF8String(key))=\(strValue)"
+            } else if value is NSNull {
+                body += "\(self.urlEncodedUTF8String(key))="
+            } else {
+                body += "\(self.urlEncodedUTF8String(key))=\(value)"
+            }
+        }
+        
+        return body
+    }
+    
+    @nonobjc func createHttpParameters(with parameters: String) -> String {
+        return self.urlEncodedUTF8String(parameters)
+    }
+    
+    // MARK: - Private
+    
+    fileprivate func urlEncodedUTF8String(_ source: String) -> String {
+        return source.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
     }
 }
 

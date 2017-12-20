@@ -66,13 +66,13 @@ class StatisticCell: UITableViewCell {
             
             if statistics.player == nil {
                 if #available(iOS 8.2, *) {
-                    self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
+                    self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold)
                     for subview in self.scrollContentView.subviews {
                         if let label = subview as? UILabel {
                             if label != self.onePercentLabel &&
                                 label != self.twoPercentLabel &&
                                 label != self.threePercentLabel {
-                                label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
+                                label.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold)
                             }
                         }
                     }
@@ -138,7 +138,9 @@ class StatisticCell: UITableViewCell {
                 self.playerLabel.lineBreakMode = .byClipping
                 if var playerName = isLanguageRu ? statistics.player?.lastNameRu : statistics.player?.lastNameEn {
                     if let firstName = isLanguageRu ? statistics.player?.firstNameRu : statistics.player?.firstNameEn {
-                        if let firstLetter = firstName.characters.first {
+                        if firstName.count > 0 {
+                            let indexOfFirst = firstName.index(firstName.startIndex, offsetBy: 1)
+                            let firstLetter = firstName[..<indexOfFirst]
                             playerName += " \(firstLetter)."
                         }
                     }
@@ -275,7 +277,7 @@ class StatisticCell: UITableViewCell {
                 self.teamReboundsHeight.constant = 27
                 
                 if #available(iOS 8.2, *) {
-                    self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
+                    self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold)
                     for subview in self.scrollContentView.subviews {
                         if let label = subview as? UILabel {
                             if label != self.onePercentLabel &&
@@ -284,7 +286,7 @@ class StatisticCell: UITableViewCell {
                                 label != self.teamReboundsLabel &&
                                 label != self.teamReboundsOLabel &&
                                 label != self.teamReboundsDLabel {
-                                label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
+                                label.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold)
                             }
                         }
                     }
@@ -360,7 +362,7 @@ class StatisticCell: UITableViewCell {
                 
                 if gameStatistics.isStart?.boolValue ?? false {
                     if #available(iOS 8.2, *) {
-                        self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightSemibold)
+                        self.playerLabel.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.semibold)
                     } else {
                         self.playerLabel.font = UIFont.boldSystemFont(ofSize: 15)
                     }

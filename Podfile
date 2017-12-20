@@ -4,7 +4,7 @@ use_frameworks!
 
 target 'mlbl' do
     pod 'Fabric'
-    pod 'Crashlytics'
+    pod 'Crashlytics', '~>  3.9'
     pod 'SnapKit'
     pod 'TTTAttributedLabel'
 end

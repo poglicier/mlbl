@@ -30,7 +30,7 @@ class TeamMainCell: UITableViewCell {
             self.nameLabel.text = isLanguageRu ? team.nameRu : team.nameEn
             
             let region = isLanguageRu ? team.regionNameRu : team.regionNameEn
-            if region?.characters.count ?? 0 > 0 {
+            if region?.count ?? 0 > 0 {
                 self.cityLabel.text = "(\(region!))"
             } else {
                 self.cityLabel.text = ""

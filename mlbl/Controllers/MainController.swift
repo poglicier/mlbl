@@ -11,22 +11,28 @@ import SnapKit
 import CoreData
 
 class MainController: BaseController {
-
-    @IBOutlet fileprivate var buttonsScrollView: UIScrollView!
-    @IBOutlet fileprivate var sectionButtons: [UIButton]!
-    @IBOutlet fileprivate var contentView: UIView!
-    @IBOutlet fileprivate var selectedIndicatorView: UIView!
-    fileprivate var containerController: ContainerController!
-    fileprivate var choosenComp: Competition!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setupNavigatioBar()
         self.setupButtons()
+        
+        self.pushesController.registerForRemoteNotifications(UIApplication.shared)
     }
     
+    // MARK: - Public
+    
+    var pushesController: PushesController!
+    
     // MARK: - Private
+    
+    @IBOutlet fileprivate var buttonsScrollView: UIScrollView!
+    @IBOutlet fileprivate var sectionButtons: [UIButton]!
+    @IBOutlet fileprivate var contentView: UIView!
+    @IBOutlet fileprivate var selectedIndicatorView: UIView!
+    fileprivate var containerController: ContainerController!
+    fileprivate var choosenComp: Competition!
     
     fileprivate func setupNavigatioBar() {
         self.navigationItem.hidesBackButton = true
@@ -100,6 +106,7 @@ class MainController: BaseController {
     @IBAction fileprivate func settingsDidTap() {
         if let settingsController = UIStoryboard(name: "Settings", bundle: nil).instantiateViewController(withIdentifier: "SettingsController") as? SettingsController {
             settingsController.dataController = self.dataController
+            settingsController.pushesController = self.pushesController
             self.navigationController?.pushViewController(settingsController, animated: true)
         }
     }

@@ -193,7 +193,7 @@ class TableController: BaseController {
                         }
                         
                         let refreshButton = UIButton(type: .custom)
-                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
+                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
                         refreshButton.setAttributedTitle(attrString, for: UIControlState())
                         refreshButton.addTarget(self, action: #selector(strongSelf.refreshRoundRobin), for: .touchUpInside)
                         strongSelf.view.addSubview(refreshButton)
@@ -241,7 +241,7 @@ class TableController: BaseController {
                         }
                         
                         let refreshButton = UIButton(type: .custom)
-                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
+                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
                         refreshButton.setAttributedTitle(attrString, for: UIControlState())
                         refreshButton.addTarget(self, action: #selector(strongSelf.refreshPlayoff), for: .touchUpInside)
                         strongSelf.view.addSubview(refreshButton)
@@ -416,7 +416,7 @@ extension TableController: UITableViewDelegate, UITableViewDataSource {
             // Только для игр на вылет
             let label = UILabel()
             if #available(iOS 8.2, *) {
-                label.font = UIFont.systemFont(ofSize: 15, weight: UIFontWeightMedium)
+                label.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
             } else {
                 label.font = UIFont.systemFont(ofSize: 15)
             }

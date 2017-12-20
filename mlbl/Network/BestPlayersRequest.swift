@@ -57,7 +57,7 @@ class BestPlayersRequest: NetworkRequest {
                     do {
                         let all = try context.fetch(fetchRequest)
                         for rank in all {
-                            print("DELETE PlayerRank \(rank.player?.lastNameRu)")
+                            print("DELETE PlayerRank \(rank.player?.lastNameRu ?? "")")
                             context.delete(rank)
                         }
                     }

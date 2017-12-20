@@ -62,7 +62,7 @@ public class Competition: NSManagedObject {
                         for comp in all {
                             if let compId = comp.objectId {
                                 if childIdsToSave.contains(compId) == false {
-                                    print("DELETE COMPETITION \(comp.compAbcNameRu)-\(comp.compShortNameRu)")
+                                    print("DELETE COMPETITION \(comp.compAbcNameRu ?? "")-\(comp.compShortNameRu ?? "")")
                                     context.delete(comp)
                                 }
                             }
@@ -92,7 +92,7 @@ public class Competition: NSManagedObject {
     
     override public var description: String {
         get {
-            return String(format: "%@ <\(Unmanaged.passUnretained(self).toOpaque())> \(self.objectId) \(self.compShortNameRu ?? "") Стадия: \(compTypeStr())", type(of: self).description())
+            return String(format: "%@ <\(Unmanaged.passUnretained(self).toOpaque())> \(self.objectId?.intValue ?? -1) \(self.compShortNameRu ?? "") Стадия: \(compTypeStr())", type(of: self).description())
         }
     }
 }

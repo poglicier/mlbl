@@ -44,6 +44,10 @@ class ChooseCompetitionController: BaseController {
         self.getData(true)
     }
     
+    // MARK: - Public
+    
+    var pushesController: PushesController!
+    
     // MARK: - Private
     
     fileprivate func setupTableView() {
@@ -67,7 +71,7 @@ class ChooseCompetitionController: BaseController {
                     strongSelf.emptyLabel.isHidden = false
                     
                     let refreshButton = UIButton(type: .custom)
-                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
+                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
                     refreshButton.setAttributedTitle(attrString, for: UIControlState())
                     refreshButton.addTarget(strongSelf, action: #selector(strongSelf.refreshPlayersDidTap), for: .touchUpInside)
                     strongSelf.view.addSubview(refreshButton)
@@ -122,7 +126,7 @@ class ChooseCompetitionController: BaseController {
                         let players = try self.dataController.mainContext.fetch(playersRequest)
                         for player in players {
                             self.dataController.mainContext.delete(player)
-                            print("DELETE Player \(player.lastNameRu)")
+                            print("DELETE Player \(player.lastNameRu ?? "")")
                         }
                     }
                     
@@ -132,7 +136,12 @@ class ChooseCompetitionController: BaseController {
                         let games = try self.dataController.mainContext.fetch(gamesRequest)
                         for game in games {
                             self.dataController.mainContext.delete(game)
-                            print("DELETE Game \(game.date)")
+                            
+                            if let date = game.date {
+                                print("DELETE Game \(date)")
+                            } else {
+                                print("DELETE Game UNKNOWN DATE")
+                            }
                         }
                     }
                     
@@ -149,7 +158,7 @@ class ChooseCompetitionController: BaseController {
                                     strongSelf.emptyLabel.isHidden = false
                                     
                                     let refreshButton = UIButton(type: .custom)
-                                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
+                                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
                                     refreshButton.setAttributedTitle(attrString, for: UIControlState())
                                     refreshButton.addTarget(strongSelf, action: #selector(strongSelf.refreshPlayersDidTap), for: .touchUpInside)
                                     strongSelf.view.addSubview(refreshButton)
@@ -196,7 +205,10 @@ class ChooseCompetitionController: BaseController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToMain" {
-            (segue.destination as? BaseController)?.dataController = self.dataController
+            let main = segue.destination as! MainController
+            main.dataController = self.dataController
+            main.pushesController = self.pushesController
+            
         }
     }
     
@@ -277,7 +289,7 @@ extension ChooseCompetitionController: UITableViewDataSource, UITableViewDelegat
         view.backgroundColor = UIColor.mlblLightOrangeColor()
         let label = UILabel()
         if #available(iOS 8.2, *) {
-            label.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightMedium)
+            label.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.medium)
         } else {
             label.font = UIFont.systemFont(ofSize: 17)
         }

@@ -37,18 +37,33 @@ extension UIImage {
     
     static func imageForNavigationBar(portrait: Bool) -> UIImage {
         if portrait == true {
-            UIGraphicsBeginImageContext(CGSize(width: 1, height: 64))
-            let context = UIGraphicsGetCurrentContext()
-
-            let rect1 = CGRect(x: 0, y: 0, width: 1, height: 20)
-            let color1 = UIColor.mlblDarkOrangeColor()
-            let rect2 = CGRect(x: 0, y: 20, width: 1, height: 44)
-            let color2 = UIColor.mlblLightOrangeColor()
+            let statusBarHeight = UIApplication.shared.statusBarFrame.size.height
             
-            context?.setFillColor(color1.cgColor)
-            context?.fill(rect1)
-            context?.setFillColor(color2.cgColor)
-            context?.fill(rect2)
+            if statusBarHeight > 20 {
+                // iPhoneX
+                UIGraphicsBeginImageContext(CGSize(width: 1, height: 1))
+                let context = UIGraphicsGetCurrentContext()
+                
+                let rect1 = CGRect(x: 0, y: 0, width: 1, height: 1)
+                let color1 = UIColor.mlblLightOrangeColor()
+                
+                context?.setFillColor(color1.cgColor)
+                context?.fill(rect1)
+            } else {
+                let topBarHeight: CGFloat = 64
+                UIGraphicsBeginImageContext(CGSize(width: 1, height: topBarHeight))
+                let context = UIGraphicsGetCurrentContext()
+                
+                let rect1 = CGRect(x: 0, y: 0, width: 1, height: statusBarHeight)
+                let color1 = UIColor.mlblDarkOrangeColor()
+                let rect2 = CGRect(x: 0, y: statusBarHeight, width: 1, height: topBarHeight - statusBarHeight)
+                let color2 = UIColor.mlblLightOrangeColor()
+                
+                context?.setFillColor(color1.cgColor)
+                context?.fill(rect1)
+                context?.setFillColor(color2.cgColor)
+                context?.fill(rect2)
+            }
         } else {
             let rect2 = CGRect(x: 0, y: 0, width: 1, height: 44)
             UIGraphicsBeginImageContext(rect2.size)
@@ -92,7 +107,7 @@ extension UINavigationController: UINavigationControllerDelegate {
         
         self.navigationBar.isTranslucent = false
         self.navigationBar.tintColor = UIColor.white
-        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+        self.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         self.navigationBar.setBackgroundImage(UIImage.imageForNavigationBar(portrait: true), for: .default)
         self.delegate = self
     }
@@ -139,7 +154,7 @@ extension UIFont {
     func sizeOfString(string: NSString, constrainedToWidth width: CGFloat) -> CGSize {
         return string.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
                                    options: .usesLineFragmentOrigin,
-                                   attributes: [NSFontAttributeName: self],
+                                   attributes: [NSAttributedStringKey.font: self],
                                    context: nil).size
     }
 }

@@ -76,7 +76,7 @@ class TeamRosterRequest: NetworkRequest {
                         for player in all {
                             if let playerId = player.objectId {
                                 if playerIdsToSave.contains(playerId) == false {
-                                    print("DELETE Player \(player.lastNameRu)")
+                                    print("DELETE Player \(player.lastNameRu ?? "")")
                                     context.delete(player)
                                 }
                             }

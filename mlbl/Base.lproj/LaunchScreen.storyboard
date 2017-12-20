@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,26 +18,16 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="wDY-Tk-LPr">
-                                <rect key="frame" x="164" y="164" width="273" height="273"/>
+                                <rect key="frame" x="51" y="269.66666666666669" width="273" height="273.00000000000006"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dvR-3s-Zbd">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="20"/>
-                                <color key="backgroundColor" red="0.71764705882352942" green="0.25490196078431371" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="9K6-m6-FCW"/>
-                                </constraints>
-                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.44313725490196076" blue="0.73725490196078436" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.44313725490196076" blue="0.73725490196078436" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="dvR-3s-Zbd" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="1w9-RL-9Ob"/>
-                            <constraint firstAttribute="trailing" secondItem="dvR-3s-Zbd" secondAttribute="trailing" id="C4u-ct-sir"/>
                             <constraint firstItem="wDY-Tk-LPr" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="FRn-2t-G8O"/>
-                            <constraint firstItem="dvR-3s-Zbd" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="n3g-oi-zw9"/>
                             <constraint firstItem="wDY-Tk-LPr" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="yqs-bQ-8kF"/>
                         </constraints>
                     </view>

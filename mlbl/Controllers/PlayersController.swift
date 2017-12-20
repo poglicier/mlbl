@@ -139,7 +139,7 @@ class PlayersController: BaseController {
     }
     
     fileprivate func filterContentForSearchText(_ searchText: String) {
-        if searchText.characters.count > 2 {
+        if searchText.count > 2 {
             func predicateForSearchText(_ text: String) -> NSPredicate {
                 let p1 = NSPredicate(format: "lastNameRu CONTAINS[cd] %@", text)
                 let p2 = NSPredicate(format: "lastNameEn CONTAINS[cd] %@", text)

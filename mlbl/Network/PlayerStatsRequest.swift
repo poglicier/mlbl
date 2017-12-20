@@ -56,7 +56,7 @@ class PlayerStatsRequest: NetworkRequest {
                     do {
                         let all = try context.fetch(fetchRequest)
                         for playerStatistics in all {
-                            print("DELETE PlayerStatistics \(playerStatistics.player?.lastNameRu)")
+                            print("DELETE PlayerStatistics \(playerStatistics.player?.lastNameRu ?? "")")
                             context.delete(playerStatistics)
                         }
                     }

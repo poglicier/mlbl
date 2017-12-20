@@ -145,7 +145,7 @@ class GamesController: BaseController {
                         strongSelf.emptyLabel.isHidden = false
                         
                         let refreshButton = UIButton(type: .custom)
-                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSUnderlineStyleAttributeName : 1, NSForegroundColorAttributeName : UIColor.mlblLightOrangeColor()])
+                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
                         refreshButton.setAttributedTitle(attrString, for: .normal)
                         refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), for: .touchUpInside)
                         strongSelf.view.addSubview(refreshButton)

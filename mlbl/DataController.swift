@@ -257,11 +257,27 @@ class DataController {
         request.dataController = self
         
         request.completionBlock = {
-            DispatchQueue.main.async(execute: {
+            DispatchQueue.main.async {
                 completion?(request.error)
-            })
+            }
         }
         self.queue.addOperation(request)
+    }
+    
+    func sendAPNSToken(_ token: String, oldToken: String?, completion: ((NSError?) -> ())?) {
+        let request = SendTokenRequest(token: token, oldToken: oldToken, compId: self.currentCompetitionId())
+        request.dataController = self
+        
+        request.completionBlock = {
+            DispatchQueue.main.async {
+                completion?(request.error)
+            }
+        }
+        self.queue.addOperation(request)
+    }
+    
+    func terminateRequests() {
+        self.queue.cancelAllOperations()
     }
     
     // MARK: - Core Data stack

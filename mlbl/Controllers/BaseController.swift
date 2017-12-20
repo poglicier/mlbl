@@ -51,7 +51,7 @@ class BaseController: UIViewController {
     
     // MARK: - Public
     
-    func willEnterForegroud() {
+    @objc func willEnterForegroud() {
         
     }
 }

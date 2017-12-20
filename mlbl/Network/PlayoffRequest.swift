@@ -58,7 +58,7 @@ class PlayoffRequest: NetworkRequest {
                     do {
                         let all = try context.fetch(fetchRequest)
                         for rank in all {
-                            print("DELETE PlayoffSerie \(rank.team1?.nameRu) - \(rank.team2?.nameRu)")
+                            print("DELETE PlayoffSerie \(rank.team1?.nameRu ?? "") - \(rank.team2?.nameRu ?? "")")
                             context.delete(rank)
                         }
                     }

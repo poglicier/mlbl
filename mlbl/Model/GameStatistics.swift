@@ -109,23 +109,23 @@ public class GameStatistics: NSManagedObject {
         res?.fouls = dict[FoulsKey] as? Int as NSNumber?
         res?.opponentFouls = dict[OpponentFoulsKey] as? Int as NSNumber?
         res?.isStart = dict[IsStartKey] as? Bool as NSNumber?
-        res?.points = dict[PointsKey] as? Int as NSNumber?? ?? 0
-        res?.shot1 = dict[Shot1Key] as? Int as NSNumber?? ?? 0
-        res?.shot2 = dict[Shot2Key] as? Int as NSNumber?? ?? 0
-        res?.shot3 = dict[Shot3Key] as? Int as NSNumber?? ?? 0
-        res?.goal1 = dict[Goal1Key] as? Int as NSNumber?? ?? 0
-        res?.goal2 = dict[Goal2Key] as? Int as NSNumber?? ?? 0
-        res?.goal3 = dict[Goal3Key] as? Int as NSNumber?? ?? 0
-        res?.assists = dict[AssistsKey] as? Int as NSNumber?? ?? 0
-        res?.steals = dict[StealsKey] as? Int as NSNumber?? ?? 0
-        res?.offensiveRebounds = dict[OffReboundsKey] as? Int as NSNumber?? ?? 0
-        res?.defensiveRebounds = dict[DefReboundsKey] as? Int as NSNumber?? ?? 0
-        res?.teamOffensiveRebounds = dict[TeamOffReboundKey] as? Int as NSNumber?? ?? 0
-        res?.teamDefensiveRebounds = dict[TeamDefReboundKey] as? Int as NSNumber?? ?? 0
-        res?.turnovers = dict[TurnoversKey] as? Int as NSNumber?? ?? 0
-        res?.blocks = dict[BlocksKey] as? Int as NSNumber?? ?? 0
-        res?.plusMinus = dict[PlusMinusKey] as? Int as NSNumber?? ?? 0
-        res?.seconds = dict[SecondsKey] as? Int as NSNumber?? ?? 0
+        res?.points = dict[PointsKey] as? NSNumber ?? 0
+        res?.shot1 = dict[Shot1Key] as? NSNumber ?? 0
+        res?.shot2 = dict[Shot2Key] as? NSNumber ?? 0
+        res?.shot3 = dict[Shot3Key] as? NSNumber ?? 0
+        res?.goal1 = dict[Goal1Key] as? NSNumber ?? 0
+        res?.goal2 = dict[Goal2Key] as? NSNumber ?? 0
+        res?.goal3 = dict[Goal3Key] as? NSNumber ?? 0
+        res?.assists = dict[AssistsKey] as? NSNumber ?? 0
+        res?.steals = dict[StealsKey] as? NSNumber ?? 0
+        res?.offensiveRebounds = dict[OffReboundsKey] as? NSNumber ?? 0
+        res?.defensiveRebounds = dict[DefReboundsKey] as? NSNumber ?? 0
+        res?.teamOffensiveRebounds = dict[TeamOffReboundKey] as? NSNumber ?? 0
+        res?.teamDefensiveRebounds = dict[TeamDefReboundKey] as? NSNumber ?? 0
+        res?.turnovers = dict[TurnoversKey] as? NSNumber ?? 0
+        res?.blocks = dict[BlocksKey] as? NSNumber ?? 0
+        res?.plusMinus = dict[PlusMinusKey] as? NSNumber ?? 0
+        res?.seconds = dict[SecondsKey] as? NSNumber ?? 0
         
         return res
     }
