@@ -41,6 +41,7 @@ class GameStatsRequest: NetworkRequest {
     }
     
     override func processData() {
+        print(String(bytes: incomingData as Data, encoding: .utf8))
         do {
             let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let dict = json as? [String:AnyObject] {

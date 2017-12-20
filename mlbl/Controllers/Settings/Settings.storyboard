@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <deployment version="2304" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,10 +14,6 @@
         <scene sceneID="bEl-Iv-haA">
             <objects>
                 <viewController storyboardIdentifier="SettingsController" id="pbM-MN-xos" customClass="SettingsController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="BBv-PI-mGQ"/>
-                        <viewControllerLayoutGuide type="bottom" id="VnW-Lb-J2W"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="zQa-kS-3FR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -50,7 +47,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="settingsCell" id="5Q5-cO-Fsq" customClass="SettingsCell" customModule="mlbl" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="144" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="143.5" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="5Q5-cO-Fsq" id="XFj-Nh-hLU">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -98,11 +95,12 @@
                         </subviews>
                         <color key="backgroundColor" red="0.83137254900000002" green="0.83137254900000002" blue="0.83137254900000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="fJe-Gm-rHJ" firstAttribute="top" secondItem="BBv-PI-mGQ" secondAttribute="bottom" id="0HM-tM-ICZ"/>
-                            <constraint firstAttribute="trailing" secondItem="fJe-Gm-rHJ" secondAttribute="trailing" id="Ljs-ab-fqb"/>
-                            <constraint firstItem="VnW-Lb-J2W" firstAttribute="top" secondItem="fJe-Gm-rHJ" secondAttribute="bottom" id="XLZ-y3-R6g"/>
-                            <constraint firstItem="fJe-Gm-rHJ" firstAttribute="leading" secondItem="zQa-kS-3FR" secondAttribute="leading" id="i8E-SD-Dq5"/>
+                            <constraint firstItem="fJe-Gm-rHJ" firstAttribute="top" secondItem="ykH-4Z-Xrm" secondAttribute="top" id="0HM-tM-ICZ"/>
+                            <constraint firstItem="ykH-4Z-Xrm" firstAttribute="trailing" secondItem="fJe-Gm-rHJ" secondAttribute="trailing" id="Ljs-ab-fqb"/>
+                            <constraint firstItem="ykH-4Z-Xrm" firstAttribute="bottom" secondItem="fJe-Gm-rHJ" secondAttribute="bottom" id="XLZ-y3-R6g"/>
+                            <constraint firstItem="fJe-Gm-rHJ" firstAttribute="leading" secondItem="ykH-4Z-Xrm" secondAttribute="leading" id="i8E-SD-Dq5"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="ykH-4Z-Xrm"/>
                     </view>
                     <connections>
                         <outlet property="appInfoLabel" destination="cHt-7I-r5b" id="g6T-N7-Sj7"/>

@@ -31,6 +31,11 @@ class SendTokenRequest: NetworkRequest {
         request.httpMethod = "POST"
 //        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 //        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        request.setValue(appVersion, forHTTPHeaderField: "appVersion")
+        request.setValue("ios", forHTTPHeaderField: "platform")
+        request.setValue(ProcessInfo().operatingSystemVersionString, forHTTPHeaderField: "platformVersion")
+        request.setValue(UIDevice.current.model, forHTTPHeaderField: "device")
         
         if let _ = self.params {
             request.httpBody = self.createHttpParameters(with: self.params!).data(using: String.Encoding.utf8)
@@ -42,11 +47,12 @@ class SendTokenRequest: NetworkRequest {
     
     override func processData() {
         do {
-            print("DATA", String(data: incomingData as Data, encoding: .utf8))
             let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let result = json as? [String:AnyObject] {
-                if let resultDict = result as? NSNumber {
-                    print("RESULTDICT", resultDict)
+                if let success = result["success"] as? NSNumber {
+                    if !success.boolValue {
+                        self.error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey : NSLocalizedString("apns token sending failed", comment: "")])
+                    }
                 } else {
                     self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : NSLocalizedString("internal server wrong json object error", comment: "")])
                 }

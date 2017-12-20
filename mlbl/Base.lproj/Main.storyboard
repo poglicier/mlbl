@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="PBT-P2-aax">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PBT-P2-aax">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
+        <deployment version="2304" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,10 +15,6 @@
         <scene sceneID="bbK-B7-hYc">
             <objects>
                 <viewController storyboardIdentifier="ChooseCompetitionController" id="QIn-yo-6rW" customClass="ChooseCompetitionController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="YT1-wT-dUL"/>
-                        <viewControllerLayoutGuide type="bottom" id="Fto-yQ-y32"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="DbX-tX-yBE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -53,12 +50,13 @@
                         <color key="backgroundColor" red="0.0" green="0.44313725490196076" blue="0.73725490196078436" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Y6o-Td-YPh" firstAttribute="centerY" secondItem="DbX-tX-yBE" secondAttribute="centerY" id="4By-FC-9ML"/>
-                            <constraint firstAttribute="trailing" secondItem="wqk-Mi-iqK" secondAttribute="trailing" constant="20" id="58F-0a-aPz"/>
-                            <constraint firstItem="wqk-Mi-iqK" firstAttribute="leading" secondItem="DbX-tX-yBE" secondAttribute="leading" constant="20" id="Yq9-ya-70J"/>
-                            <constraint firstItem="Fto-yQ-y32" firstAttribute="top" secondItem="wqk-Mi-iqK" secondAttribute="bottom" constant="20" id="eBp-uY-yVR"/>
-                            <constraint firstItem="wqk-Mi-iqK" firstAttribute="top" secondItem="YT1-wT-dUL" secondAttribute="bottom" constant="20" id="uEx-rI-MlF"/>
-                            <constraint firstItem="Y6o-Td-YPh" firstAttribute="centerX" secondItem="DbX-tX-yBE" secondAttribute="centerX" id="xqu-y7-2Hf"/>
+                            <constraint firstItem="wqk-Mi-iqK" firstAttribute="leading" secondItem="fZE-pJ-3Sl" secondAttribute="leading" constant="20" id="Yq9-ya-70J"/>
+                            <constraint firstItem="fZE-pJ-3Sl" firstAttribute="bottom" secondItem="wqk-Mi-iqK" secondAttribute="bottom" constant="20" id="eBp-uY-yVR"/>
+                            <constraint firstItem="fZE-pJ-3Sl" firstAttribute="trailing" secondItem="wqk-Mi-iqK" secondAttribute="trailing" constant="20" id="kMf-OL-hFg"/>
+                            <constraint firstItem="wqk-Mi-iqK" firstAttribute="top" secondItem="fZE-pJ-3Sl" secondAttribute="top" constant="20" id="uEx-rI-MlF"/>
+                            <constraint firstItem="Y6o-Td-YPh" firstAttribute="centerX" secondItem="fZE-pJ-3Sl" secondAttribute="centerX" id="xqu-y7-2Hf"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="fZE-pJ-3Sl"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="hvR-aY-mcT"/>
@@ -92,10 +90,6 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController storyboardIdentifier="mainController" automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="MainController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -246,18 +240,19 @@
                         </subviews>
                         <color key="backgroundColor" red="0.71764705882352942" green="0.25490196078431371" blue="0.074509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="tCJ-L1-JEA" secondAttribute="trailing" id="0MJ-6j-uhM"/>
-                            <constraint firstItem="tCJ-L1-JEA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1Gs-Kf-eHu"/>
-                            <constraint firstAttribute="trailing" secondItem="QT1-IJ-G1g" secondAttribute="trailing" id="1fw-ew-YJf"/>
-                            <constraint firstItem="QT1-IJ-G1g" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="3xG-Lg-u1q"/>
+                            <constraint firstItem="xCa-Sw-6bO" firstAttribute="trailing" secondItem="tCJ-L1-JEA" secondAttribute="trailing" id="0MJ-6j-uhM"/>
+                            <constraint firstItem="tCJ-L1-JEA" firstAttribute="leading" secondItem="xCa-Sw-6bO" secondAttribute="leading" id="1Gs-Kf-eHu"/>
+                            <constraint firstItem="xCa-Sw-6bO" firstAttribute="trailing" secondItem="QT1-IJ-G1g" secondAttribute="trailing" id="1fw-ew-YJf"/>
+                            <constraint firstItem="QT1-IJ-G1g" firstAttribute="top" secondItem="xCa-Sw-6bO" secondAttribute="top" id="3xG-Lg-u1q"/>
                             <constraint firstItem="QT1-IJ-G1g" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="870-cg-5d5"/>
-                            <constraint firstItem="QT1-IJ-G1g" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="LCs-9W-BLQ"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="tCJ-L1-JEA" secondAttribute="bottom" id="Vw4-Wg-CQA"/>
+                            <constraint firstItem="QT1-IJ-G1g" firstAttribute="leading" secondItem="xCa-Sw-6bO" secondAttribute="leading" id="LCs-9W-BLQ"/>
+                            <constraint firstItem="xCa-Sw-6bO" firstAttribute="bottom" secondItem="tCJ-L1-JEA" secondAttribute="bottom" id="Vw4-Wg-CQA"/>
                             <constraint firstItem="QT1-IJ-G1g" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="WON-GL-5gc"/>
                             <constraint firstItem="CId-vU-Q2G" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="fpb-wb-fn9"/>
                             <constraint firstItem="tCJ-L1-JEA" firstAttribute="top" secondItem="QT1-IJ-G1g" secondAttribute="bottom" id="g7v-p3-BQV"/>
-                            <constraint firstItem="QT1-IJ-G1g" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="sge-aD-sY4"/>
+                            <constraint firstItem="QT1-IJ-G1g" firstAttribute="top" secondItem="xCa-Sw-6bO" secondAttribute="top" id="sge-aD-sY4"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="xCa-Sw-6bO"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="fpb-wb-fn9"/>
@@ -293,10 +288,6 @@
         <scene sceneID="gyy-Ns-Tsy">
             <objects>
                 <viewController id="r1A-Xb-dbE" customClass="GamesController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="qGb-VR-SD0"/>
-                        <viewControllerLayoutGuide type="bottom" id="maL-yJ-nCp"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="S4S-yn-NBu">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -378,18 +369,19 @@
                         <color key="backgroundColor" red="0.83137254901960778" green="0.83137254901960778" blue="0.83137254901960778" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="D9A-SL-3rK" firstAttribute="centerY" secondItem="S4S-yn-NBu" secondAttribute="centerY" id="48m-dO-KI1"/>
-                            <constraint firstItem="A3G-ks-NlG" firstAttribute="leading" secondItem="S4S-yn-NBu" secondAttribute="leading" id="4nj-iq-8O5"/>
-                            <constraint firstItem="D9A-SL-3rK" firstAttribute="centerX" secondItem="S4S-yn-NBu" secondAttribute="centerX" id="B5X-DA-MbF"/>
-                            <constraint firstAttribute="trailing" secondItem="Gen-Fk-gfi" secondAttribute="trailing" id="Fb5-kq-eaU"/>
-                            <constraint firstItem="maL-yJ-nCp" firstAttribute="top" secondItem="Gen-Fk-gfi" secondAttribute="bottom" id="PQA-ZX-rUp"/>
-                            <constraint firstItem="Gen-Fk-gfi" firstAttribute="leading" secondItem="S4S-yn-NBu" secondAttribute="leading" id="SB5-Jt-kLW"/>
-                            <constraint firstAttribute="trailing" secondItem="A3G-ks-NlG" secondAttribute="trailing" id="VWz-OT-wg4"/>
-                            <constraint firstItem="Gen-Fk-gfi" firstAttribute="top" secondItem="qGb-VR-SD0" secondAttribute="bottom" id="Yfg-tN-5lb"/>
-                            <constraint firstItem="A3G-ks-NlG" firstAttribute="top" secondItem="qGb-VR-SD0" secondAttribute="bottom" id="jd6-Gt-uIo"/>
-                            <constraint firstItem="Gen-Fk-gfi" firstAttribute="centerX" secondItem="S4S-yn-NBu" secondAttribute="centerX" id="tnC-qA-DD0"/>
+                            <constraint firstItem="A3G-ks-NlG" firstAttribute="leading" secondItem="7tA-1A-6vQ" secondAttribute="leading" id="4nj-iq-8O5"/>
+                            <constraint firstItem="D9A-SL-3rK" firstAttribute="centerX" secondItem="7tA-1A-6vQ" secondAttribute="centerX" id="B5X-DA-MbF"/>
+                            <constraint firstItem="7tA-1A-6vQ" firstAttribute="trailing" secondItem="Gen-Fk-gfi" secondAttribute="trailing" id="Fb5-kq-eaU"/>
+                            <constraint firstItem="7tA-1A-6vQ" firstAttribute="bottom" secondItem="Gen-Fk-gfi" secondAttribute="bottom" id="PQA-ZX-rUp"/>
+                            <constraint firstItem="Gen-Fk-gfi" firstAttribute="leading" secondItem="7tA-1A-6vQ" secondAttribute="leading" id="SB5-Jt-kLW"/>
+                            <constraint firstItem="7tA-1A-6vQ" firstAttribute="trailing" secondItem="A3G-ks-NlG" secondAttribute="trailing" id="VWz-OT-wg4"/>
+                            <constraint firstItem="Gen-Fk-gfi" firstAttribute="top" secondItem="7tA-1A-6vQ" secondAttribute="top" id="Yfg-tN-5lb"/>
+                            <constraint firstItem="A3G-ks-NlG" firstAttribute="top" secondItem="7tA-1A-6vQ" secondAttribute="top" id="jd6-Gt-uIo"/>
+                            <constraint firstItem="Gen-Fk-gfi" firstAttribute="centerX" secondItem="7tA-1A-6vQ" secondAttribute="centerX" id="tnC-qA-DD0"/>
                             <constraint firstItem="Gen-Fk-gfi" firstAttribute="width" secondItem="S4S-yn-NBu" secondAttribute="width" id="uDZ-5h-9fr"/>
                             <constraint firstItem="A3G-ks-NlG" firstAttribute="bottom" secondItem="Gen-Fk-gfi" secondAttribute="top" id="wsj-n7-IGK"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="7tA-1A-6vQ"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="Fb5-kq-eaU"/>
@@ -416,11 +408,7 @@
         <!--Game Controller-->
         <scene sceneID="zlf-yY-jmz">
             <objects>
-                <viewController id="ycI-sX-n8Y" customClass="GameController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Xt0-YU-LBu"/>
-                        <viewControllerLayoutGuide type="bottom" id="TyM-BB-gC9"/>
-                    </layoutGuides>
+                <viewController storyboardIdentifier="GameController" id="ycI-sX-n8Y" customClass="GameController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8WR-Rz-Hnc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -704,16 +692,17 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="TyM-BB-gC9" firstAttribute="top" secondItem="eSz-ag-Zgq" secondAttribute="bottom" id="E2B-GW-N13"/>
-                            <constraint firstItem="Zik-K9-sV1" firstAttribute="leading" secondItem="8WR-Rz-Hnc" secondAttribute="leading" id="InN-iB-McO"/>
-                            <constraint firstItem="Zik-K9-sV1" firstAttribute="top" secondItem="Xt0-YU-LBu" secondAttribute="bottom" id="LeI-aG-x6o"/>
-                            <constraint firstItem="eSz-ag-Zgq" firstAttribute="top" secondItem="Xt0-YU-LBu" secondAttribute="bottom" id="SWZ-Td-TXZ"/>
-                            <constraint firstAttribute="trailing" secondItem="eSz-ag-Zgq" secondAttribute="trailing" id="cz5-SL-ceO"/>
-                            <constraint firstAttribute="trailing" secondItem="Zik-K9-sV1" secondAttribute="trailing" id="frB-Vl-FV0"/>
-                            <constraint firstItem="TyM-BB-gC9" firstAttribute="top" secondItem="Zik-K9-sV1" secondAttribute="bottom" id="uDH-ti-s7O"/>
-                            <constraint firstItem="Zik-K9-sV1" firstAttribute="top" secondItem="Xt0-YU-LBu" secondAttribute="bottom" id="zLP-W4-bEP"/>
-                            <constraint firstItem="eSz-ag-Zgq" firstAttribute="leading" secondItem="8WR-Rz-Hnc" secondAttribute="leading" id="zMf-DB-HFV"/>
+                            <constraint firstItem="vSS-P8-k07" firstAttribute="bottom" secondItem="eSz-ag-Zgq" secondAttribute="bottom" id="E2B-GW-N13"/>
+                            <constraint firstItem="Zik-K9-sV1" firstAttribute="leading" secondItem="vSS-P8-k07" secondAttribute="leading" id="InN-iB-McO"/>
+                            <constraint firstItem="Zik-K9-sV1" firstAttribute="top" secondItem="vSS-P8-k07" secondAttribute="top" id="LeI-aG-x6o"/>
+                            <constraint firstItem="eSz-ag-Zgq" firstAttribute="top" secondItem="vSS-P8-k07" secondAttribute="top" id="SWZ-Td-TXZ"/>
+                            <constraint firstItem="vSS-P8-k07" firstAttribute="trailing" secondItem="eSz-ag-Zgq" secondAttribute="trailing" id="cz5-SL-ceO"/>
+                            <constraint firstItem="vSS-P8-k07" firstAttribute="trailing" secondItem="Zik-K9-sV1" secondAttribute="trailing" id="frB-Vl-FV0"/>
+                            <constraint firstItem="vSS-P8-k07" firstAttribute="bottom" secondItem="Zik-K9-sV1" secondAttribute="bottom" id="uDH-ti-s7O"/>
+                            <constraint firstItem="Zik-K9-sV1" firstAttribute="top" secondItem="vSS-P8-k07" secondAttribute="top" id="zLP-W4-bEP"/>
+                            <constraint firstItem="eSz-ag-Zgq" firstAttribute="leading" secondItem="vSS-P8-k07" secondAttribute="leading" id="zMf-DB-HFV"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="vSS-P8-k07"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="LeI-aG-x6o"/>
@@ -734,10 +723,6 @@
         <scene sceneID="jka-Lc-Cao">
             <objects>
                 <viewController id="ikz-eb-Vw4" customClass="PlayoffGamesController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="UhT-ay-OBc"/>
-                        <viewControllerLayoutGuide type="bottom" id="vZo-EE-05p"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nyG-eR-9FM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -762,13 +747,14 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="wZ5-h4-Qx7" firstAttribute="top" secondItem="UhT-ay-OBc" secondAttribute="bottom" id="0ML-Cx-tuo"/>
+                            <constraint firstItem="wZ5-h4-Qx7" firstAttribute="top" secondItem="p7Q-EY-DFc" secondAttribute="top" id="0ML-Cx-tuo"/>
                             <constraint firstItem="Cet-UK-ZZi" firstAttribute="centerY" secondItem="nyG-eR-9FM" secondAttribute="centerY" id="5vj-Jx-ntm"/>
-                            <constraint firstItem="vZo-EE-05p" firstAttribute="top" secondItem="wZ5-h4-Qx7" secondAttribute="bottom" id="Pvz-ut-GlQ"/>
-                            <constraint firstAttribute="trailing" secondItem="wZ5-h4-Qx7" secondAttribute="trailing" id="WDP-Gd-aNh"/>
-                            <constraint firstItem="wZ5-h4-Qx7" firstAttribute="leading" secondItem="nyG-eR-9FM" secondAttribute="leading" id="cjb-JZ-bYz"/>
-                            <constraint firstItem="Cet-UK-ZZi" firstAttribute="centerX" secondItem="nyG-eR-9FM" secondAttribute="centerX" id="p8G-Ch-igs"/>
+                            <constraint firstItem="p7Q-EY-DFc" firstAttribute="bottom" secondItem="wZ5-h4-Qx7" secondAttribute="bottom" id="Pvz-ut-GlQ"/>
+                            <constraint firstItem="p7Q-EY-DFc" firstAttribute="trailing" secondItem="wZ5-h4-Qx7" secondAttribute="trailing" id="WDP-Gd-aNh"/>
+                            <constraint firstItem="wZ5-h4-Qx7" firstAttribute="leading" secondItem="p7Q-EY-DFc" secondAttribute="leading" id="cjb-JZ-bYz"/>
+                            <constraint firstItem="Cet-UK-ZZi" firstAttribute="centerX" secondItem="p7Q-EY-DFc" secondAttribute="centerX" id="p8G-Ch-igs"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="p7Q-EY-DFc"/>
                     </view>
                     <connections>
                         <outlet property="emptyLabel" destination="Cet-UK-ZZi" id="euA-hf-V0e"/>
@@ -783,11 +769,7 @@
         <!--Player Controller-->
         <scene sceneID="zbA-zk-MUe">
             <objects>
-                <viewController id="M0Z-ID-aCQ" customClass="PlayerController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="lyR-t8-2Az"/>
-                        <viewControllerLayoutGuide type="bottom" id="KH9-92-l4G"/>
-                    </layoutGuides>
+                <viewController storyboardIdentifier="PlayerController" id="M0Z-ID-aCQ" customClass="PlayerController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Rb-SC-5qT">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1219,13 +1201,14 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="L3J-MO-WGT" firstAttribute="centerX" secondItem="0Rb-SC-5qT" secondAttribute="centerX" id="1iE-PN-ZHl"/>
-                            <constraint firstAttribute="trailing" secondItem="pvc-jJ-VPr" secondAttribute="trailing" id="2Sf-5J-lzh"/>
-                            <constraint firstItem="KH9-92-l4G" firstAttribute="top" secondItem="pvc-jJ-VPr" secondAttribute="bottom" id="Qb0-EM-Fpz"/>
+                            <constraint firstItem="L3J-MO-WGT" firstAttribute="centerX" secondItem="ArV-E9-KIs" secondAttribute="centerX" id="1iE-PN-ZHl"/>
+                            <constraint firstItem="ArV-E9-KIs" firstAttribute="trailing" secondItem="pvc-jJ-VPr" secondAttribute="trailing" id="2Sf-5J-lzh"/>
+                            <constraint firstItem="ArV-E9-KIs" firstAttribute="bottom" secondItem="pvc-jJ-VPr" secondAttribute="bottom" id="Qb0-EM-Fpz"/>
                             <constraint firstItem="L3J-MO-WGT" firstAttribute="centerY" secondItem="0Rb-SC-5qT" secondAttribute="centerY" id="jzV-xw-IFc"/>
-                            <constraint firstItem="pvc-jJ-VPr" firstAttribute="top" secondItem="lyR-t8-2Az" secondAttribute="bottom" id="qXd-bq-kLz"/>
-                            <constraint firstItem="pvc-jJ-VPr" firstAttribute="leading" secondItem="0Rb-SC-5qT" secondAttribute="leading" id="ycH-Va-cli"/>
+                            <constraint firstItem="pvc-jJ-VPr" firstAttribute="top" secondItem="ArV-E9-KIs" secondAttribute="top" id="qXd-bq-kLz"/>
+                            <constraint firstItem="pvc-jJ-VPr" firstAttribute="leading" secondItem="ArV-E9-KIs" secondAttribute="leading" id="ycH-Va-cli"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="ArV-E9-KIs"/>
                     </view>
                     <connections>
                         <outlet property="emptyLabel" destination="L3J-MO-WGT" id="tlv-BJ-AOM"/>
@@ -1240,11 +1223,7 @@
         <!--Team Controller-->
         <scene sceneID="r6R-Fh-VKi">
             <objects>
-                <viewController id="iEg-ec-LtL" customClass="TeamController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="aYO-PT-fQH"/>
-                        <viewControllerLayoutGuide type="bottom" id="M6V-Wv-3bs"/>
-                    </layoutGuides>
+                <viewController storyboardIdentifier="TeamController" id="iEg-ec-LtL" customClass="TeamController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oyY-Y2-gzT">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1526,13 +1505,14 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="M6V-Wv-3bs" firstAttribute="top" secondItem="rNY-5q-CyO" secondAttribute="bottom" id="2Bi-nZ-h4v"/>
-                            <constraint firstAttribute="trailing" secondItem="rNY-5q-CyO" secondAttribute="trailing" id="8iW-2S-d8e"/>
-                            <constraint firstItem="rNY-5q-CyO" firstAttribute="leading" secondItem="oyY-Y2-gzT" secondAttribute="leading" id="ClM-CC-SWV"/>
-                            <constraint firstItem="rNY-5q-CyO" firstAttribute="top" secondItem="aYO-PT-fQH" secondAttribute="bottom" id="TUK-NP-lwT"/>
+                            <constraint firstItem="BYP-Ad-WN9" firstAttribute="bottom" secondItem="rNY-5q-CyO" secondAttribute="bottom" id="2Bi-nZ-h4v"/>
+                            <constraint firstItem="BYP-Ad-WN9" firstAttribute="trailing" secondItem="rNY-5q-CyO" secondAttribute="trailing" id="8iW-2S-d8e"/>
+                            <constraint firstItem="rNY-5q-CyO" firstAttribute="leading" secondItem="BYP-Ad-WN9" secondAttribute="leading" id="ClM-CC-SWV"/>
+                            <constraint firstItem="rNY-5q-CyO" firstAttribute="top" secondItem="BYP-Ad-WN9" secondAttribute="top" id="TUK-NP-lwT"/>
                             <constraint firstItem="AJR-cc-cE5" firstAttribute="centerY" secondItem="oyY-Y2-gzT" secondAttribute="centerY" id="ZQ8-DB-2XM"/>
-                            <constraint firstItem="AJR-cc-cE5" firstAttribute="centerX" secondItem="oyY-Y2-gzT" secondAttribute="centerX" id="r5I-c1-2DR"/>
+                            <constraint firstItem="AJR-cc-cE5" firstAttribute="centerX" secondItem="BYP-Ad-WN9" secondAttribute="centerX" id="r5I-c1-2DR"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="BYP-Ad-WN9"/>
                     </view>
                     <connections>
                         <outlet property="emptyLabel" destination="AJR-cc-cE5" id="6vX-4E-Aq6"/>
@@ -1549,10 +1529,6 @@
         <scene sceneID="n8z-gi-S06">
             <objects>
                 <viewController id="uab-Yy-igx" customClass="TableController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="loa-40-z36"/>
-                        <viewControllerLayoutGuide type="bottom" id="2qa-mY-j3J"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="tRp-Tc-uIs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1953,20 +1929,21 @@
                         <constraints>
                             <constraint firstItem="WUK-QH-VAk" firstAttribute="bottom" secondItem="CcY-d0-bVG" secondAttribute="bottom" id="60w-jb-Bsg"/>
                             <constraint firstItem="WUK-QH-VAk" firstAttribute="leading" secondItem="CcY-d0-bVG" secondAttribute="leading" id="8U7-Oc-RHM"/>
-                            <constraint firstItem="dBX-6E-gD7" firstAttribute="centerX" secondItem="tRp-Tc-uIs" secondAttribute="centerX" id="GPk-t3-AEb"/>
-                            <constraint firstItem="XQy-EV-dBe" firstAttribute="top" secondItem="loa-40-z36" secondAttribute="bottom" id="HRO-dm-qG5"/>
-                            <constraint firstItem="WUK-QH-VAk" firstAttribute="top" secondItem="loa-40-z36" secondAttribute="bottom" priority="750" id="Jri-g6-4Ln"/>
+                            <constraint firstItem="dBX-6E-gD7" firstAttribute="centerX" secondItem="xRt-Hg-ecI" secondAttribute="centerX" id="GPk-t3-AEb"/>
+                            <constraint firstItem="XQy-EV-dBe" firstAttribute="top" secondItem="xRt-Hg-ecI" secondAttribute="top" id="HRO-dm-qG5"/>
+                            <constraint firstItem="WUK-QH-VAk" firstAttribute="top" secondItem="xRt-Hg-ecI" secondAttribute="top" priority="750" id="Jri-g6-4Ln"/>
                             <constraint firstItem="WUK-QH-VAk" firstAttribute="trailing" secondItem="CcY-d0-bVG" secondAttribute="trailing" id="QPj-lv-7Mm"/>
                             <constraint firstItem="WUK-QH-VAk" firstAttribute="top" secondItem="XQy-EV-dBe" secondAttribute="bottom" id="Rew-Yo-cqG"/>
-                            <constraint firstItem="2qa-mY-j3J" firstAttribute="top" secondItem="WUK-QH-VAk" secondAttribute="bottom" id="Tjg-rz-E9b"/>
-                            <constraint firstItem="WUK-QH-VAk" firstAttribute="top" secondItem="loa-40-z36" secondAttribute="bottom" id="dbF-eQ-1OW"/>
+                            <constraint firstItem="xRt-Hg-ecI" firstAttribute="bottom" secondItem="WUK-QH-VAk" secondAttribute="bottom" id="Tjg-rz-E9b"/>
+                            <constraint firstItem="WUK-QH-VAk" firstAttribute="top" secondItem="xRt-Hg-ecI" secondAttribute="top" id="dbF-eQ-1OW"/>
                             <constraint firstItem="WUK-QH-VAk" firstAttribute="top" secondItem="CcY-d0-bVG" secondAttribute="top" id="fLu-HG-HoR"/>
-                            <constraint firstAttribute="trailing" secondItem="WUK-QH-VAk" secondAttribute="trailing" id="gPK-xz-K7G"/>
+                            <constraint firstItem="xRt-Hg-ecI" firstAttribute="trailing" secondItem="WUK-QH-VAk" secondAttribute="trailing" id="gPK-xz-K7G"/>
                             <constraint firstItem="dBX-6E-gD7" firstAttribute="centerY" secondItem="tRp-Tc-uIs" secondAttribute="centerY" id="kLK-5g-Fup"/>
-                            <constraint firstItem="WUK-QH-VAk" firstAttribute="leading" secondItem="tRp-Tc-uIs" secondAttribute="leading" id="mdV-QF-wQ2"/>
-                            <constraint firstAttribute="trailing" secondItem="XQy-EV-dBe" secondAttribute="trailing" id="tJ9-ej-AvM"/>
-                            <constraint firstItem="XQy-EV-dBe" firstAttribute="leading" secondItem="tRp-Tc-uIs" secondAttribute="leading" id="uLX-1x-gGG"/>
+                            <constraint firstItem="WUK-QH-VAk" firstAttribute="leading" secondItem="xRt-Hg-ecI" secondAttribute="leading" id="mdV-QF-wQ2"/>
+                            <constraint firstItem="xRt-Hg-ecI" firstAttribute="trailing" secondItem="XQy-EV-dBe" secondAttribute="trailing" id="tJ9-ej-AvM"/>
+                            <constraint firstItem="XQy-EV-dBe" firstAttribute="leading" secondItem="xRt-Hg-ecI" secondAttribute="leading" id="uLX-1x-gGG"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="xRt-Hg-ecI"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="dbF-eQ-1OW"/>
@@ -1994,10 +1971,6 @@
         <scene sceneID="HDm-WT-K0e">
             <objects>
                 <viewController id="Id3-iN-xv2" customClass="PlayersController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Mhd-mg-vTg"/>
-                        <viewControllerLayoutGuide type="bottom" id="JLm-Bx-6jO"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rJL-r6-tIA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2031,12 +2004,13 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="N9P-Us-Lr4" firstAttribute="centerY" secondItem="rJL-r6-tIA" secondAttribute="centerY" id="5LZ-TO-6KZ"/>
-                            <constraint firstItem="ZR5-Vm-cab" firstAttribute="leading" secondItem="rJL-r6-tIA" secondAttribute="leading" id="BMf-0Q-l4b"/>
-                            <constraint firstItem="JLm-Bx-6jO" firstAttribute="top" secondItem="ZR5-Vm-cab" secondAttribute="bottom" id="gdR-NF-zoZ"/>
-                            <constraint firstAttribute="trailing" secondItem="ZR5-Vm-cab" secondAttribute="trailing" id="iWl-fK-KUL"/>
-                            <constraint firstItem="N9P-Us-Lr4" firstAttribute="centerX" secondItem="rJL-r6-tIA" secondAttribute="centerX" id="mmP-kx-es0"/>
-                            <constraint firstItem="ZR5-Vm-cab" firstAttribute="top" secondItem="Mhd-mg-vTg" secondAttribute="bottom" id="q7L-wz-GdS"/>
+                            <constraint firstItem="ZR5-Vm-cab" firstAttribute="leading" secondItem="j09-tb-Npt" secondAttribute="leading" id="BMf-0Q-l4b"/>
+                            <constraint firstItem="j09-tb-Npt" firstAttribute="bottom" secondItem="ZR5-Vm-cab" secondAttribute="bottom" id="gdR-NF-zoZ"/>
+                            <constraint firstItem="j09-tb-Npt" firstAttribute="trailing" secondItem="ZR5-Vm-cab" secondAttribute="trailing" id="iWl-fK-KUL"/>
+                            <constraint firstItem="N9P-Us-Lr4" firstAttribute="centerX" secondItem="j09-tb-Npt" secondAttribute="centerX" id="mmP-kx-es0"/>
+                            <constraint firstItem="ZR5-Vm-cab" firstAttribute="top" secondItem="j09-tb-Npt" secondAttribute="top" id="q7L-wz-GdS"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="j09-tb-Npt"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <connections>
@@ -2054,10 +2028,6 @@
         <scene sceneID="eZ6-Ue-0jL">
             <objects>
                 <viewController id="HDr-fg-GWs" customClass="StatisticsController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Bcz-G0-1qJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="NNr-HI-BCi"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="0Fk-jS-QPp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2249,21 +2219,22 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6p4-9b-fRJ" firstAttribute="leading" secondItem="0Fk-jS-QPp" secondAttribute="leading" id="9aP-rd-UWw"/>
+                            <constraint firstItem="6p4-9b-fRJ" firstAttribute="leading" secondItem="brg-nI-SKh" secondAttribute="leading" id="9aP-rd-UWw"/>
                             <constraint firstItem="iN3-dA-XuJ" firstAttribute="top" secondItem="6p4-9b-fRJ" secondAttribute="bottom" id="Miz-PW-NtB"/>
-                            <constraint firstItem="mD2-Ly-ueg" firstAttribute="leading" secondItem="0Fk-jS-QPp" secondAttribute="leading" id="NrM-bc-oWQ"/>
-                            <constraint firstItem="iN3-dA-XuJ" firstAttribute="leading" secondItem="0Fk-jS-QPp" secondAttribute="leading" id="Tig-bi-b07"/>
+                            <constraint firstItem="mD2-Ly-ueg" firstAttribute="leading" secondItem="brg-nI-SKh" secondAttribute="leading" id="NrM-bc-oWQ"/>
+                            <constraint firstItem="iN3-dA-XuJ" firstAttribute="leading" secondItem="brg-nI-SKh" secondAttribute="leading" id="Tig-bi-b07"/>
                             <constraint firstItem="8Cb-oN-rvK" firstAttribute="centerY" secondItem="0Fk-jS-QPp" secondAttribute="centerY" id="TvT-J0-dcA"/>
-                            <constraint firstAttribute="trailing" secondItem="mD2-Ly-ueg" secondAttribute="trailing" id="Y7i-pF-4nI"/>
-                            <constraint firstItem="NNr-HI-BCi" firstAttribute="top" secondItem="mD2-Ly-ueg" secondAttribute="bottom" id="ZfK-wO-JO5"/>
-                            <constraint firstItem="6p4-9b-fRJ" firstAttribute="top" secondItem="Bcz-G0-1qJ" secondAttribute="bottom" id="ahs-0a-lfh"/>
+                            <constraint firstItem="brg-nI-SKh" firstAttribute="trailing" secondItem="mD2-Ly-ueg" secondAttribute="trailing" id="Y7i-pF-4nI"/>
+                            <constraint firstItem="brg-nI-SKh" firstAttribute="bottom" secondItem="mD2-Ly-ueg" secondAttribute="bottom" id="ZfK-wO-JO5"/>
+                            <constraint firstItem="6p4-9b-fRJ" firstAttribute="top" secondItem="brg-nI-SKh" secondAttribute="top" id="ahs-0a-lfh"/>
                             <constraint firstItem="mD2-Ly-ueg" firstAttribute="top" secondItem="6p4-9b-fRJ" secondAttribute="bottom" id="cdW-cm-E8l"/>
-                            <constraint firstAttribute="trailing" secondItem="iN3-dA-XuJ" secondAttribute="trailing" id="iwl-CB-Tpi"/>
-                            <constraint firstItem="8Cb-oN-rvK" firstAttribute="centerX" secondItem="0Fk-jS-QPp" secondAttribute="centerX" id="kra-xk-k9R"/>
-                            <constraint firstAttribute="trailing" secondItem="6p4-9b-fRJ" secondAttribute="trailing" id="l4y-ZV-tZW"/>
-                            <constraint firstItem="NNr-HI-BCi" firstAttribute="top" secondItem="mD2-Ly-ueg" secondAttribute="bottom" id="njD-Pa-KOJ"/>
-                            <constraint firstItem="NNr-HI-BCi" firstAttribute="top" secondItem="iN3-dA-XuJ" secondAttribute="bottom" id="qMb-nZ-0Lt"/>
+                            <constraint firstItem="brg-nI-SKh" firstAttribute="trailing" secondItem="iN3-dA-XuJ" secondAttribute="trailing" id="iwl-CB-Tpi"/>
+                            <constraint firstItem="8Cb-oN-rvK" firstAttribute="centerX" secondItem="brg-nI-SKh" secondAttribute="centerX" id="kra-xk-k9R"/>
+                            <constraint firstItem="brg-nI-SKh" firstAttribute="trailing" secondItem="6p4-9b-fRJ" secondAttribute="trailing" id="l4y-ZV-tZW"/>
+                            <constraint firstItem="brg-nI-SKh" firstAttribute="bottom" secondItem="mD2-Ly-ueg" secondAttribute="bottom" id="njD-Pa-KOJ"/>
+                            <constraint firstItem="brg-nI-SKh" firstAttribute="bottom" secondItem="iN3-dA-XuJ" secondAttribute="bottom" id="qMb-nZ-0Lt"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="brg-nI-SKh"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="njD-Pa-KOJ"/>
@@ -2289,14 +2260,11 @@
         <scene sceneID="yQz-8n-6re">
             <objects>
                 <viewController id="Ji9-Lh-3HY" customClass="ContainerController" customModule="mlbl" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="4tc-cZ-xWI"/>
-                        <viewControllerLayoutGuide type="bottom" id="CZN-O3-R7T"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="D1r-zg-iW7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="HyE-G3-K5G"/>
                     </view>
                     <connections>
                         <segue destination="r1A-Xb-dbE" kind="custom" identifier="Games" customClass="EmptySegue" customModule="mlbl" customModuleProvider="target" id="kee-mN-MxE"/>
@@ -2318,6 +2286,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="s3r-by-vqU"/>
-        <segue reference="Aeb-vT-jBd"/>
+        <segue reference="vhc-iV-55l"/>
     </inferredMetricsTieBreakers>
 </document>
