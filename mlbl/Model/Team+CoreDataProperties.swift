@@ -2,17 +2,18 @@
 //  Team+CoreDataProperties.swift
 //  
 //
-//  Created by Valentin Shamardin on 10.10.16.
+//  Created by Valentin Shamardin on 29.12.2017.
 //
 //
 
 import Foundation
 import CoreData
 
+
 extension Team {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Team> {
-        return NSFetchRequest<Team>(entityName: "Team");
+        return NSFetchRequest<Team>(entityName: "Team")
     }
 
     @NSManaged public var nameEn: String?
@@ -22,15 +23,16 @@ extension Team {
     @NSManaged public var regionNameRu: String?
     @NSManaged public var shortNameEn: String?
     @NSManaged public var shortNameRu: String?
+    @NSManaged public var subscribed: NSNumber?
     @NSManaged public var gameStatistics: NSSet?
     @NSManaged public var players: NSSet?
+    @NSManaged public var playerStatisticsA: NSSet?
+    @NSManaged public var playerStatisticsB: NSSet?
     @NSManaged public var playoffSeries1: NSSet?
     @NSManaged public var playoffSeries2: NSSet?
     @NSManaged public var roundRanks: NSSet?
     @NSManaged public var seasonTeams: NSSet?
     @NSManaged public var teamStatistics: NSSet?
-    @NSManaged public var playerStatisticsA: NSSet?
-    @NSManaged public var playerStatisticsB: NSSet?
 
 }
 
@@ -65,6 +67,40 @@ extension Team {
 
     @objc(removePlayers:)
     @NSManaged public func removeFromPlayers(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for playerStatisticsA
+extension Team {
+
+    @objc(addPlayerStatisticsAObject:)
+    @NSManaged public func addToPlayerStatisticsA(_ value: PlayerStatistics)
+
+    @objc(removePlayerStatisticsAObject:)
+    @NSManaged public func removeFromPlayerStatisticsA(_ value: PlayerStatistics)
+
+    @objc(addPlayerStatisticsA:)
+    @NSManaged public func addToPlayerStatisticsA(_ values: NSSet)
+
+    @objc(removePlayerStatisticsA:)
+    @NSManaged public func removeFromPlayerStatisticsA(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for playerStatisticsB
+extension Team {
+
+    @objc(addPlayerStatisticsBObject:)
+    @NSManaged public func addToPlayerStatisticsB(_ value: PlayerStatistics)
+
+    @objc(removePlayerStatisticsBObject:)
+    @NSManaged public func removeFromPlayerStatisticsB(_ value: PlayerStatistics)
+
+    @objc(addPlayerStatisticsB:)
+    @NSManaged public func addToPlayerStatisticsB(_ values: NSSet)
+
+    @objc(removePlayerStatisticsB:)
+    @NSManaged public func removeFromPlayerStatisticsB(_ values: NSSet)
 
 }
 
@@ -150,39 +186,5 @@ extension Team {
 
     @objc(removeTeamStatistics:)
     @NSManaged public func removeFromTeamStatistics(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for playerStatisticsA
-extension Team {
-
-    @objc(addPlayerStatisticsAObject:)
-    @NSManaged public func addToPlayerStatisticsA(_ value: GameStatistics)
-
-    @objc(removePlayerStatisticsAObject:)
-    @NSManaged public func removeFromPlayerStatisticsA(_ value: GameStatistics)
-
-    @objc(addPlayerStatisticsA:)
-    @NSManaged public func addToPlayerStatisticsA(_ values: NSSet)
-
-    @objc(removePlayerStatisticsA:)
-    @NSManaged public func removeFromPlayerStatisticsA(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for playerStatisticsB
-extension Team {
-
-    @objc(addPlayerStatisticsBObject:)
-    @NSManaged public func addToPlayerStatisticsB(_ value: GameStatistics)
-
-    @objc(removePlayerStatisticsBObject:)
-    @NSManaged public func removeFromPlayerStatisticsB(_ value: GameStatistics)
-
-    @objc(addPlayerStatisticsB:)
-    @NSManaged public func addToPlayerStatisticsB(_ values: NSSet)
-
-    @objc(removePlayerStatisticsB:)
-    @NSManaged public func removeFromPlayerStatisticsB(_ values: NSSet)
 
 }

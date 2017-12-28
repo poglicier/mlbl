@@ -44,6 +44,7 @@ class ContainerController: BaseController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         (segue.destination as? BaseController)?.dataController = self.dataController
+        (segue.destination as? BaseController)?.pushesController = self.pushesController
         
         if self.childViewControllers.count > 0 {
             segue.destination.view.frame = self.view.bounds
@@ -88,6 +89,7 @@ class ContainerController: BaseController {
             
             if let _ = toViewController {
                 (toViewController as? BaseController)?.dataController = self.dataController
+                (toViewController as? BaseController)?.pushesController = self.pushesController
                 
                 toViewController!.view.frame = self.view.bounds
                 self.activeController?.willMove(toParentViewController: toViewController)

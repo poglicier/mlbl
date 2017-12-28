@@ -383,7 +383,7 @@ class StatisticCell: UITableViewCell {
                 self.playerLabel.lineBreakMode = .byClipping
                 if var playerName = isLanguageRu ? gameStatistics.player?.lastNameRu : gameStatistics.player?.lastNameEn {
                     if let firstName = isLanguageRu ? gameStatistics.player?.firstNameRu : gameStatistics.player?.firstNameEn {
-                        if let firstLetter = firstName.characters.first {
+                        if let firstLetter = firstName[0] {
                             playerName += " \(firstLetter)."
                         }
                     }

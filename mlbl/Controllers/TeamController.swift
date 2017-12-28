@@ -51,6 +51,12 @@ class TeamController: BaseController {
         do {
             try self.statisticsFetchedResultsController.performFetch()
         } catch {}
+        
+         NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -116,17 +122,53 @@ class TeamController: BaseController {
         return formatter
     } ()
     
+    @objc fileprivate func contextDidChange(_ notification: Notification) {
+        if (notification.object as? NSManagedObjectContext) == self.dataController.mainContext {
+            let inserted = notification.userInfo?[NSInsertedObjectsKey] as? Set<NSManagedObject>
+            if (inserted?.contains(where: { $0 is Team }) ?? false) {
+                self.setupNavigationBar()
+            } else {
+                let updated = notification.userInfo?[NSUpdatedObjectsKey] as? Set<NSManagedObject>
+                if (updated?.contains( where: { $0 is Team }) ?? false) {
+                    self.setupNavigationBar()
+                }
+            }
+        }
+    }
+    
     fileprivate func setupTeam() {
         let fetchRequest = NSFetchRequest<Team>(entityName: Team.entityName())
         fetchRequest.predicate = NSPredicate(format: "objectId = \(self.teamId!)")
         do {
             if let team = (try self.dataController.mainContext.fetch(fetchRequest)).first{
                 self.team = team
+                self.setupNavigationBar()
             } else {
                 _ = self.navigationController?.popViewController(animated: true)
             }
         } catch {
             _ = self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    fileprivate func setupNavigationBar() {
+        self.navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(image: (self.team?.subscribed?.boolValue ?? false) ? #imageLiteral(resourceName: "subscribeOff") : #imageLiteral(resourceName: "subscribeOn"),
+                            style: .plain,
+                            target: self,
+                             action: #selector(subscribeDidTap))
+        ];
+    }
+    
+    @objc fileprivate func subscribeDidTap() {
+        if let _ = DefaultsController.shared.apnsToken {
+            self.dataController.subscribe(!(self.team?.subscribed?.boolValue ?? false),
+                                          onTeamWithId: self.teamId,
+                                          completion: nil)
+            self.team?.subscribed = NSNumber(value: !(self.team?.subscribed?.boolValue ?? false))
+            self.dataController.saveContext(self.dataController.mainContext)
+        } else {
+            self.pushesController.registerForRemoteNotifications(UIApplication.shared)
         }
     }
     
@@ -225,6 +267,8 @@ class TeamController: BaseController {
                                             dispatchGroup.leave()
         }
         
+        self.dataController.getSubscriptionInfoFor(teamId: self.teamId, completion: nil)
+        
         dispatchGroup.notify(queue: DispatchQueue.main, execute: { [weak self] in
             if let strongSelf = self {
                 strongSelf.activityView.stopAnimating()
@@ -283,10 +327,12 @@ class TeamController: BaseController {
         if segue.identifier == "goToGame" {
             let gameController = segue.destination as! GameController
             gameController.dataController = self.dataController
+            gameController.pushesController = self.pushesController
             gameController.gameId = self.selectedGameId!
         } else if segue.identifier == "goToPlayer" {
             let gameController = segue.destination as! PlayerController
             gameController.dataController = self.dataController
+            gameController.pushesController = self.pushesController
             gameController.playerId = self.selectedPlayerId!
         }
     }

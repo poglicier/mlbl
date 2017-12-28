@@ -116,7 +116,7 @@ extension NetworkRequest: URLSessionTaskDelegate {
         }
         if error != nil {
             self.error = error as NSError?
-            print("Failed to receive response: \(error)")
+            print("Failed to receive response: \(error!)")
             isFinished = true
             return
         }

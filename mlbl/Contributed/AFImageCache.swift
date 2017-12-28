@@ -105,38 +105,45 @@ extension UIImageView {
         }
         
         self.af_requestImageOperation = (BlockOperation(block: { () -> Void in
-            var response:URLResponse?
-            do {
-                let data = try NSURLConnection.sendSynchronousRequest(request, returning: &response)
-                DispatchQueue.main.async(execute: { () -> Void in
-                    if request.url! == self.af_requestImageOperation.request?.url {
-                        let image:UIImage? = UIImage(data: data)
-                        if image != nil {
-                            if image!.size != CGSize(width: 1, height: 1) {
-                                if success != nil {
-                                    success!(request, response, image!, false)
-                                }
-                                else {
-                                    self.image = image!
+            URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let _ = error {
+                    DispatchQueue.main.async {
+                        failure?(request, response, error as! NSError)
+                    }
+                } else {
+                    if let data = data {
+                        DispatchQueue.main.async { [weak self] in
+                            if let strongSelf = self {
+                                if request.url! == strongSelf.af_requestImageOperation.request?.url {
+                                    let image:UIImage? = UIImage(data: data)
+                                    if image != nil {
+                                        if image!.size != CGSize(width: 1, height: 1) {
+                                            if success != nil {
+                                                success!(request, response, image!, false)
+                                            }
+                                            else {
+                                                strongSelf.image = image!
+                                                
+                                                let transition = CATransition()
+                                                transition.duration = 0.3
+                                                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                                                transition.type = kCATransitionFade
+                                                
+                                                strongSelf.layer.add(transition, forKey:nil)
+                                            }
+                                            UIImageView.sharedImageCache().cacheImage(image!, forRequest: request)
+                                        }
+                                    }
                                     
-                                    let transition = CATransition()
-                                    transition.duration = 0.3
-                                    transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                                    transition.type = kCATransitionFade
-                                    
-                                    self.layer.add(transition, forKey:nil)
+                                    strongSelf.af_requestImageOperation = (nil, nil)
                                 }
-                                UIImageView.sharedImageCache().cacheImage(image!, forRequest: request)
                             }
                         }
-                        
-                        self.af_requestImageOperation = (nil, nil)
+                    } else {
+                        DispatchQueue.main.async {
+                            failure?(request, response, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey:"Empty data"]))
+                        }
                     }
-                })
-            }
-            catch {
-                if failure != nil {
-                    failure!(request, response, error as NSError)
                 }
             }
         }), request: request)

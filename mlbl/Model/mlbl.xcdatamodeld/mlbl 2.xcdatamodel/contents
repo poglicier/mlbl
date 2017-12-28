@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Xcode 7.3" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17C88" minimumToolsVersion="Xcode 7.3" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Competition" representedClassName=".Competition" syncable="YES">
         <attribute name="compAbcNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compAbcNameRu" optional="YES" attributeType="String" syncable="YES"/>
@@ -147,6 +147,7 @@
         <attribute name="regionNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shortNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shortNameRu" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subscribed" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="gameStatistics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="GameStatistics" inverseName="team" inverseEntity="GameStatistics" syncable="YES"/>
         <relationship name="players" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="team" inverseEntity="Player" syncable="YES"/>
         <relationship name="playerStatisticsA" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayerStatistics" inverseName="teamA" inverseEntity="PlayerStatistics" syncable="YES"/>
@@ -203,7 +204,7 @@
         <element name="PlayoffSerie" positionX="-27" positionY="144" width="128" height="210"/>
         <element name="SeasonTeam" positionX="-36" positionY="135" width="128" height="135"/>
         <element name="StatParameter" positionX="-36" positionY="135" width="128" height="90"/>
-        <element name="Team" positionX="-54" positionY="36" width="128" height="285"/>
+        <element name="Team" positionX="-54" positionY="36" width="128" height="300"/>
         <element name="TeamRoundRank" positionX="-36" positionY="135" width="128" height="165"/>
         <element name="TeamStatistics" positionX="-36" positionY="135" width="128" height="405"/>
     </elements>

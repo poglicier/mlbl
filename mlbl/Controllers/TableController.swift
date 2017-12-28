@@ -321,14 +321,17 @@ class TableController: BaseController {
         if segue.identifier == "goToGame" {
             let gameController = segue.destination as! GameController
             gameController.dataController = self.dataController
+            gameController.pushesController = self.pushesController
             gameController.gameId = self.selectedGameId!
         } else if segue.identifier == "goToGamesSerie" {
             let gameController = segue.destination as! PlayoffGamesController
             gameController.dataController = self.dataController
+            gameController.pushesController = self.pushesController
             gameController.gamesIds = self.selectedGameIds!
         } else if segue.identifier == "goToTeam" {
             let teamController = segue.destination as! TeamController
             teamController.dataController = self.dataController
+            teamController.pushesController = self.pushesController
             teamController.teamId = self.selectedTeamId!;
         }
     }

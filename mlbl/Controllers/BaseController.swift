@@ -11,6 +11,7 @@ import UIKit
 class BaseController: UIViewController {
 
     var dataController: DataController!
+    var pushesController: PushesController!
     fileprivate(set) var activityView: UIActivityIndicatorView!
     
     override func viewDidLoad() {

@@ -42,8 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {}
         
         firstController.dataController = self.dataController
-        (firstController as? ChooseCompetitionController)?.pushesController = self.pushesController
-        (firstController as? MainController)?.pushesController = self.pushesController
+        firstController.pushesController = self.pushesController
         
         if let userInfo = launchOptions?[.remoteNotification] as? [AnyHashable:Any] {
             self.pushesController.handlePushWith(userInfo: userInfo)

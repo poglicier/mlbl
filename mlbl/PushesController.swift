@@ -22,9 +22,6 @@ class PushesController {
         } else if #available(iOS 9, *) {
             UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
             UIApplication.shared.registerForRemoteNotifications()
-        } else if #available(iOS 8, *) {
-            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil))
-            UIApplication.shared.registerForRemoteNotifications()
         } else {
             application.registerForRemoteNotifications(matching: [.badge, .sound, .alert])
         }
@@ -62,6 +59,7 @@ class PushesController {
                     let navigationController = UIApplication.shared.delegate?.window??.rootViewController as? UINavigationController
                     if let top = navigationController?.topViewController as? BaseController {
                         baseController!.dataController = top.dataController
+                        baseController!.pushesController = top.pushesController
                         navigationController?.pushViewController(baseController!, animated: true)
                     }
                 }

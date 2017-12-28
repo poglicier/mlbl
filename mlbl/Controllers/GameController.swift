@@ -233,6 +233,7 @@ class GameController: BaseController {
         if segue.identifier == "goToPlayer" {
             let gameController = segue.destination as! PlayerController
             gameController.dataController = self.dataController
+            gameController.pushesController = self.pushesController
             gameController.playerId = self.selectedPlayerId!
         }
     }

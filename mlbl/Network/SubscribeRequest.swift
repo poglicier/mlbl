@@ -1,20 +1,22 @@
 //
-//  SendTokenRequest.swift
+//  SubscribeRequest.swift
 //  mlbl
 //
-//  Created by Valentin Shamardin on 19.12.2017.
+//  Created by Valentin Shamardin on 29.12.2017.
 //  Copyright © 2017 Valentin Shamardin. All rights reserved.
 //
 
-class SendTokenRequest: NetworkRequest {
-    init(token: String, oldToken: String?, compId: Int) {
+import CoreData
+
+class SubscribeRequest: NetworkRequest {
+    init(subscribe: Bool, token: String, teamId: Int) {
         super.init()
         
-        self.params = ["token" : token,
-                       "oldToken" : oldToken ?? token,
-                       "appId" : 2,
-                       "compId" : compId,
-                       "compApi" : "reg.infobasket.ru"]
+        self.subscribe = subscribe
+        self.params = ["deviceToken" : token,
+                       "entityType" : 2,
+                       "entityId" : teamId,
+                       "apiUrl" : "reg.infobasket.ru"]
     }
     
     override func start() {
@@ -25,7 +27,7 @@ class SendTokenRequest: NetworkRequest {
             return
         }
         
-        guard let url = URL(string: "https://russiabasket.ru/api/v1.0/register-device", relativeTo: nil) else { fatalError("Failed to build URL") }
+        guard let url = URL(string: "https://russiabasket.ru/api/v1.0/\(self.subscribe ? "subscribe" : "unsubscribe")-device", relativeTo: nil) else { fatalError("Failed to build URL") }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -59,4 +61,7 @@ class SendTokenRequest: NetworkRequest {
             self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
         }
     }
+    
+    // MARK: - Private
+    fileprivate var subscribe: Bool!
 }

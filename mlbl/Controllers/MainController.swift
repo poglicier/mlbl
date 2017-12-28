@@ -17,13 +17,7 @@ class MainController: BaseController {
         
         self.setupNavigatioBar()
         self.setupButtons()
-        
-        self.pushesController.registerForRemoteNotifications(UIApplication.shared)
     }
-    
-    // MARK: - Public
-    
-    var pushesController: PushesController!
     
     // MARK: - Private
     
@@ -117,6 +111,7 @@ class MainController: BaseController {
         if segue.identifier == "embedContainer" {
             self.containerController = segue.destination as! ContainerController
             self.containerController.dataController = self.dataController
+            self.containerController.pushesController = self.pushesController
         }
     }
 }

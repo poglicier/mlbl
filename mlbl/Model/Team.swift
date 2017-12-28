@@ -96,4 +96,13 @@ public class Team: NSManagedObject {
         
         return res
     }
+    
+    static func updateSubscriptionInfo(forTeamWithId teamId: Int, subscribed: Bool, in context: NSManagedObjectContext) {
+        let fetchRequest = NSFetchRequest<Team>(entityName: Team.entityName())
+        fetchRequest.predicate = NSPredicate(format: "\(#keyPath(Team.objectId)) = \(teamId)")
+        do {
+            let team = try context.fetch(fetchRequest).first
+            team?.subscribed = NSNumber(value: subscribed)
+        } catch { }
+    }
 }

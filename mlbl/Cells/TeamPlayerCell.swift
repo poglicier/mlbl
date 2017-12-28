@@ -29,7 +29,7 @@ class TeamPlayerCell: UITableViewCell {
             
             if var playerName = isLanguageRu ? player.lastNameRu : player.lastNameEn {
                 if let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn {
-                    if let firstLetter = firstName.characters.first {
+                    if let firstLetter = firstName[0] {
                         playerName += " \(firstLetter)."
                     }
                 }
@@ -43,7 +43,7 @@ class TeamPlayerCell: UITableViewCell {
             if position == nil {
                 position = isLanguageRu ? player.positionRu : player.positionEn
                 if let _ = position {
-                    position = "\(position!.characters.first)"
+                    position = "\(position![0] ?? "")"
                 }
             }
             self.positionLabel.text = position
@@ -134,7 +134,7 @@ class TeamPlayerCell: UITableViewCell {
         if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
             if var playerName = isLanguageRu ? player.lastNameRu : player.lastNameEn {
                 if let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn {
-                    if let firstLetter = firstName.characters.first {
+                    if let firstLetter = firstName[0] {
                         playerName += " \(firstLetter)."
                     }
                 }

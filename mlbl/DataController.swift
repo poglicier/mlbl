@@ -276,6 +276,38 @@ class DataController {
         self.queue.addOperation(request)
     }
     
+    func getSubscriptionInfoFor(teamId: Int, completion: ((NSError?) -> ())?) {
+        if let token = DefaultsController.shared.apnsToken {
+            let request = SubscriptionInfoRequest(teamId: teamId, token: token)
+            request.dataController = self
+            
+            request.completionBlock = {
+                DispatchQueue.main.async {
+                    completion?(request.error)
+                }
+            }
+            self.queue.addOperation(request)
+        } else {
+            completion?(NSError(domain: "", code: 0, userInfo: nil))
+        }
+    }
+    
+    func subscribe(_ subscribe: Bool, onTeamWithId teamId: Int, completion: ((NSError?) -> ())?) {
+        if let token = DefaultsController.shared.apnsToken {
+            let request = SubscribeRequest(subscribe: subscribe, token: token, teamId: teamId)
+            request.dataController = self
+            
+            request.completionBlock = {
+                DispatchQueue.main.async {
+                    completion?(request.error)
+                }
+            }
+            self.queue.addOperation(request)
+        } else {
+            completion?(NSError(domain: "", code: 0, userInfo: nil))
+        }
+    }
+    
     func terminateRequests() {
         self.queue.cancelAllOperations()
     }

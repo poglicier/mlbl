@@ -31,6 +31,8 @@
 		FC4624021D82A852003E9E30 /* StatisticCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4624011D82A852003E9E30 /* StatisticCell.swift */; };
 		FC46240E1D834778003E9E30 /* TeamStatisticsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC46240D1D834778003E9E30 /* TeamStatisticsHeader.swift */; };
 		FC4624101D83478E003E9E30 /* TeamStatisticsHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC46240F1D83478E003E9E30 /* TeamStatisticsHeader.xib */; };
+		FC4C68D31FF5962B0010BBC6 /* SubscriptionInfoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4C68D21FF5962B0010BBC6 /* SubscriptionInfoRequest.swift */; };
+		FC4C68D51FF5A4EF0010BBC6 /* SubscribeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4C68D41FF5A4EF0010BBC6 /* SubscribeRequest.swift */; };
 		FC57AC031D786C16009E67C6 /* TeamController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC57AC021D786C16009E67C6 /* TeamController.swift */; };
 		FC57AC051D787093009E67C6 /* TeamMainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC57AC041D787093009E67C6 /* TeamMainCell.swift */; };
 		FC57AC071D79661D009E67C6 /* TeamInfoRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC57AC061D79661D009E67C6 /* TeamInfoRequest.swift */; };
@@ -138,6 +140,8 @@
 		FC4624011D82A852003E9E30 /* StatisticCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
 		FC46240D1D834778003E9E30 /* TeamStatisticsHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamStatisticsHeader.swift; sourceTree = "<group>"; };
 		FC46240F1D83478E003E9E30 /* TeamStatisticsHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TeamStatisticsHeader.xib; sourceTree = "<group>"; };
+		FC4C68D21FF5962B0010BBC6 /* SubscriptionInfoRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionInfoRequest.swift; sourceTree = "<group>"; };
+		FC4C68D41FF5A4EF0010BBC6 /* SubscribeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeRequest.swift; sourceTree = "<group>"; };
 		FC57AC021D786C16009E67C6 /* TeamController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamController.swift; sourceTree = "<group>"; };
 		FC57AC041D787093009E67C6 /* TeamMainCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamMainCell.swift; sourceTree = "<group>"; };
 		FC57AC061D79661D009E67C6 /* TeamInfoRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamInfoRequest.swift; sourceTree = "<group>"; };
@@ -306,6 +310,8 @@
 				FC22D2C41D9AA6FA009C6E27 /* PlayerStatsRequest.swift */,
 				FCA661871E07C4A800D3EF6F /* OnlineStatusRequest.swift */,
 				FCFF819E1FE9AFF70038E768 /* SendTokenRequest.swift */,
+				FC4C68D21FF5962B0010BBC6 /* SubscriptionInfoRequest.swift */,
+				FC4C68D41FF5A4EF0010BBC6 /* SubscribeRequest.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -636,6 +642,7 @@
 				FCEEA9251D5BB26E00686DD6 /* PlayerStatCell.swift in Sources */,
 				FC637E561C945819009EE880 /* ChooseCompetitionController.swift in Sources */,
 				FC321FA41C81B13E00674271 /* ContainerController.swift in Sources */,
+				FC4C68D51FF5A4EF0010BBC6 /* SubscribeRequest.swift in Sources */,
 				FCD2D5A01D7A2B2800C436E9 /* TeamGamesRequest.swift in Sources */,
 				FCD76E151D3F4172002BB24A /* Competition+CoreDataProperties.swift in Sources */,
 				FC7546C11D7D8D5F00F02119 /* SeasonTeam+CoreDataProperties.swift in Sources */,
@@ -660,6 +667,7 @@
 				FCEEA9231D5B54F400686DD6 /* StatParameter.swift in Sources */,
 				FC321FAC1C82F97900674271 /* EmptySegue.swift in Sources */,
 				FC7546C21D7D8D5F00F02119 /* SeasonTeam.swift in Sources */,
+				FC4C68D31FF5962B0010BBC6 /* SubscriptionInfoRequest.swift in Sources */,
 				FC9837BA1D701E3900534AB1 /* TeamRoundRank.swift in Sources */,
 				FC6FC1621D3D4807004B49E1 /* PlayersRequest.swift in Sources */,
 				FC705D4F1C80F8FC00216AB8 /* BaseController.swift in Sources */,

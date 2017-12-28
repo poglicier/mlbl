@@ -58,7 +58,7 @@ class StatParametersRequest: NetworkRequest {
                         for parameter in all {
                             if let parameterId = parameter.objectId {
                                 if statParameterIdsToSave.contains(parameterId) == false {
-                                    print("DELETE StatParameter \(parameter.name)")
+                                    print("DELETE StatParameter \(parameter.name ?? "")")
                                     context.delete(parameter)
                                 }
                             }

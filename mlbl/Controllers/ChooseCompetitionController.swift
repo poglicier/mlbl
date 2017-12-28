@@ -44,10 +44,6 @@ class ChooseCompetitionController: BaseController {
         self.getData(true)
     }
     
-    // MARK: - Public
-    
-    var pushesController: PushesController!
-    
     // MARK: - Private
     
     fileprivate func setupTableView() {

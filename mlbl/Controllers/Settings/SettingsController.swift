@@ -24,10 +24,6 @@ class SettingsController: BaseController {
         // в которой прячется navigationBar
     }
     
-    // MARK: - Public
-    
-    var pushesController: PushesController!
-    
     // MARK: - Private
     
     fileprivate enum Sections: Int {

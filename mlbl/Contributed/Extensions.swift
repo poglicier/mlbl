@@ -148,6 +148,22 @@ extension String {
             return 0
         }
     }
+    
+    fileprivate subscript (i: Int) -> Character {
+        return self[index(startIndex, offsetBy: i)]
+    }
+    
+    subscript (i: Int) -> String? {
+        if self.count < i {
+            return String(self[i] as Character)
+        } else {
+            return nil
+        }
+    }
+    
+    func firstLetter() -> String? {
+        return self[0]
+    }
 }
 
 extension UIFont {

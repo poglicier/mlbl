@@ -51,6 +51,7 @@ class PlayoffGamesController: BaseController {
         if segue.identifier == "goToGame" {
             let gameController = segue.destination as! GameController
             gameController.dataController = self.dataController
+            gameController.pushesController = self.pushesController
             gameController.gameId = self.selectedGameId!
         }
     }
