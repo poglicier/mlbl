@@ -48,6 +48,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.pushesController.handlePushWith(userInfo: userInfo)
         }
         
+        self.registerForPushNotifications()
+        
         return true
     }
     
@@ -83,5 +85,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         self.pushesController.handlePushWith(userInfo: userInfo)
+    }
+    
+    // MARK: - Private
+    
+    fileprivate func registerForPushNotifications() {
+        let fetchRequest = NSFetchRequest<Team>(entityName: Team.entityName())
+        fetchRequest.predicate = NSPredicate(format: "\(#keyPath(Team.subscribed)) = true")
+        do {
+            if try self.dataController.mainContext.fetch(fetchRequest).count > 0 {
+                self.pushesController.registerForRemoteNotifications(UIApplication.shared)
+            }
+        } catch { }
     }
 }

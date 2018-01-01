@@ -152,12 +152,14 @@ class TeamController: BaseController {
     }
     
     fileprivate func setupNavigationBar() {
-        self.navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(image: (self.team?.subscribed?.boolValue ?? false) ? #imageLiteral(resourceName: "subscribeOff") : #imageLiteral(resourceName: "subscribeOn"),
-                            style: .plain,
-                            target: self,
-                             action: #selector(subscribeDidTap))
-        ];
+        let button = UIButton(type: .system)
+        button.setImage((self.team?.subscribed?.boolValue ?? false) ? #imageLiteral(resourceName: "subscribeOff") : #imageLiteral(resourceName: "subscribeOn"),
+                        for: .normal)
+        button.setTitle(" " + ((self.team?.subscribed?.boolValue ?? false) ? NSLocalizedString("Unsubscribe", comment: "") : NSLocalizedString("Subscribe", comment: "")),
+                        for: .normal)
+        button.addTarget(self, action: #selector(subscribeDidTap), for: .touchUpInside)
+        
+        self.navigationItem.setRightBarButton(UIBarButtonItem(customView: button), animated: true)
     }
     
     @objc fileprivate func subscribeDidTap() {

@@ -42,8 +42,7 @@ class BaseController: UIViewController {
         av.color = UIColor.mlblLightOrangeColor()
         self.view.addSubview(av)
         av.snp.makeConstraints { (make) in
-            make.centerX.equalTo(0)
-            make.centerY.equalTo(0)
+            make.center.equalTo(self.view.snp.center)
         }
         av.isHidden = true
         

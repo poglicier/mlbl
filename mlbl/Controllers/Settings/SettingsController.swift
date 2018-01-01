@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import MessageUI
 import SafariServices
+import StoreKit
 
 class SettingsController: BaseController {
 
@@ -48,7 +49,11 @@ class SettingsController: BaseController {
     }
     
     fileprivate func goToAppStore() {
-        UIApplication.shared.openURL(URL(string: "itms-apps://itunes.apple.com/app/id1088559757")!)
+        if #available(iOS 10.3, *) {
+            SKStoreReviewController.requestReview()
+        } else {
+            UIApplication.shared.openURL(URL(string: "itms-apps://itunes.apple.com/app/id1088559757")!)
+        }
     }
     
     fileprivate func goToEmailSupport() {
