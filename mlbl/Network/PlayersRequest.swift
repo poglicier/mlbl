@@ -51,21 +51,10 @@ class PlayersRequest: NetworkRequest {
         self.sessionTask?.resume()
     }
     
-    func convertToDictionary(text: String?) -> Any? {
-        if let data = text?.data(using: .utf8) {
-            do {
-                return try JSONSerialization.jsonObject(with: data, options: [])
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-        return nil
-    }
-    
     override func processData() {
         do {
             let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
-            if let playerDicts = convertToDictionary(text: (json as? String)) as? [[String:AnyObject]] {
+            if let playerDicts = self.convertToJSONObject(text: (json as? String)) as? [[String:AnyObject]] {
                 let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
                 context.parent = self.dataController?.mainContext
                 context.performAndWait({
@@ -83,5 +72,18 @@ class PlayersRequest: NetworkRequest {
         } catch {
             self.error = NSError(domain: "json error", code: -1, userInfo: [NSLocalizedDescriptionKey : "Не смог разобрать json"])
         }
+    }
+    
+    // MARK: - Private
+    
+    fileprivate func convertToJSONObject(text: String?) -> Any? {
+        if let data = text?.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: [])
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
     }
 }
