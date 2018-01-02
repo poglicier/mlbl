@@ -401,7 +401,7 @@ extension StatisticsController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "parameterCell", for: indexPath) as! ParameterCell
-        let parameter = self.parameters[(indexPath as NSIndexPath).row]
+        let parameter = self.parameters[indexPath.row]
         cell.parameter = parameter
         cell.isParameterSelected = parameter.objectId?.intValue == self.selectedParameterId
         
@@ -411,7 +411,7 @@ extension StatisticsController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let parameterCell = collectionView.cellForItem(at: indexPath) as? ParameterCell {
             parameterCell.isParameterSelected = true
-            let parameter = self.parameters[(indexPath as NSIndexPath).row]
+            let parameter = self.parameters[indexPath.row]
             
             if parameter.objectId?.intValue != self.selectedParameterId {
                 self.selectedParameterId = (parameter.objectId as? Int) ?? 1
@@ -440,7 +440,7 @@ extension StatisticsController : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if let name =  self.parameters[(indexPath as NSIndexPath).row].name {
+        if let name =  self.parameters[indexPath.row].name {
             var size = name.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44),
                                                  options: .usesLineFragmentOrigin,
                                                  attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17)],

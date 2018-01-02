@@ -163,16 +163,16 @@ class PlayerController: BaseController {
         cell.contentOffset = self.statisticCellOffset
         cell.delegate = self
         cell.total = NSLocalizedString("Average", comment: "")
-        let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+        let fixedIndexPath = IndexPath(row: indexPath.row, section: 0)
         cell.statistics = self.statsFetchedResultsController.object(at: fixedIndexPath)
-        cell.color = (indexPath as NSIndexPath).row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
     }
     
     fileprivate func configureCell(_ cell: PlayerTeamCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+        let fixedIndexPath = IndexPath(row: indexPath.row, section: 0)
         cell.seasonTeam = self.teamsFetchedResultsController.object(at: fixedIndexPath)
-        cell.color = (indexPath as NSIndexPath).row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
     }
     
     // MARK: BaseController
@@ -323,12 +323,12 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var res: CGFloat = 0
         
-        if let enumSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
+        if let enumSection = Sections(rawValue: indexPath.section) {
             switch enumSection {
             case .title:
                 res = 148
             case .games:
-                let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+                let fixedIndexPath = IndexPath(row: indexPath.row, section: 0)
                 let teamStatistics = self.statsFetchedResultsController.object(at: fixedIndexPath)
                 if teamStatistics.game == nil {
                     res = 54
@@ -345,7 +345,7 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cellIdentifier: String?
         
-        if let enumSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
+        if let enumSection = Sections(rawValue: indexPath.section) {
             switch enumSection {
             case .title:
                 cellIdentifier = "playerCell"
@@ -367,7 +367,7 @@ extension PlayerController: UITableViewDataSource, UITableViewDelegate {
         cell.backgroundColor = UIColor.clear
         cell.contentView.backgroundColor = UIColor.clear
         
-        if let enumSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
+        if let enumSection = Sections(rawValue: indexPath.section) {
             switch enumSection {
             case .title:
                 self.configureCell(cell as! PlayerCell, atIndexPath:indexPath)
@@ -410,17 +410,17 @@ extension PlayerController: NSFetchedResultsControllerDelegate {
         
         if controller == self.teamsFetchedResultsController {
             if let _ = indexPath {
-                fixedIndexPath = IndexPath(row: (indexPath! as NSIndexPath).row, section: Sections.teams.rawValue)
+                fixedIndexPath = IndexPath(row: indexPath!.row, section: Sections.teams.rawValue)
             }
             if let _ = newIndexPath {
-                fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.teams.rawValue)
+                fixedNewIndexPath = IndexPath(row: newIndexPath!.row, section: Sections.teams.rawValue)
             }
         } else if controller == self.statsFetchedResultsController {
             if let _ = indexPath {
-                fixedIndexPath = IndexPath(row: (indexPath! as NSIndexPath).row, section: Sections.games.rawValue)
+                fixedIndexPath = IndexPath(row: indexPath!.row, section: Sections.games.rawValue)
             }
             if let _ = newIndexPath {
-                fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.games.rawValue)
+                fixedNewIndexPath = IndexPath(row: newIndexPath!.row, section: Sections.games.rawValue)
             }
         }
         

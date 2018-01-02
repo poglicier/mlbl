@@ -161,7 +161,7 @@ extension GameScoreCell: UICollectionViewDataSource, UICollectionViewDelegate {
         let periodCell = cell as! PeriodCell
         let count = self.collectionView.numberOfItems(inSection: 0)
         
-        if (indexPath as NSIndexPath).row == count - 1 {
+        if indexPath.row == count - 1 {
             periodCell.periodLabel.text = NSLocalizedString("Total", comment: "")
             periodCell.teamALabel.font = UIFont.boldSystemFont(ofSize: 16)
             periodCell.teamBLabel.font = UIFont.boldSystemFont(ofSize: 16)
@@ -178,10 +178,10 @@ extension GameScoreCell: UICollectionViewDataSource, UICollectionViewDelegate {
             periodCell.teamALabel.font = UIFont.systemFont(ofSize: 16)
             periodCell.teamBLabel.font = UIFont.systemFont(ofSize: 16)
             
-            periodCell.teamALabel.text = "\(self.scoreByPeriods[(indexPath as NSIndexPath).row].0)"
-            periodCell.teamBLabel.text = "\(self.scoreByPeriods[(indexPath as NSIndexPath).row].1)"
+            periodCell.teamALabel.text = "\(self.scoreByPeriods[indexPath.row].0)"
+            periodCell.teamBLabel.text = "\(self.scoreByPeriods[indexPath.row].1)"
             
-            switch (indexPath as NSIndexPath).row {
+            switch indexPath.row {
             case 0:
                 periodCell.periodLabel.text = "I"
             case 1:
@@ -193,7 +193,7 @@ extension GameScoreCell: UICollectionViewDataSource, UICollectionViewDelegate {
             case 4:
                 periodCell.periodLabel.text = "OT"
             default:
-                periodCell.periodLabel.text = "OT\((indexPath as NSIndexPath).row - 3)"
+                periodCell.periodLabel.text = "OT\(indexPath.row - 3)"
             }
         }
     }

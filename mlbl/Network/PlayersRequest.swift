@@ -51,10 +51,21 @@ class PlayersRequest: NetworkRequest {
         self.sessionTask?.resume()
     }
     
+    func convertToDictionary(text: String?) -> Any? {
+        if let data = text?.data(using: .utf8) {
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: [])
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+    
     override func processData() {
         do {
             let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
-            if let playerDicts = json as? [[String:AnyObject]] {
+            if let playerDicts = convertToDictionary(text: (json as? String)) as? [[String:AnyObject]] {
                 let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
                 context.parent = self.dataController?.mainContext
                 context.performAndWait({

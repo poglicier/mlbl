@@ -868,8 +868,8 @@
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Хозяин" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYC-Uk-mCS">
                                                                             <rect key="frame" x="0.0" y="0.0" width="80" height="27"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="Rif-HL-fZT"/>
-                                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="TF2-mt-11W"/>
+                                                                                <constraint firstAttribute="width" constant="80" id="Rif-HL-fZT"/>
+                                                                                <constraint firstAttribute="width" constant="44" id="TF2-mt-11W"/>
                                                                             </constraints>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -890,7 +890,7 @@
                                                                             <rect key="frame" x="160" y="0.0" width="64" height="27"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="27" id="aha-m8-umf"/>
-                                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="64" id="yMS-Q7-kZv"/>
+                                                                                <constraint firstAttribute="width" constant="64" id="yMS-Q7-kZv"/>
                                                                             </constraints>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -905,7 +905,7 @@
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2-х" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xzE-tj-odi">
                                                                             <rect key="frame" x="288" y="0.0" width="74" height="27"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="74" id="vpU-ce-yDo"/>
+                                                                                <constraint firstAttribute="width" constant="74" id="vpU-ce-yDo"/>
                                                                             </constraints>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -986,7 +986,7 @@
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Счёт" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FX0-bS-W1E">
                                                                             <rect key="frame" x="1150" y="0.0" width="100" height="27"/>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="lcz-Vf-yw9"/>
+                                                                                <constraint firstAttribute="width" constant="100" id="lcz-Vf-yw9"/>
                                                                             </constraints>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2285,7 +2285,7 @@
         <image name="teamStub" width="65" height="65"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="HTu-wv-3Re"/>
-        <segue reference="Aeb-vT-jBd"/>
+        <segue reference="n5E-FS-R7n"/>
+        <segue reference="cos-br-m1K"/>
     </inferredMetricsTieBreakers>
 </document>

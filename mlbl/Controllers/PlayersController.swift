@@ -216,7 +216,7 @@ extension PlayersController: UITableViewDelegate, UITableViewDataSource {
             self.searchBar.text != "" {
         } else {
             if !self.allDataLoaded &&
-                (indexPath as NSIndexPath).row >= self.numberOfLoadedPlayers - 1 {
+                indexPath.row >= self.numberOfLoadedPlayers - 1 {
                 self.getData(false)
             }
         }

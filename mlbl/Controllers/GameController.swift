@@ -192,8 +192,8 @@ class GameController: BaseController {
     
     fileprivate func configureCell(_ cell: StatisticCell, atIndexPath indexPath: IndexPath) {
         cell.language = self.dataController.language
-        cell.color = (indexPath as NSIndexPath).row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
-        let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+        cell.color = indexPath.row % 2 == 0 ? UIColor(red: 254/255.0, green: 254/255.0, blue: 254/255.0, alpha: 1) : UIColor(red: 246/255.0, green: 246/255.0, blue: 246/255.0, alpha: 1)
+        let fixedIndexPath = IndexPath(row: indexPath.row, section: 0)
         
         if indexPath.section == Sections.teamA.rawValue {
             cell.total = NSLocalizedString("Total", comment: "").uppercased()
@@ -357,12 +357,12 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var res: CGFloat = 0
         
-        if let gameSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
+        if let gameSection = Sections(rawValue: indexPath.section) {
             switch gameSection {
             case .hat:
                 res = 252
             case .teamA:
-                let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+                let fixedIndexPath = IndexPath(row: indexPath.row, section: 0)
                 let gameStatistics = self.statisticsAFetchedResultsController.object(at: fixedIndexPath)
                 if gameStatistics.player == nil {
                     res = 81 // 3 строки: КОМАНДА, ВСЕГО и проценты
@@ -370,7 +370,7 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
                     res = 27
                 }
             case .teamB:
-                let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+                let fixedIndexPath = IndexPath(row: indexPath.row, section: 0)
                 let gameStatistics = self.statisticsBFetchedResultsController.object(at: fixedIndexPath)
                 if gameStatistics.player == nil {
                     res = 81 // 3 строки: КОМАНДА, ВСЕГО и проценты
@@ -387,7 +387,7 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
-        if let gameSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
+        if let gameSection = Sections(rawValue: indexPath.section) {
             switch gameSection {
             case .hat:
                 let cellIdentifier = "gameScoreCell"
@@ -407,7 +407,7 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
         cell.backgroundColor = UIColor.clear
         cell.contentView.backgroundColor = UIColor.clear
         
-        if let gameSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
+        if let gameSection = Sections(rawValue: indexPath.section) {
             switch gameSection {
             case .hat:
                 self.configureCell(cell as! GameScoreCell, atIndexPath:indexPath)
@@ -420,18 +420,18 @@ extension GameController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let gameSection = Sections(rawValue: (indexPath as NSIndexPath).section) {
-            let fixedIndexPath = IndexPath(row: (indexPath as NSIndexPath).row, section: 0)
+        if let gameSection = Sections(rawValue: indexPath.section) {
+            let fixedIndexPath = IndexPath(row: indexPath.row, section: 0)
             switch gameSection {
             case .teamA:
-                if (indexPath as NSIndexPath).row < self.statisticsAFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
+                if indexPath.row < self.statisticsAFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
                     self.selectedPlayerId = self.statisticsAFetchedResultsController.object(at: fixedIndexPath).player?.objectId as? Int
                     if let _ = self.selectedPlayerId {
                         self.performSegue(withIdentifier: "goToPlayer", sender: nil)
                     }
                 }
             case .teamB:
-                if (indexPath as NSIndexPath).row < self.statisticsBFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
+                if indexPath.row < self.statisticsBFetchedResultsController.sections?.first?.numberOfObjects ?? 0 {
                     self.selectedPlayerId = self.statisticsBFetchedResultsController.object(at: fixedIndexPath).player?.objectId as? Int
                     if let _ = self.selectedPlayerId {
                         self.performSegue(withIdentifier: "goToPlayer", sender: nil)
@@ -455,17 +455,17 @@ extension GameController: NSFetchedResultsControllerDelegate {
         
         if controller == self.statisticsAFetchedResultsController {
             if let _ = indexPath {
-                fixedIndexPath = IndexPath(row: (indexPath! as NSIndexPath).row, section: Sections.teamA.rawValue)
+                fixedIndexPath = IndexPath(row: indexPath!.row, section: Sections.teamA.rawValue)
             }
             if let _ = newIndexPath {
-                fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.teamA.rawValue)
+                fixedNewIndexPath = IndexPath(row: newIndexPath!.row, section: Sections.teamA.rawValue)
             }
         } else if controller == self.statisticsBFetchedResultsController {
             if let _ = indexPath {
-                fixedIndexPath = IndexPath(row: (indexPath! as NSIndexPath).row, section: Sections.teamB.rawValue)
+                fixedIndexPath = IndexPath(row: indexPath!.row, section: Sections.teamB.rawValue)
             }
             if let _ = newIndexPath {
-                fixedNewIndexPath = IndexPath(row: (newIndexPath! as NSIndexPath).row, section: Sections.teamB.rawValue)
+                fixedNewIndexPath = IndexPath(row: newIndexPath!.row, section: Sections.teamB.rawValue)
             }
         } else {
             return
