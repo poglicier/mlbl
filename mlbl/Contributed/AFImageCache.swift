@@ -12,37 +12,62 @@ class AFImageCache: NSCache<AnyObject, AnyObject>, AFImageCacheProtocol {
     func cachedImageForRequest(_ request: URLRequest) -> UIImage? {
         switch request.cachePolicy {
         case NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData,
-        NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData:
+             NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData:
             return nil
         default:
             break
         }
         
-        return self.object(forKey: AFImageCacheKeyFromURLRequest(request) as AnyObject) as? UIImage
+        let key = AFImageCache.imageCacheKeyFromURLRequest(request)
+        var res = self.object(forKey: key as AnyObject) as? UIImage
+        if res == nil {
+            res = AFImageCache.getImageFromDisk(for: key)
+        }
+        return res
     }
     
     func cacheImage(_ image: UIImage, forRequest request: URLRequest) {
-        self.setObject(image, forKey: AFImageCacheKeyFromURLRequest(request) as AnyObject)
+        let key = AFImageCache.imageCacheKeyFromURLRequest(request)
+        self.setObject(image, forKey: key as AnyObject)
+        AFImageCache.cacheImageToDisk(image, for: key)
     }
     
     // MARK: - Private
     
-    fileprivate func AFImageCacheKeyFromURLRequest(_ request:URLRequest) -> String {
-        return request.url!.absoluteString
+    static fileprivate func imageCacheKeyFromURLRequest(_ request:URLRequest) -> String {
+        return request.url!.absoluteString.replacingOccurrences(of: "/", with: "")
+    }
+    
+    static fileprivate var cacheDirectory: String = { () -> String in
+        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!
+        let res = documentsDirectory.appending("/scAvatars")
+        let isExist = FileManager.default.fileExists(atPath: res, isDirectory: nil)
+        if !isExist {
+            try? FileManager.default.createDirectory(atPath: res, withIntermediateDirectories: true, attributes: nil)
+        }
+        return res
+    }()
+    
+    static fileprivate func getImageFromDisk(for key: String) -> UIImage? {
+        let imagePath = AFImageCache.cacheDirectory.appending("/\(key)")
+        let image = UIImage(named: imagePath)
+        return image
+    }
+    
+    static fileprivate func cacheImageToDisk(_ image: UIImage, for key: String) {
+        if let data = UIImagePNGRepresentation(image) {
+            let fileName = AFImageCache.cacheDirectory.appending("/\(key)")
+            FileManager.default.createFile(atPath: fileName, contents: data, attributes: nil)
+        }
     }
 }
 
-
-
-@objc public protocol AFImageCacheProtocol:class{
+@objc public protocol AFImageCacheProtocol: class{
     func cachedImageForRequest(_ request:URLRequest) -> UIImage?
     func cacheImage(_ image:UIImage, forRequest request:URLRequest);
 }
 
 extension UIImageView {
-    fileprivate static var defaultImageCache = AFImageCache()
-    fileprivate static var queue = OperationQueue()
-    
     fileprivate struct AssociatedKeys {
         static var SharedImageCache = "SharedImageCache"
         static var RequestImageOperation = "RequestImageOperation"
@@ -53,16 +78,29 @@ extension UIImageView {
         objc_setAssociatedObject(self, &AssociatedKeys.SharedImageCache, cache, .OBJC_ASSOCIATION_RETAIN)
     }
     
-    public class func sharedImageCache() -> AFImageCacheProtocol {
-        NotificationCenter.default.addObserver(forName: Notification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: OperationQueue.main) { (NSNotification) -> Void in
-            self.defaultImageCache.removeAllObjects()
+    public class var sharedImageCache: AFImageCacheProtocol {
+        struct Static {
+            static var token : Int = 0
+            static let defaultImageCache = AFImageCache()
         }
-        return objc_getAssociatedObject(self, &AssociatedKeys.SharedImageCache) as? AFImageCacheProtocol ?? self.defaultImageCache
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: OperationQueue.main) { (NSNotification) -> Void in
+            Static.defaultImageCache.removeAllObjects()
+        }
+        return objc_getAssociatedObject(self, &AssociatedKeys.SharedImageCache) as? AFImageCacheProtocol ?? Static.defaultImageCache
     }
     
-    fileprivate class func af_sharedImageRequestOperationQueue() -> OperationQueue {
-        self.queue.maxConcurrentOperationCount = OperationQueue.defaultMaxConcurrentOperationCount
-        return self.queue
+    fileprivate class var af_sharedImageRequestOperationQueue: OperationQueue {
+        struct Static {
+            static var token = 0
+            static let queue = { () -> OperationQueue in
+                let queue = OperationQueue()
+                queue.maxConcurrentOperationCount = OperationQueue.defaultMaxConcurrentOperationCount
+                return queue
+            }()
+        }
+        
+        return Static.queue
     }
     
     fileprivate var af_requestImageOperation:(operation:Operation?, request: URLRequest?) {
@@ -77,19 +115,19 @@ extension UIImageView {
         }
     }
     
-    public func setImageWithUrl(_ url: URL, placeHolderImage:UIImage? = nil) {
-        var request = URLRequest(url: url)
+    public func setImageWithUrl(_ url:URL, placeHolderImage:UIImage? = nil) {
+        let request:NSMutableURLRequest = NSMutableURLRequest(url: url)
         request.addValue("image/*", forHTTPHeaderField: "Accept")
-        self.setImageWithUrlRequest(request, placeHolderImage: placeHolderImage, success: nil, failure: nil)
+        self.setImageWithUrlRequest(request as URLRequest, placeHolderImage: placeHolderImage, success: nil, failure: nil)
     }
     
     public func setImageWithUrlRequest(_ request:URLRequest, placeHolderImage:UIImage? = nil,
-        success:((_ request:URLRequest?, _ response:URLResponse?, _ image:UIImage, _ fromCache:Bool) -> Void)?,
-        failure:((_ request:URLRequest?, _ response:URLResponse?, _ error:NSError) -> Void)?)
+                                       success:((_ request:URLRequest?, _ response:URLResponse?, _ image:UIImage, _ fromCache:Bool) -> Void)?,
+                                       failure:((_ request:URLRequest?, _ response:URLResponse?, _ error:NSError?) -> Void)?)
     {
         self.cancelImageRequestOperation()
         
-        if let cachedImage = UIImageView.sharedImageCache().cachedImageForRequest(request) {
+        if let cachedImage = UIImageView.sharedImageCache.cachedImageForRequest(request) {
             if success != nil {
                 success!(nil, nil, cachedImage, true)
             }
@@ -105,50 +143,40 @@ extension UIImageView {
         }
         
         self.af_requestImageOperation = (BlockOperation(block: { () -> Void in
-            URLSession.shared.dataTask(with: request) { (data, response, error) in
-                if let _ = error {
-                    DispatchQueue.main.async {
-                        failure?(request, response, error as! NSError)
-                    }
-                } else {
-                    if let data = data {
-                        DispatchQueue.main.async { [weak self] in
-                            if let strongSelf = self {
-                                if request.url! == strongSelf.af_requestImageOperation.request?.url {
-                                    let image:UIImage? = UIImage(data: data)
-                                    if image != nil {
-                                        if image!.size != CGSize(width: 1, height: 1) {
-                                            if success != nil {
-                                                success!(request, response, image!, false)
-                                            }
-                                            else {
-                                                strongSelf.image = image!
-                                                
-                                                let transition = CATransition()
-                                                transition.duration = 0.3
-                                                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                                                transition.type = kCATransitionFade
-                                                
-                                                strongSelf.layer.add(transition, forKey:nil)
-                                            }
-                                            UIImageView.sharedImageCache().cacheImage(image!, forRequest: request)
-                                        }
+            URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+                DispatchQueue.main.async(execute: { () -> Void in
+                    if let _ = data {
+                        if request.url! == self.af_requestImageOperation.request?.url {
+                            let image:UIImage? = UIImage(data: data!)
+                            if image != nil {
+                                if image!.size != CGSize(width: 1, height: 1) {
+                                    if success != nil {
+                                        success!(request, response, image!, false)
                                     }
-                                    
-                                    strongSelf.af_requestImageOperation = (nil, nil)
+                                    else {
+                                        self.image = image!
+                                        
+                                        let transition = CATransition()
+                                        transition.duration = 0.3
+                                        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                                        transition.type = kCATransitionFade
+                                        
+                                        self.layer.add(transition, forKey:nil)
+                                    }
+                                    UIImageView.sharedImageCache.cacheImage(image!, forRequest: request)
                                 }
                             }
+                            
+                            self.af_requestImageOperation = (nil, nil)
                         }
                     } else {
-                        DispatchQueue.main.async {
-                            failure?(request, response, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey:"Empty data"]))
-                        }
+                        failure?(request, response, error as NSError?)
                     }
-                }
-            }
+                })
+            }) .resume()
         }), request: request)
         
-        UIImageView.af_sharedImageRequestOperationQueue().addOperation(self.af_requestImageOperation.operation!)
+        UIImageView.af_sharedImageRequestOperationQueue.addOperation(self.af_requestImageOperation.operation!)
     }
     
     fileprivate func cancelImageRequestOperation() {
@@ -156,3 +184,4 @@ extension UIImageView {
         self.af_requestImageOperation = (nil, nil)
     }
 }
+
