@@ -65,7 +65,7 @@ class GamesController: BaseController {
         self.setupEmptyLabel()
         self.getData(true)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
     }
     
     deinit {
@@ -151,7 +151,7 @@ class GamesController: BaseController {
                         strongSelf.view.addSubview(refreshButton)
                         
                         refreshButton.snp.makeConstraints( { (make) in
-                            make.centerX.equalTo(0)
+                            make.centerXWithinMargins.equalTo(0)
                             make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                         })
                         

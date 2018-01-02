@@ -12,6 +12,7 @@ class SubscribeRequest: NetworkRequest {
     init(subscribe: Bool, token: String, teamId: Int) {
         super.init()
         
+        self.teamId = teamId
         self.subscribe = subscribe
         self.params = ["deviceToken" : token,
                        "entityType" : 2,
@@ -50,7 +51,17 @@ class SubscribeRequest: NetworkRequest {
             let json = try JSONSerialization.jsonObject(with: incomingData as Data, options: .allowFragments)
             if let result = json as? [String:AnyObject] {
                 if let success = result["success"] as? NSNumber {
-                    if !success.boolValue {
+                    if success.boolValue {
+                        let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                        context.parent = self.dataController?.mainContext
+                        context.performAndWait {
+                            Team.updateSubscriptionInfo(forTeamWithId: self.teamId,
+                                                        subscribed: subscribe,
+                                                        isRegisteredForRemoteNotifications: true,
+                                                        in: context)
+                            self.dataController?.saveContext(context)
+                        }
+                    } else {
                         self.error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey : NSLocalizedString("apns token sending failed", comment: "")])
                     }
                 } else {
@@ -63,5 +74,6 @@ class SubscribeRequest: NetworkRequest {
     }
     
     // MARK: - Private
+    fileprivate var teamId: Int!
     fileprivate var subscribe: Bool!
 }

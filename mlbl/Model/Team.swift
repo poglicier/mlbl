@@ -97,12 +97,13 @@ public class Team: NSManagedObject {
         return res
     }
     
-    static func updateSubscriptionInfo(forTeamWithId teamId: Int, subscribed: Bool, in context: NSManagedObjectContext) {
+    static func updateSubscriptionInfo(forTeamWithId teamId: Int, subscribed: Bool, isRegisteredForRemoteNotifications: Bool, in context: NSManagedObjectContext) {
         let fetchRequest = NSFetchRequest<Team>(entityName: Team.entityName())
         fetchRequest.predicate = NSPredicate(format: "\(#keyPath(Team.objectId)) = \(teamId)")
         do {
             let team = try context.fetch(fetchRequest).first
-            team?.subscribed = NSNumber(value: subscribed)
+            print("isRegisteredForRemoteNotifications", isRegisteredForRemoteNotifications)
+            team?.subscribed = isRegisteredForRemoteNotifications ? NSNumber(value: subscribed) : NSNumber(value: false)
         } catch { }
     }
 }

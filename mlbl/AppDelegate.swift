@@ -15,6 +15,7 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var teamIdToSubscribeOn: Int?
 
     // MARK: - Private
     
@@ -24,8 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - UIApplicationDelegate
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        Fabric.with([Crashlytics.self()])
-        
         self.dataController = DataController()
         self.pushesController = PushesController()
         
@@ -50,6 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.registerForPushNotifications()
         
+        Fabric.with([Crashlytics.self()])
+        
         return true
     }
     
@@ -71,9 +72,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let oldToken = DefaultsController.shared.apnsToken
         
         if token != oldToken {
-            self.dataController.sendAPNSToken(token, oldToken: oldToken) { (error) in
+            self.dataController.sendAPNSToken(token, oldToken: oldToken) { [weak self] error in
                 if error == nil {
                     DefaultsController.shared.apnsToken = token
+                    
+                    if let strongSelf = self {
+                        if let teamId = strongSelf.teamIdToSubscribeOn {
+                            strongSelf.dataController.subscribe(true, onTeamWithId: teamId)
+                        }
+                    }
                 }
             }
         }

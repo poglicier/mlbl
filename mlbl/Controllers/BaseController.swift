@@ -19,7 +19,7 @@ class BaseController: UIViewController {
         
         self.setupActivityView()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForegroud), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForegroud), name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
     }
     
     deinit {

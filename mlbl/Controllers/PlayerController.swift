@@ -123,7 +123,7 @@ class PlayerController: BaseController {
                     strongSelf.view.addSubview(refreshButton)
                     
                     refreshButton.snp.makeConstraints({ (make) in
-                        make.centerX.equalTo(0)
+                        make.centerXWithinMargins.equalTo(0)
                         make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                     })
                     

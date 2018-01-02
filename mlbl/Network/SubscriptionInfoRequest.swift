@@ -9,11 +9,12 @@
 import CoreData
 
 class SubscriptionInfoRequest: NetworkRequest {
-    init(teamId: Int, token: String) {
+    init(teamId: Int, token: String, isRegisteredForRemoteNotifications: Bool) {
         super.init()
         
         self.teamId = teamId
         self.token = token
+        self.isRegisteredForRemoteNotifications = isRegisteredForRemoteNotifications
     }
     
     override func start() {
@@ -23,7 +24,6 @@ class SubscriptionInfoRequest: NetworkRequest {
         }
         
         let urlString = "https://russiabasket.ru/api/v1.0/is-device-subscribed?deviceToken=\(self.token!)&entityType=2&entityId=\(self.teamId!)&apiUrl=reg.infobasket.ru"
-        print(urlString)
         guard let url = URL(string: urlString, relativeTo: nil) else { fatalError("Failed to build URL") }
         
         var request = URLRequest(url: url)
@@ -50,6 +50,7 @@ class SubscriptionInfoRequest: NetworkRequest {
                 context.performAndWait({
                     Team.updateSubscriptionInfo(forTeamWithId: self.teamId,
                                                 subscribed: (resultDict["subscribed"] as? Bool) ?? false,
+                                                isRegisteredForRemoteNotifications: self.isRegisteredForRemoteNotifications,
                                                 in: context)
                     self.dataController?.saveContext(context)
                 })
@@ -65,4 +66,5 @@ class SubscriptionInfoRequest: NetworkRequest {
     
     fileprivate var teamId: Int!
     fileprivate var token: String!
+    fileprivate var isRegisteredForRemoteNotifications: Bool!
 }

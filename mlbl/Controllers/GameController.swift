@@ -48,7 +48,7 @@ class GameController: BaseController {
             try self.statisticsBFetchedResultsController.performFetch()
         } catch {}
         
-        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
     }
     
     deinit {

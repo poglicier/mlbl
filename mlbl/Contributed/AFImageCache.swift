@@ -54,7 +54,7 @@ extension UIImageView {
     }
     
     public class func sharedImageCache() -> AFImageCacheProtocol {
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: OperationQueue.main) { (NSNotification) -> Void in
+        NotificationCenter.default.addObserver(forName: Notification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: OperationQueue.main) { (NSNotification) -> Void in
             self.defaultImageCache.removeAllObjects()
         }
         return objc_getAssociatedObject(self, &AssociatedKeys.SharedImageCache) as? AFImageCacheProtocol ?? self.defaultImageCache

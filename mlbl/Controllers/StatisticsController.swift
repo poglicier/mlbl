@@ -76,7 +76,7 @@ class StatisticsController: BaseController {
         self.setupParameterLabel()
         self.setupParameterButton()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
 
         // Чтобы filtersCollectionView при пропадании не было видно поверх statusBar
         self.view.clipsToBounds = true
@@ -180,7 +180,7 @@ class StatisticsController: BaseController {
                     strongSelf.view.addSubview(refreshButton)
                     
                     refreshButton.snp.makeConstraints({ (make) in
-                        make.centerX.equalTo(0)
+                        make.centerXWithinMargins.equalTo(0)
                         make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                     })
                     
@@ -249,7 +249,7 @@ class StatisticsController: BaseController {
                                                     strongSelf.view.addSubview(refreshButton)
                                                     
                                                     refreshButton.snp.makeConstraints({ (make) in
-                                                        make.centerX.equalTo(0)
+                                                        make.centerXWithinMargins.equalTo(0)
                                                         make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                                                     })
                                                     

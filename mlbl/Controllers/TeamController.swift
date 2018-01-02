@@ -52,7 +52,7 @@ class TeamController: BaseController {
             try self.statisticsFetchedResultsController.performFetch()
         } catch {}
         
-         NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(contextDidChange(_:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: nil)
     }
     
     deinit {
@@ -142,7 +142,6 @@ class TeamController: BaseController {
         do {
             if let team = (try self.dataController.mainContext.fetch(fetchRequest)).first{
                 self.team = team
-                self.setupNavigationBar()
             } else {
                 _ = self.navigationController?.popViewController(animated: true)
             }
@@ -163,15 +162,26 @@ class TeamController: BaseController {
     }
     
     @objc fileprivate func subscribeDidTap() {
-        if let _ = DefaultsController.shared.apnsToken {
-            self.dataController.subscribe(!(self.team?.subscribed?.boolValue ?? false),
-                                          onTeamWithId: self.teamId,
-                                          completion: nil)
-            self.team?.subscribed = NSNumber(value: !(self.team?.subscribed?.boolValue ?? false))
-            self.dataController.saveContext(self.dataController.mainContext)
+        if UIApplication.shared.isRegisteredForRemoteNotifications {
+            if let _ = DefaultsController.shared.apnsToken {
+                let loader = UIActivityIndicatorView(activityIndicatorStyle: .white)
+                loader.startAnimating()
+                self.navigationItem.setRightBarButton(UIBarButtonItem(customView: loader), animated: true)
+                let subscribed = !(self.team?.subscribed?.boolValue ?? false)
+                self.dataController.subscribe(subscribed,
+                                              onTeamWithId: self.teamId)
+            }
         } else {
+            // Случай, когда подписываемся впервые, и нужно сперва разрешить пуши на уровне iOS
+            NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
             self.pushesController.registerForRemoteNotifications(UIApplication.shared)
         }
+    }
+    
+    @objc fileprivate func didBecomeActive() {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
+        
+        (UIApplication.shared.delegate as? AppDelegate)?.teamIdToSubscribeOn = self.team?.objectId?.intValue
     }
     
     fileprivate func setupTableView() {
@@ -269,7 +279,7 @@ class TeamController: BaseController {
                                             dispatchGroup.leave()
         }
         
-        self.dataController.getSubscriptionInfoFor(teamId: self.teamId, completion: nil)
+        self.dataController.getSubscriptionInfoFor(teamId: self.teamId)
         
         dispatchGroup.notify(queue: DispatchQueue.main, execute: { [weak self] in
             if let strongSelf = self {
@@ -289,7 +299,7 @@ class TeamController: BaseController {
                     strongSelf.view.addSubview(refreshButton)
                     
                     refreshButton.snp.makeConstraints({ (make) in
-                        make.centerX.equalTo(0)
+                        make.centerXWithinMargins.equalTo(0)
                         make.top.equalTo(strongSelf.emptyLabel.snp.bottom)
                     })
                     

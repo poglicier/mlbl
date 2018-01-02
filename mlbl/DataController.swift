@@ -276,9 +276,11 @@ class DataController {
         self.queue.addOperation(request)
     }
     
-    func getSubscriptionInfoFor(teamId: Int, completion: ((NSError?) -> ())?) {
+    func getSubscriptionInfoFor(teamId: Int, completion: ((NSError?) -> ())? = nil) {
         if let token = DefaultsController.shared.apnsToken {
-            let request = SubscriptionInfoRequest(teamId: teamId, token: token)
+            let request = SubscriptionInfoRequest(teamId: teamId,
+                                                  token: token,
+                                                  isRegisteredForRemoteNotifications: UIApplication.shared.isRegisteredForRemoteNotifications)
             request.dataController = self
             
             request.completionBlock = {
@@ -292,9 +294,13 @@ class DataController {
         }
     }
     
-    func subscribe(_ subscribe: Bool, onTeamWithId teamId: Int, completion: ((NSError?) -> ())?) {
+    func subscribe(_ subscribe: Bool,
+                   onTeamWithId teamId: Int,
+                   completion: ((NSError?) -> ())? = nil) {
         if let token = DefaultsController.shared.apnsToken {
-            let request = SubscribeRequest(subscribe: subscribe, token: token, teamId: teamId)
+            let request = SubscribeRequest(subscribe: subscribe,
+                                           token: token,
+                                           teamId: teamId)
             request.dataController = self
             
             request.completionBlock = {
