@@ -40,7 +40,7 @@ class AFImageCache: NSCache<AnyObject, AnyObject>, AFImageCacheProtocol {
     
     static fileprivate var cacheDirectory: String = { () -> String in
         let documentsDirectory = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first!
-        let res = documentsDirectory.appending("/scAvatars")
+        let res = documentsDirectory.appending("/mlblAvatars")
         let isExist = FileManager.default.fileExists(atPath: res, isDirectory: nil)
         if !isExist {
             try? FileManager.default.createDirectory(atPath: res, withIntermediateDirectories: true, attributes: nil)
@@ -55,9 +55,12 @@ class AFImageCache: NSCache<AnyObject, AnyObject>, AFImageCacheProtocol {
     }
     
     static fileprivate func cacheImageToDisk(_ image: UIImage, for key: String) {
-        if let data = UIImagePNGRepresentation(image) {
-            let fileName = AFImageCache.cacheDirectory.appending("/\(key)")
-            FileManager.default.createFile(atPath: fileName, contents: data, attributes: nil)
+        let concurrentQueue = DispatchQueue(label: "writeImage", attributes: .concurrent)
+        concurrentQueue.async {
+            if let data = UIImagePNGRepresentation(image) {
+                let fileName = AFImageCache.cacheDirectory.appending("/\(key)")
+                FileManager.default.createFile(atPath: fileName, contents: data, attributes: nil)
+            }
         }
     }
 }

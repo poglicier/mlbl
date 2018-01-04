@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PlayerGamesHeaderDelegate {
+protocol PlayerGamesHeaderDelegate: class {
     func header(_ header: PlayerGamesHeader, didScrollTo contentOffset: CGPoint)
 }
 
@@ -59,7 +59,7 @@ class PlayerGamesHeader: UIView {
     
     // MARK: - Public
     
-    var delegate: PlayerGamesHeaderDelegate?
+    weak var delegate: PlayerGamesHeaderDelegate?
     var contentOffset: CGPoint! {
         didSet {
             self.scrollView.contentOffset = contentOffset

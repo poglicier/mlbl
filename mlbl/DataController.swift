@@ -35,7 +35,7 @@ class DataController {
     
     func currentCompetitionId() -> Int {
         let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
-        fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
+        fetchRequest.predicate = NSPredicate(format: "\(#keyPath(Competition.isChoosen)) = true")
         do {
             if let comp = try self.mainContext.fetch(fetchRequest).first {
                 return comp.objectId as! Int
@@ -316,6 +316,23 @@ class DataController {
     
     func terminateRequests() {
         self.queue.cancelAllOperations()
+    }
+    
+    func cleanData() {
+        PlayerStatistics.deleteAll(in: self.mainContext)
+        SeasonTeam.deleteAll(in: self.mainContext)
+        TeamRoundRank.deleteAll(in: self.mainContext)
+        PlayerRank.deleteAll(in: self.mainContext)
+        PlayerRank.deleteAll(in: self.mainContext)
+        StatParameter.deleteAll(in: self.mainContext)
+        Team.deleteAll(in: self.mainContext)
+        Game.deleteAll(in: self.mainContext)
+        Player.deleteAll(in: self.mainContext)
+        PlayoffSerie.deleteAll(in: self.mainContext)
+        GameStatistics.deleteAll(in: self.mainContext)
+        TeamStatistics.deleteAll(in: self.mainContext)
+        
+        self.saveContext(self.mainContext)
     }
     
     // MARK: - Core Data stack

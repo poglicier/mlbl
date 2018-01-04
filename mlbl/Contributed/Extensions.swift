@@ -13,6 +13,16 @@ extension NSManagedObject {
     static func entityName() -> String {
         return String(describing: self)
     }
+    
+    class func deleteAll(in context: NSManagedObjectContext) {
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: self.entityName())
+        do {
+            let objects = try context.fetch(fetchRequest)
+            for object in objects {
+                context.delete(object)
+            }
+        } catch {}
+    }
 }
 
 extension UIColor {

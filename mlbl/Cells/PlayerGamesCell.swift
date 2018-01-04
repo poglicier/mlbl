@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PlayerGamesCellDelegate {
+protocol PlayerGamesCellDelegate: class {
     func cell(_ cell: PlayerGamesCell, didScrollTo contentOffset: CGPoint, tag: Int)
 }
 
@@ -97,7 +97,7 @@ class PlayerGamesCell: UITableViewCell {
     // MARK: - Public
     
     var language: String!
-    var delegate: PlayerGamesCellDelegate?
+    weak var delegate: PlayerGamesCellDelegate?
     var contentOffset: CGPoint! {
         didSet {
             self.scrollView.contentOffset = contentOffset

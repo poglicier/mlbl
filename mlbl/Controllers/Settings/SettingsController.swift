@@ -215,12 +215,13 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
             case .changeCompetition:
                 if let chooseCompetitionController = UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "ChooseCompetitionController") as? ChooseCompetitionController {
                     let fetchRequest = NSFetchRequest<Competition>(entityName: Competition.entityName())
-                    fetchRequest.predicate = NSPredicate(format: "isChoosen = true")
+                    fetchRequest.predicate = NSPredicate(format: "\(#keyPath(Competition.isChoosen)) = true")
                     do {
                         let comp = try self.dataController.mainContext.fetch(fetchRequest).first
                         comp?.isChoosen = false
-                        self.dataController.saveContext(self.dataController.mainContext)
                     } catch {}
+                    
+                    self.dataController.cleanData()
                     
                     chooseCompetitionController.dataController = self.dataController
                     chooseCompetitionController.pushesController = self.pushesController

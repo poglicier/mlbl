@@ -30,7 +30,7 @@ class PlayersRequest: NetworkRequest {
             return
         }
         
-        var urlString = "CompGamePlayers/\(self.compId!)?skip=\(self.from)&take=\(self.count)"
+        var urlString = "CompGamePlayers/\(self.compId!)?skip=\(self.from!)&take=\(self.count!)"
         if let search = self.searchText?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
             urlString += "&search=\(search)"
         }

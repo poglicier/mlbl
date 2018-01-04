@@ -31,7 +31,7 @@ class PlayerCell: UITableViewCell {
     var language: String!
     var player: Player! {
         didSet {
-            self.avatarView.image = UIImage(named: "avatarStub\(1 + ((player.objectId as? Int) ?? 1)%3)")
+            self.avatarView.image = UIImage(named: "avatarStub\(1 + (player.objectId?.intValue ?? 1)%3)")
             if let personId = player.objectId {
                 if let url = URL(string: "http://reg.infobasket.ru/Widget/GetPersonPhoto/\(personId)") {
                     self.avatarView.setImageWithUrl(url)

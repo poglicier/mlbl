@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol StatisticCellDelegate {
+protocol StatisticCellDelegate: class {
     func cell(_ cell: StatisticCell, didScrollTo contentOffset: CGPoint, tag: Int)
 }
 
@@ -44,7 +44,7 @@ class StatisticCell: UITableViewCell {
     @IBOutlet fileprivate var teamLabel: UILabel!
     @IBOutlet fileprivate var totalBackground: UIView!
 
-    var delegate: StatisticCellDelegate?
+    weak var delegate: StatisticCellDelegate?
     var language: String!
     var total = ""
     var color: UIColor? {

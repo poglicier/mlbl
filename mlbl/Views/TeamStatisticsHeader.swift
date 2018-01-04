@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol TeamStatisticsHeaderDelegate {
+protocol TeamStatisticsHeaderDelegate: class {
     func header(_ header: TeamStatisticsHeader, didScrollTo contentOffset: CGPoint)
 }
 
@@ -57,7 +57,7 @@ class TeamStatisticsHeader: UIView {
     
     // MARK: - Public
     
-    var delegate: TeamStatisticsHeaderDelegate?
+    weak var delegate: TeamStatisticsHeaderDelegate?
     var contentOffset: CGPoint! {
         didSet {
             self.scrollView.contentOffset = contentOffset
