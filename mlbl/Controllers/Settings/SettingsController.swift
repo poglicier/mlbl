@@ -60,7 +60,7 @@ class SettingsController: BaseController {
         if MFMailComposeViewController.canSendMail() {
             UINavigationBar.appearance().isTranslucent = false
             UINavigationBar.appearance().tintColor = UIColor.white
-            UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor : UIColor.white]
             UINavigationBar.appearance().setBackgroundImage(UIImage.imageForNavigationBar(portrait: true), for: .default)
             
             let composeViewController = MFMailComposeViewController()
@@ -146,15 +146,15 @@ extension SettingsController: UITableViewDelegate, UITableViewDataSource {
             case .aboutLeague:
                 settingsCell.cellType = .simple
                 settingsCell.title = NSLocalizedString("About league", comment: "")
-                settingsCell.descriptionText = NSMutableAttributedString(string: NSLocalizedString("About league text", comment: ""), attributes: [NSAttributedStringKey.font:UIFont.systemFont(ofSize: 17)])
+                settingsCell.descriptionText = NSMutableAttributedString(string: NSLocalizedString("About league text", comment: ""), attributes: [.font:UIFont.systemFont(ofSize: 17)])
                 settingsCell.selectionStyle = .none
             case .aboutApp:
                 settingsCell.cellType = .simple
                 settingsCell.title = NSLocalizedString("About app", comment: "")
                 
                 let plainText = NSLocalizedString("About app text", comment: "")
-                let attributedText = NSMutableAttributedString(string: plainText, attributes: [NSAttributedStringKey.font:UIFont.systemFont(ofSize: 17)])
-                attributedText.addAttribute(NSAttributedStringKey.link, value: "http://github.com/poglicier/mlbl", range: (attributedText.mutableString.range(of: "GitHub")))
+                let attributedText = NSMutableAttributedString(string: plainText, attributes: [.font:UIFont.systemFont(ofSize: 17)])
+                attributedText.addAttribute(.link, value: "http://github.com/poglicier/mlbl", range: (attributedText.mutableString.range(of: "GitHub")))
                 settingsCell.descriptionText = attributedText
                 settingsCell.selectionStyle = .none
                 settingsCell.linkDidSelectBlock = { [weak self] url in
@@ -241,9 +241,10 @@ extension SettingsController: MFMailComposeViewControllerDelegate {
 }
 
 extension MFMailComposeViewController {
-    override open func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+    override open var preferredStatusBarStyle: UIStatusBarStyle {
+        get {
+            return .lightContent
+        }
     }
     
     open override func viewDidLoad() {
@@ -251,7 +252,7 @@ extension MFMailComposeViewController {
         
         self.navigationBar.isTranslucent = false
         self.navigationBar.tintColor = UIColor.white
-        self.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+        self.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
         self.navigationBar.setBackgroundImage(UIImage.imageForNavigationBar(portrait: true), for: .default)
     }
 }

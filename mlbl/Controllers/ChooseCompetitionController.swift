@@ -67,8 +67,9 @@ class ChooseCompetitionController: BaseController {
                     strongSelf.emptyLabel.isHidden = false
                     
                     let refreshButton = UIButton(type: .custom)
-                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
-                    refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""),
+                                                        attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
+                    refreshButton.setAttributedTitle(attrString, for: UIControl.State())
                     refreshButton.addTarget(strongSelf, action: #selector(strongSelf.refreshPlayersDidTap), for: .touchUpInside)
                     strongSelf.view.addSubview(refreshButton)
                     
@@ -154,8 +155,8 @@ class ChooseCompetitionController: BaseController {
                                     strongSelf.emptyLabel.isHidden = false
                                     
                                     let refreshButton = UIButton(type: .custom)
-                                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
-                                    refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
+                                    refreshButton.setAttributedTitle(attrString, for: UIControl.State())
                                     refreshButton.addTarget(strongSelf, action: #selector(strongSelf.refreshPlayersDidTap), for: .touchUpInside)
                                     strongSelf.view.addSubview(refreshButton)
                                     

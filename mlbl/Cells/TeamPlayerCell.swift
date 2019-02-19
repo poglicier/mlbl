@@ -131,7 +131,7 @@ class TeamPlayerCell: UITableViewCell {
         super.layoutSubviews()
         
         let isLanguageRu = self.language.contains("ru")
-        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+        if UIApplication.shared.statusBarOrientation == UIInterfaceOrientation.portrait {
             if var playerName = isLanguageRu ? player.lastNameRu : player.lastNameEn {
                 if let firstName = isLanguageRu ? player.firstNameRu : player.firstNameEn {
                     if let firstLetter = firstName[0] {

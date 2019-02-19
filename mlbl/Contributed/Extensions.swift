@@ -117,7 +117,7 @@ extension UINavigationController: UINavigationControllerDelegate {
         
         self.navigationBar.isTranslucent = false
         self.navigationBar.tintColor = UIColor.white
-        self.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+        self.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
         self.navigationBar.setBackgroundImage(UIImage.imageForNavigationBar(portrait: true), for: .default)
         self.delegate = self
     }
@@ -139,7 +139,7 @@ extension UINavigationController: UINavigationControllerDelegate {
         self.navigationBar.setBackgroundImage(image, for: .default)
     }
     
-    public func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         if toVC is ChooseCompetitionController {
             let animator = FadeAnimator()
             animator.presenting = true
@@ -180,7 +180,7 @@ extension UIFont {
     func sizeOfString(string: NSString, constrainedToWidth width: CGFloat) -> CGSize {
         return string.boundingRect(with: CGSize(width: width, height: CGFloat.greatestFiniteMagnitude),
                                    options: .usesLineFragmentOrigin,
-                                   attributes: [NSAttributedStringKey.font: self],
+                                   attributes: [.font: self],
                                    context: nil).size
     }
 }

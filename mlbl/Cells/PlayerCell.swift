@@ -104,7 +104,7 @@ class PlayerCell: UITableViewCell {
         self.background.clipsToBounds = false
         
         let isLanguageRu = self.language.contains("ru")
-        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+        if UIApplication.shared.statusBarOrientation == UIInterfaceOrientation.portrait {
             self.teamLabel.text = isLanguageRu ? self.player.team?.shortNameRu : self.player.team?.shortNameEn
             self.positionLabel.text = isLanguageRu ? self.player.positionShortRu : self.player.positionShortEn
         } else {

@@ -66,7 +66,7 @@ class PlayersController: BaseController {
     // MARK: - Private
     
     fileprivate func setupTableView() {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        let spinner = UIActivityIndicatorView(style: .white)
         spinner.startAnimating()
         spinner.color = UIColor.mlblLightOrangeColor()
         spinner.frame = CGRect(x: 0, y: 0, width: 0, height: 64)

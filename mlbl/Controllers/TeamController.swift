@@ -164,7 +164,7 @@ class TeamController: BaseController {
     @objc fileprivate func subscribeDidTap() {
         if UIApplication.shared.isRegisteredForRemoteNotifications {
             if let _ = DefaultsController.shared.apnsToken {
-                let loader = UIActivityIndicatorView(activityIndicatorStyle: .white)
+                let loader = UIActivityIndicatorView(style: .white)
                 loader.startAnimating()
                 self.navigationItem.setRightBarButton(UIBarButtonItem(customView: loader), animated: true)
                 let subscribed = !(self.team?.subscribed?.boolValue ?? false)
@@ -173,13 +173,13 @@ class TeamController: BaseController {
             }
         } else {
             // Случай, когда подписываемся впервые, и нужно сперва разрешить пуши на уровне iOS
-            NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
             self.pushesController.registerForRemoteNotifications(UIApplication.shared)
         }
     }
     
     @objc fileprivate func didBecomeActive() {
-        NotificationCenter.default.removeObserver(self, name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
         
         (UIApplication.shared.delegate as? AppDelegate)?.teamIdToSubscribeOn = self.team?.objectId?.intValue
     }
@@ -190,7 +190,7 @@ class TeamController: BaseController {
         self.refreshControl.tintColor = UIColor.mlblLightOrangeColor()
         self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for:.valueChanged)
         self.tableView.addSubview(self.refreshControl)
-        self.tableView.sendSubview(toBack: self.refreshControl)
+        self.tableView.sendSubviewToBack(self.refreshControl)
         
         self.tableView.register(UINib(nibName: "StatisticCell", bundle: nil), forCellReuseIdentifier: "statisticCell")
     }
@@ -293,8 +293,8 @@ class TeamController: BaseController {
                     strongSelf.tableView.isHidden = true
                     
                     let refreshButton = UIButton(type: .custom)
-                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
-                    refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
+                    refreshButton.setAttributedTitle(attrString, for: UIControl.State())
                     refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), for: .touchUpInside)
                     strongSelf.view.addSubview(refreshButton)
                     

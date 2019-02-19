@@ -1,18 +1,20 @@
 //
 //  Competition+CoreDataProperties.swift
-//  
+//  mlbl
 //
-//  Created by Valentin Shamardin on 11.10.16.
+//  Created by Валентин Шамардин on 19.02.2019.
+//  Copyright © 2019 Valentin Shamardin. All rights reserved.
 //
 //
 
 import Foundation
 import CoreData
 
+
 extension Competition {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Competition> {
-        return NSFetchRequest<Competition>(entityName: "Competition");
+        return NSFetchRequest<Competition>(entityName: "Competition")
     }
 
     @NSManaged public var compAbcNameEn: String?

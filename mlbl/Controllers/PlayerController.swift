@@ -117,8 +117,8 @@ class PlayerController: BaseController {
                     strongSelf.tableView.isHidden = true
                     
                     let refreshButton = UIButton(type: .custom)
-                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
-                    refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
+                    refreshButton.setAttributedTitle(attrString, for: UIControl.State())
                     refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), for: .touchUpInside)
                     strongSelf.view.addSubview(refreshButton)
                     

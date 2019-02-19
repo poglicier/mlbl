@@ -66,13 +66,13 @@ class MainController: BaseController {
             if let controllerType = ContainerController.ControllerType(rawValue: idx) {
                 switch controllerType {
                 case .games:
-                    button.setTitle(NSLocalizedString("Games", comment: "").uppercased(), for: UIControlState())
+                    button.setTitle(NSLocalizedString("Games", comment: "").uppercased(), for: UIControl.State())
                 case .table:
-                    button.setTitle(NSLocalizedString("Table", comment: "").uppercased(), for: UIControlState())
+                    button.setTitle(NSLocalizedString("Table", comment: "").uppercased(), for: UIControl.State())
                 case .statistics:
-                    button.setTitle(NSLocalizedString("Statistics", comment: "").uppercased(), for: UIControlState())
+                    button.setTitle(NSLocalizedString("Statistics", comment: "").uppercased(), for: UIControl.State())
                 case .players:
-                    button.setTitle(NSLocalizedString("Players rating", comment: "").uppercased(), for: UIControlState())
+                    button.setTitle(NSLocalizedString("Players rating", comment: "").uppercased(), for: UIControl.State())
                 }
             }
         }
@@ -109,7 +109,7 @@ class MainController: BaseController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "embedContainer" {
-            self.containerController = segue.destination as! ContainerController
+            self.containerController = (segue.destination as! ContainerController)
             self.containerController.dataController = self.dataController
             self.containerController.pushesController = self.pushesController
         }

@@ -57,7 +57,7 @@ class AFImageCache: NSCache<AnyObject, AnyObject>, AFImageCacheProtocol {
     static fileprivate func cacheImageToDisk(_ image: UIImage, for key: String) {
         let concurrentQueue = DispatchQueue(label: "writeImage", attributes: .concurrent)
         concurrentQueue.async {
-            if let data = UIImagePNGRepresentation(image) {
+            if let data = image.pngData() {
                 let fileName = AFImageCache.cacheDirectory.appending("/\(key)")
                 FileManager.default.createFile(atPath: fileName, contents: data, attributes: nil)
             }
@@ -87,7 +87,7 @@ extension UIImageView {
             static let defaultImageCache = AFImageCache()
         }
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil, queue: OperationQueue.main) { (NSNotification) -> Void in
+        NotificationCenter.default.addObserver(forName: UIApplication.didReceiveMemoryWarningNotification, object: nil, queue: OperationQueue.main) { (NSNotification) -> Void in
             Static.defaultImageCache.removeAllObjects()
         }
         return objc_getAssociatedObject(self, &AssociatedKeys.SharedImageCache) as? AFImageCacheProtocol ?? Static.defaultImageCache
@@ -161,8 +161,8 @@ extension UIImageView {
                                         
                                         let transition = CATransition()
                                         transition.duration = 0.3
-                                        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                                        transition.type = kCATransitionFade
+                                        transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+                                        transition.type = CATransitionType.fade
                                         
                                         self.layer.add(transition, forKey:nil)
                                     }

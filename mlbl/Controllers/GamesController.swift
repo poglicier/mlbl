@@ -145,7 +145,7 @@ class GamesController: BaseController {
                         strongSelf.emptyLabel.isHidden = false
                         
                         let refreshButton = UIButton(type: .custom)
-                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
+                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
                         refreshButton.setAttributedTitle(attrString, for: .normal)
                         refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), for: .touchUpInside)
                         strongSelf.view.addSubview(refreshButton)
@@ -192,7 +192,7 @@ class GamesController: BaseController {
         self.refreshControl.tintColor = UIColor.mlblLightOrangeColor()
         self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for:.valueChanged)
         self.tableView.addSubview(self.refreshControl)
-        self.tableView.sendSubview(toBack: self.refreshControl)
+        self.tableView.sendSubviewToBack(self.refreshControl)
     }
     
     fileprivate func configureCell(_ cell: GameCell, atIndexPath indexPath: IndexPath) {

@@ -123,7 +123,7 @@ class GameScoreCell: UITableViewCell {
             
             if let statisticsA = (statistics.filter {$0.teamNumber?.intValue == 1}).first {
                 if let teamA = statisticsA.team {
-                    if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+                    if UIApplication.shared.statusBarOrientation == UIInterfaceOrientation.portrait {
                       self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
                     } else {
                         self.titleA.text = isLanguageRu ? teamA.nameRu : teamA.nameEn
@@ -133,7 +133,7 @@ class GameScoreCell: UITableViewCell {
             
             if let statisticsB = (statistics.filter {$0.teamNumber?.intValue == 2}).first {
                 if let teamB = statisticsB.team {
-                    if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+                    if UIApplication.shared.statusBarOrientation == UIInterfaceOrientation.portrait {
                         self.titleB.text = isLanguageRu ? teamB.shortNameRu : teamB.shortNameEn
                     } else {
                         self.titleB.text = isLanguageRu ? teamB.nameRu : teamB.nameEn

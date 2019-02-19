@@ -73,7 +73,6 @@ public class Competition: NSManagedObject {
                 
             } catch {}
         }
-        
         return res
     }
     
@@ -92,7 +91,7 @@ public class Competition: NSManagedObject {
     
     override public var description: String {
         get {
-            return String(format: "%@ <\(Unmanaged.passUnretained(self).toOpaque())> \(self.objectId?.intValue ?? -1) \(self.compShortNameRu ?? "") Стадия: \(compTypeStr())", type(of: self).description())
+            return String(format: "%@ <\(Unmanaged.passUnretained(self).toOpaque())> \(self.objectId?.intValue ?? -1) \(self.compShortNameRu ?? "NO SHORT NAME RU") \(self.compAbcNameRu ?? "NO ABC NAME RU") РОДИТЕЛЬ \(self.parent?.compShortNameRu ?? "ОТСУТСТВУЕТ") Стадия: \(compTypeStr())", type(of: self).description())
         }
     }
 }

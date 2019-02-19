@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17C88" minimumToolsVersion="Xcode 7.3" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="17G5019" minimumToolsVersion="Xcode 7.3" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Competition" representedClassName=".Competition" syncable="YES">
         <attribute name="compAbcNameEn" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compAbcNameRu" optional="YES" attributeType="String" syncable="YES"/>
@@ -7,7 +7,7 @@
         <attribute name="compShortNameRu" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="compType" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="isChoosen" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="objectId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="objectId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Competition" inverseName="parent" inverseEntity="Competition" syncable="YES"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Competition" inverseName="children" inverseEntity="Competition" syncable="YES"/>
         <relationship name="playoffSeries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayoffSerie" inverseName="competition" inverseEntity="PlayoffSerie" syncable="YES"/>

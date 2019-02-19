@@ -93,13 +93,13 @@ class StatisticsController: BaseController {
     }
     
     fileprivate func setupTableView() {
-        self.tableView.contentInset = UIEdgeInsetsMake(4, 0, 4, 0)
+        self.tableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
         self.tableView.scrollsToTop = true
         
         self.refreshControl.tintColor = UIColor.mlblLightOrangeColor()
         self.refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for:.valueChanged)
         self.tableView.addSubview(self.refreshControl)
-        self.tableView.sendSubview(toBack: self.refreshControl)
+        self.tableView.sendSubviewToBack(self.refreshControl)
     }
     
     fileprivate func setupFiltersCollectionView() {
@@ -116,7 +116,7 @@ class StatisticsController: BaseController {
     }
     
     fileprivate func setupParameterButton() {
-        self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblDarkOrangeColor()), for: UIControlState())
+        self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblDarkOrangeColor()), for: UIControl.State())
         self.parameterButton.setImage(UIImage(named: "filter")?.imageWithColor(UIColor.mlblLightOrangeColor()), for: .highlighted)
     }
     
@@ -124,7 +124,7 @@ class StatisticsController: BaseController {
         if text != nil {
             let width = text!.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: self.parameterLabel.frame.size.height),
                                                  options: .usesLineFragmentOrigin,
-                                                 attributes: [NSAttributedStringKey.font : self.parameterLabel.font],
+                                                 attributes: [.font : self.parameterLabel.font],
                                                  context: nil).size.width
             if width > self.view.frame.size.width - 2*8 - 2*self.parameterButton.frame.size.width {
                 self.parameterLabelTrailing.constant = self.parameterButton.frame.size.width + 8
@@ -174,8 +174,8 @@ class StatisticsController: BaseController {
                     strongSelf.parameterLabelBackground.isHidden = true
                     
                     let refreshButton = UIButton(type: .custom)
-                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
-                    refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
+                    refreshButton.setAttributedTitle(attrString, for: UIControl.State())
                     refreshButton.addTarget(self, action: #selector(strongSelf.refreshDidTap), for: .touchUpInside)
                     strongSelf.view.addSubview(refreshButton)
                     
@@ -243,7 +243,7 @@ class StatisticsController: BaseController {
                                                     strongSelf.tableView.isHidden = true
                                                     
                                                     let refreshButton = UIButton(type: .custom)
-                                                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
+                                                    let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
                                                     refreshButton.setAttributedTitle(attrString, for: .normal)
                                                     refreshButton.addTarget(self, action: #selector(strongSelf.refreshPlayersDidTap), for: .touchUpInside)
                                                     strongSelf.view.addSubview(refreshButton)
@@ -443,7 +443,7 @@ extension StatisticsController : UICollectionViewDelegateFlowLayout {
         if let name =  self.parameters[indexPath.row].name {
             var size = name.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 44),
                                                  options: .usesLineFragmentOrigin,
-                                                 attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 17)],
+                                                 attributes: [.font : UIFont.systemFont(ofSize: 17)],
                                                  context: nil).size
             size.width = min(size.width + 10, collectionView.frame.size.width - 2*8)
             size.height = 44

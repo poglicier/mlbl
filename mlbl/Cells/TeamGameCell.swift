@@ -103,7 +103,7 @@ class TeamGameCell: UITableViewCell {
 //        }
         
         let isLanguageRu = self.language.contains("ru")
-        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+        if UIApplication.shared.statusBarOrientation == UIInterfaceOrientation.portrait {
             if self.teamOfInterest?.shortNameRu == game.shortTeamNameAru {
                 self.opponentLabel.text = isLanguageRu ? game.shortTeamNameBru : game.shortTeamNameBen
             } else {

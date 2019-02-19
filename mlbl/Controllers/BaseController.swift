@@ -19,7 +19,7 @@ class BaseController: UIViewController {
         
         self.setupActivityView()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForegroud), name: Notification.Name.UIApplicationWillEnterForeground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.willEnterForegroud), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
     
     deinit {
@@ -37,7 +37,7 @@ class BaseController: UIViewController {
     }
     
     fileprivate func setupActivityView() {
-        let av = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        let av = UIActivityIndicatorView(style: .whiteLarge)
         av.hidesWhenStopped = true
         av.color = UIColor.mlblLightOrangeColor()
         self.view.addSubview(av)
@@ -58,7 +58,7 @@ class BaseController: UIViewController {
 
 extension BaseController: UIScrollViewDelegate {
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if fabs(velocity.y) > 1 {
+        if abs(velocity.y) > 1 {
             self.hideTopBar(velocity.y > 0)
         }
     }

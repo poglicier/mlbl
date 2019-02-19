@@ -108,17 +108,17 @@ class TableController: BaseController {
     // MARK: - Private
 
     fileprivate func setupTableViews() {
-        self.roundTableView.contentInset = UIEdgeInsetsMake(4, 0, 4, 0)
+        self.roundTableView.contentInset = UIEdgeInsets(top: 4, left: 0, bottom: 4, right: 0)
         
         self.refreshControlRound.tintColor = UIColor.mlblLightOrangeColor()
         self.refreshControlRound.addTarget(self, action: #selector(handleRefreshRound(_:)), for:.valueChanged)
         self.roundTableView.addSubview(self.refreshControlRound)
-        self.roundTableView.sendSubview(toBack: self.refreshControlRound)
+        self.roundTableView.sendSubviewToBack(self.refreshControlRound)
         
         self.refreshControlPlayoff.tintColor = UIColor.mlblLightOrangeColor()
         self.refreshControlPlayoff.addTarget(self, action: #selector(handleRefreshPlayoff(_:)), for:.valueChanged)
         self.playoffTableView.addSubview(self.refreshControlPlayoff)
-        self.playoffTableView.sendSubview(toBack: self.refreshControlPlayoff)
+        self.playoffTableView.sendSubviewToBack(self.refreshControlPlayoff)
     }
     
     @objc fileprivate func handleRefreshRound(_ refreshControl: UIRefreshControl) {
@@ -193,8 +193,8 @@ class TableController: BaseController {
                         }
                         
                         let refreshButton = UIButton(type: .custom)
-                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
-                        refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
+                        refreshButton.setAttributedTitle(attrString, for: UIControl.State())
                         refreshButton.addTarget(self, action: #selector(strongSelf.refreshRoundRobin), for: .touchUpInside)
                         strongSelf.view.addSubview(refreshButton)
                         
@@ -241,8 +241,8 @@ class TableController: BaseController {
                         }
                         
                         let refreshButton = UIButton(type: .custom)
-                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [NSAttributedStringKey.underlineStyle : 1, NSAttributedStringKey.foregroundColor : UIColor.mlblLightOrangeColor()])
-                        refreshButton.setAttributedTitle(attrString, for: UIControlState())
+                        let attrString = NSAttributedString(string: NSLocalizedString("Refresh", comment: ""), attributes: [.underlineStyle : 1, .foregroundColor : UIColor.mlblLightOrangeColor()])
+                        refreshButton.setAttributedTitle(attrString, for: UIControl.State())
                         refreshButton.addTarget(self, action: #selector(strongSelf.refreshPlayoff), for: .touchUpInside)
                         strongSelf.view.addSubview(refreshButton)
                         

@@ -38,7 +38,7 @@ class PlayerTeamCell: UITableViewCell {
         super.layoutSubviews()
         
         let isLanguageRu = self.language.contains("ru")
-        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+        if UIApplication.shared.statusBarOrientation == UIInterfaceOrientation.portrait {
             self.seasonLabel.text = isLanguageRu ? seasonTeam.abcNameRu : seasonTeam.abcNameEn
             self.teamLabel.text = isLanguageRu ? seasonTeam.team?.shortNameRu : seasonTeam.team?.shortNameEn
         } else {
